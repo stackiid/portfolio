@@ -4,7 +4,7 @@ A high-performance, multi-page developer portfolio built on a **data-driven vani
 architecture**. Engineered for speed, structured for long-term scalability, and designed without a
 single build dependency. The 2026 edition introduces a premium 3D interaction layer, direction-aware
 scroll animations, smart pagination, a universal shimmer-gradient design system, a runtime 10-palette
-theme customizer, a full certifications section, and a dual-mode contact form — all written in
+theme customizer, a full certifications section, and a dual-mode contact form - all written in
 pure HTML, CSS, and JavaScript.
 
 ---
@@ -18,12 +18,12 @@ pure HTML, CSS, and JavaScript.
 ## What is This Project?
 
 This is a personal developer portfolio for **Ubaid Ahmad**, a Full-Stack MERN developer and UI/UX
-designer. The portfolio is not a template or a theme — it is a custom, production-grade static site
+designer. The portfolio is not a template or a theme - it is a custom, production-grade static site
 engineered to communicate technical depth, design sensibility, and professional credibility to
 prospective clients and collaborators.
 
-Every design decision in this codebase serves a purpose. The gold/dark glassmorphism system was
-chosen for visual authority. The 3D coin-toss profile card was engineered to demonstrate front-end
+Every design decision in this codebase serves a purpose. The Gold Noir glassmorphism system was
+chosen for its technology-forward, authoritative aesthetic. The 3D coin-toss profile card was engineered to demonstrate front-end
 physics knowledge before a single line of copy is read. The data-driven rendering architecture was
 chosen so that adding a new project, experience entry, or testimonial requires zero HTML changes.
 
@@ -93,11 +93,11 @@ Ubaid Ahmad/
 |   `- services.html                   # Services / Hire Me (3 tiers, 5-step process)
 |
 |- scripts/
-|   |- projects-data.js                # window.projects — all project objects
-|   |- skills-data.js                  # skillCategories — tabbed skills grid
-|   |- experience-data.js              # experience — paginated timeline
-|   |- clients-data.js                 # clients — logo carousel
-|   |- testimonials-data.js            # testimonials — carousel + modal
+|   |- projects-data.js                # window.projects - all project objects
+|   |- skills-data.js                  # skillCategories - tabbed skills grid
+|   |- experience-data.js              # experience - paginated timeline
+|   |- clients-data.js                 # clients - logo carousel
+|   |- testimonials-data.js            # testimonials - carousel + modal
 |   |- app.js                          # All render functions, state, animations, theme toggle,
 |   |                                  #   theme customizer, mobile menu, testimonial carousel
 |   |- certification-modal-logic.js    # Cert card → modal wiring (about.html only)
@@ -121,7 +121,7 @@ The project enforces strict separation of concerns:
 - **HTML** handles structure, static metadata, and modal scaffold containers only.
 - **CSS** owns every presentational rule, animation keyframe, and responsive breakpoint.
 - **JavaScript** owns all data arrays, render logic, state management, and DOM output.
-- **Data files** (`*-data.js`) are the single source of truth for all content — edit these
+- **Data files** (`*-data.js`) are the single source of truth for all content - edit these
   to add, remove, or update entries with zero HTML changes.
 
 ### Script Load Order
@@ -161,12 +161,12 @@ All HTML pages load scripts in this sequence:
 ### Liquid Scroll-Progress Header
 
 The floating header (`.glass-header`) now doubles as a page scroll indicator. A
-`.header-progress-fill` layer grows left-to-right in sync with scroll position — 0% at the top of
-the page, 100% at the bottom — driven by `initHeaderScrollProgress()` in `scripts/app.js`. Two
-rotating, low-opacity gold blobs (`.header-progress-wave`, `.header-progress-wave--b`) sit at the
+`.header-progress-fill` layer grows left-to-right in sync with scroll position - 0% at the top of
+the page, 100% at the bottom - driven by `initHeaderScrollProgress()` in `scripts/app.js`. Two
+rotating, low-opacity green blobs (`.header-progress-wave`, `.header-progress-wave--b`) sit at the
 fill's leading edge and continuously animate via CSS `@keyframes`, producing a subtle liquid
 ripple that keeps moving even once scrolling stops. The fill uses the existing `--accent-rgb`
-gold tone at low opacity, scroll updates are rAF-throttled and only touch `width` on a small
+green tone at low opacity, scroll updates are rAF-throttled and only touch `width` on a small
 absolutely-positioned layer (no layout thrash), and the wave animation is disabled under
 `prefers-reduced-motion: reduce`.
 
@@ -175,8 +175,8 @@ absolutely-positioned layer (no layout thrash), and the wave animation is disabl
 - **Full Name** now requires a first and last name (e.g. `Ubaid Ahmad`, `Muhammad Usama`). A
   single word, digits, or most special characters are rejected; apostrophes and hyphens remain
   allowed for names like `O'Brien` or `Anne-Marie`. Extra internal spaces are normalised and
-  leading/trailing spaces are trimmed on blur, with the message *"Please enter your first and last
-  name."* shown for invalid input.
+  leading/trailing spaces are trimmed on blur, with the message _"Please enter your first and last
+  name."_ shown for invalid input.
 - The **Send Message** button is disabled by default and only enables once every required field
   for the active mode (Mail or WhatsApp) passes validation, immediately re-disabling if any field
   becomes invalid again.
@@ -213,7 +213,7 @@ image. Falls back to a placeholder icon when the image asset is not yet availabl
 
 ### Dual-Mode Contact Form
 
-The contact form is back on `index.html` — rebuilt as a dual-mode widget. A tab selector
+The contact form is back on `index.html` - rebuilt as a dual-mode widget. A tab selector
 switches between **Mail** mode (builds a `mailto:` URI) and **WhatsApp** mode (builds a
 `https://wa.me/` deep-link). Fields show/hide conditionally per mode. Each field has an inline
 error span for real-time validation. A toast notification confirms send or reports errors. All
@@ -221,8 +221,8 @@ logic lives in `scripts/contact-form-validation.js`.
 
 ### Homepage Sections Added
 
-- `#collaboration` — a CTA block positioned after the projects carousel.
-- `#social` — a social-icon grid with `.social-icon.glass-card.glow-hover` cards for
+- `#collaboration` - a CTA block positioned after the projects carousel.
+- `#social` - a social-icon grid with `.social-icon.glass-card.glow-hover` cards for
   GitHub, LinkedIn, Instagram, WhatsApp, Telegram, and email.
 
 ---
@@ -233,7 +233,7 @@ logic lives in `scripts/contact-form-validation.js`.
 
 The hero profile image is a fully interactive 3D flip card. On hover, `.coin-inner` performs a
 **720-degree rotation** (two full Y-axis turns) in `0.9s` using a springy
-`cubic-bezier(0.34, 1.56, 0.64, 1)` easing. A gold-gradient **"TRUSTED EXPERT"** verification
+`cubic-bezier(0.34, 1.56, 0.64, 1)` easing. A green-gradient **"TRUSTED EXPERT"** verification
 badge renders on the reverse face. `perspective: 1500px` and `backface-visibility: hidden` on
 both faces ensure mathematically correct depth. The `coinGlow` keyframe pulses the outer ring
 at idle. The CSS custom property `--coin-size` controls diameter at all breakpoints.
@@ -255,7 +255,7 @@ array-length-agnostic.
 
 ### Auto-Pinned Projects
 
-The first three entries in `window.projects` are automatically detected and receive a gold
+The first three entries in `window.projects` are automatically detected and receive a green
 `.pinned-badge` ribbon. No manual tagging required.
 
 ### Universal Shimmer-Gradient Hover
@@ -276,7 +276,7 @@ consistent with the active accent.
 ### Interactive Client Carousel
 
 The `clients` array (in `scripts/clients-data.js`) accepts `link` and `linkType` fields.
-Cards with no `logo` field render a gold initial pill + company name. A link-type badge icon
+Cards with no `logo` field render a green initial pill + company name. A link-type badge icon
 renders in the card corner based on `linkType`. `mouseenter` pauses the animation; `mouseleave`
 resumes it. The clients section is currently commented out in `index.html` pending updated asset
 data.
@@ -322,10 +322,10 @@ required. For the full object shape of each array, see `docs/PROJECT_EDITING_GUI
 
 | Variable         | Value                                     | Role                                 |
 | ---------------- | ----------------------------------------- | ------------------------------------ |
-| `--bg-dark`      | `#1a1a1a`                                 | Page background                      |
+| `--bg-dark`      | `#1A1A1A`                                 | Page background (deep noir black)    |
 | `--text-dark`    | `#e8e8e8`                                 | Body text                            |
-| `--accent-dark`  | `#d4af37`                                 | Gold accent - borders, glows, icons  |
-| `--accent-light` | `#f0d896`                                 | Lighter gold for gradient text       |
+| `--accent-dark`  | `#D4AF37`                                 | Primary Gold Noir accent             |
+| `--accent-light` | `#F0D896`                                 | Light green for gradient highlights  |
 | `--accent-rgb`   | `212,175,55`                              | Raw RGB triplet for rgba() calls     |
 | `--glass-dark`   | `rgba(255,255,255,0.05)`                  | Card fill                            |
 | `--border-dark`  | `rgba(212,175,55,0.2)`                    | Card borders                         |
@@ -339,7 +339,7 @@ effect, and gradient instance simultaneously. Always update `--accent-rgb` to ma
 ### Glass Cards
 
 Apply `.glass-card` to any new container to inherit the full glassmorphism treatment:
-`backdrop-filter: blur(15px)`, semi-transparent fill, gold border, and depth shadow. See
+`backdrop-filter: blur(15px)`, semi-transparent fill, green border, and depth shadow. See
 `docs/DESIGN_SYSTEM.md` for the complete component reference.
 
 ### Scroll Animations
@@ -356,12 +356,12 @@ Add `animate-on-scroll` to any element, then pair it with one of three modifier 
 
 ## Performance
 
-- **IntersectionObserver** — animations fire only when elements enter the viewport.
-- **Passive scroll listener** — direction-tracking listener is `{ passive: true }`.
-- **Lazy loading** — project images and certificate images use `loading="lazy"`.
-- **Event delegation** — modal open/close handled with minimal document-level listeners.
-- **Zero build step** — no bundler, no transpiler, no Node.js.
-- **CDN-only dependencies** — all third-party libraries load from CDN.
+- **IntersectionObserver** - animations fire only when elements enter the viewport.
+- **Passive scroll listener** - direction-tracking listener is `{ passive: true }`.
+- **Lazy loading** - project images and certificate images use `loading="lazy"`.
+- **Event delegation** - modal open/close handled with minimal document-level listeners.
+- **Zero build step** - no bundler, no transpiler, no Node.js.
+- **CDN-only dependencies** - all third-party libraries load from CDN.
 
 ---
 
@@ -404,14 +404,14 @@ The live site is currently deployed at [stackiid.github.io](https://stackiid.git
 
 See `docs/PROJECT_EDITING_GUIDE.md` for the complete reference. Quick summary:
 
-- **New project** — Append to `window.projects` in `scripts/projects-data.js`. First 3 entries auto-pin.
-- **New skill** — Append to the correct `skillCategories[n].skills` array in `scripts/skills-data.js`.
-- **New experience entry** — Append to the `experience` array in `scripts/experience-data.js`.
-- **New testimonial** — Append to the `testimonials` array in `scripts/testimonials-data.js`.
-- **New client** — Append to the `clients` array in `scripts/clients-data.js`.
-- **New certification** — Add a `.cert-card` block in `pages/about.html` and drop the image into `assets/credentials/`.
-- **New palette** — Add a palette object to `PALETTES` in `initThemeCustomizer()` inside `app.js`.
-- **New section** — Apply `.section`, `.container-custom`, `.section-wrapper`, and `.animate-on-scroll`.
+- **New project** - Append to `window.projects` in `scripts/projects-data.js`. First 3 entries auto-pin.
+- **New skill** - Append to the correct `skillCategories[n].skills` array in `scripts/skills-data.js`.
+- **New experience entry** - Append to the `experience` array in `scripts/experience-data.js`.
+- **New testimonial** - Append to the `testimonials` array in `scripts/testimonials-data.js`.
+- **New client** - Append to the `clients` array in `scripts/clients-data.js`.
+- **New certification** - Add a `.cert-card` block in `pages/about.html` and drop the image into `assets/credentials/`.
+- **New palette** - Add a palette object to `PALETTES` in `initThemeCustomizer()` inside `app.js`.
+- **New section** - Apply `.section`, `.container-custom`, `.section-wrapper`, and `.animate-on-scroll`.
 
 ---
 
@@ -419,11 +419,11 @@ See `docs/PROJECT_EDITING_GUIDE.md` for the complete reference. Quick summary:
 
 This project favors:
 
-- **Simplicity over abstraction** — if vanilla JS solves it cleanly, no library is added.
-- **Data-driven rendering** — arrays own all content; functions own all layout logic.
-- **Modular data files** — content and logic are always in separate files.
-- **Performance over decoration** — every animation serves a UX purpose and costs nothing at idle.
-- **Clear structure over framework complexity** — the codebase is readable by any developer in under 10 minutes.
+- **Simplicity over abstraction** - if vanilla JS solves it cleanly, no library is added.
+- **Data-driven rendering** - arrays own all content; functions own all layout logic.
+- **Modular data files** - content and logic are always in separate files.
+- **Performance over decoration** - every animation serves a UX purpose and costs nothing at idle.
+- **Clear structure over framework complexity** - the codebase is readable by any developer in under 10 minutes.
 
 Strong structure signals strong thinking.
 

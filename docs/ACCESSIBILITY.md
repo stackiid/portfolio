@@ -1,6 +1,6 @@
 # ACCESSIBILITY.md
 
-This document covers every accessibility pattern implemented across the portfolio — ARIA roles,
+This document covers every accessibility pattern implemented across the portfolio - ARIA roles,
 keyboard navigation contracts, focus management, and screen reader conventions. Every interactive
 element in this codebase has an explicit accessibility contract. Follow it when adding new
 components.
@@ -13,13 +13,13 @@ components.
 
 Every page uses semantic HTML5 landmarks. Do not replace these with generic `<div>` elements.
 
-| Element     | Role         | Used For                                         |
-| ----------- | ------------ | ------------------------------------------------ |
-| `<header>`  | `banner`     | Site navigation and logo                         |
-| `<main>`    | `main`       | Primary page content                             |
-| `<nav>`     | `navigation` | Desktop nav bar and mobile menu                  |
-| `<footer>`  | `contentinfo`| Footer links, social row, copyright              |
-| `<section>` | `region`     | Each named section with `aria-labelledby`        |
+| Element     | Role          | Used For                                  |
+| ----------- | ------------- | ----------------------------------------- |
+| `<header>`  | `banner`      | Site navigation and logo                  |
+| `<main>`    | `main`        | Primary page content                      |
+| `<nav>`     | `navigation`  | Desktop nav bar and mobile menu           |
+| `<footer>`  | `contentinfo` | Footer links, social row, copyright       |
+| `<section>` | `region`      | Each named section with `aria-labelledby` |
 
 All `<section>` elements with visible headings use `aria-labelledby` pointing to the heading's
 `id`. Example:
@@ -36,22 +36,22 @@ All `<section>` elements with visible headings use `aria-labelledby` pointing to
 
 #### Modals (`#projectModal`, `#testimonialModal`, `#certModal`)
 
-| Attribute             | Value                               | Purpose                               |
-| --------------------- | ----------------------------------- | ------------------------------------- |
-| `role`                | `"dialog"`                          | Identifies the overlay as a dialog    |
-| `aria-modal`          | `"true"`                            | Tells screen readers focus is trapped |
-| `aria-labelledby`     | ID of the modal's heading element   | Names the dialog for screen readers   |
+| Attribute         | Value                             | Purpose                               |
+| ----------------- | --------------------------------- | ------------------------------------- |
+| `role`            | `"dialog"`                        | Identifies the overlay as a dialog    |
+| `aria-modal`      | `"true"`                          | Tells screen readers focus is trapped |
+| `aria-labelledby` | ID of the modal's heading element | Names the dialog for screen readers   |
 
 On open: focus is moved to the modal container or the first focusable element inside it.
 On close: focus is returned to the element that triggered the open.
 
 #### Testimonial Carousel (`#testimonialCarousel`)
 
-| Attribute        | Value        | Purpose                                    |
-| ---------------- | ------------ | ------------------------------------------ |
-| `role`           | `"carousel"` | Identifies the widget type                 |
-| `aria-live`      | `"polite"`   | Announces slide changes without interrupting |
-| `aria-roledescription` | `"slide"` | Applied to each `.carousel-slide`        |
+| Attribute              | Value        | Purpose                                      |
+| ---------------------- | ------------ | -------------------------------------------- |
+| `role`                 | `"carousel"` | Identifies the widget type                   |
+| `aria-live`            | `"polite"`   | Announces slide changes without interrupting |
+| `aria-roledescription` | `"slide"`    | Applied to each `.carousel-slide`            |
 
 Previous / next buttons carry `aria-label="Previous testimonial"` and
 `aria-label="Next testimonial"`. Dot buttons carry `aria-label="Go to testimonial {n}"` and
@@ -60,9 +60,7 @@ Previous / next buttons carry `aria-label="Previous testimonial"` and
 #### Certification Cards (`.cert-card`)
 
 ```html
-role="button"
-tabindex="0"
-aria-label="View {Certificate Name} certificate"
+role="button" tabindex="0" aria-label="View {Certificate Name} certificate"
 ```
 
 These are `<div>` elements acting as buttons. The `role="button"` and `tabindex="0"` pair
@@ -71,11 +69,11 @@ makes them keyboard-accessible. `certification-modal-logic.js` binds both `click
 
 #### Mobile Menu (`#mobileMenu`)
 
-| Attribute      | Value                                        |
-| -------------- | -------------------------------------------- |
-| `role`         | `"dialog"`                                   |
-| `aria-modal`   | `"true"`                                     |
-| `aria-label`   | `"Mobile navigation menu"`                   |
+| Attribute    | Value                      |
+| ------------ | -------------------------- |
+| `role`       | `"dialog"`                 |
+| `aria-modal` | `"true"`                   |
+| `aria-label` | `"Mobile navigation menu"` |
 
 `#mobileMenuBtn` carries `aria-expanded="false"` at rest, toggled to `"true"` when the
 overlay is open. Updated by `initMobileMenu()` in `app.js`.
@@ -87,10 +85,10 @@ Carries `aria-label` updated dynamically: `"Switch to light mode"` in dark mode,
 
 #### Theme Customizer (`#cs-panel`)
 
-| Attribute       | Value                   |
-| --------------- | ----------------------- |
-| `role`          | `"dialog"`              |
-| `aria-label`    | `"Theme customizer"`    |
+| Attribute    | Value                |
+| ------------ | -------------------- |
+| `role`       | `"dialog"`           |
+| `aria-label` | `"Theme customizer"` |
 
 Each swatch button carries `title` and `aria-label` set to the palette display name.
 The active swatch receives `aria-pressed="true"`.
@@ -101,17 +99,17 @@ The active swatch receives `aria-pressed="true"`.
 
 ### 2.1 Global Keyboard Contracts
 
-| Key            | Scope                   | Behaviour                                  |
-| -------------- | ----------------------- | ------------------------------------------ |
-| `Tab`          | Entire page             | Cycles through all focusable elements      |
-| `Shift+Tab`    | Entire page             | Reverse tab order                          |
-| `Enter`        | Any `role="button"`     | Activates the element                      |
-| `Space`        | Any `role="button"`     | Activates the element                      |
-| `Escape`       | Open modal or panel     | Closes the modal / panel                   |
-| `ArrowLeft`    | Testimonial carousel    | Navigates to the previous slide            |
-| `ArrowRight`   | Testimonial carousel    | Navigates to the next slide                |
+| Key          | Scope                | Behaviour                             |
+| ------------ | -------------------- | ------------------------------------- |
+| `Tab`        | Entire page          | Cycles through all focusable elements |
+| `Shift+Tab`  | Entire page          | Reverse tab order                     |
+| `Enter`      | Any `role="button"`  | Activates the element                 |
+| `Space`      | Any `role="button"`  | Activates the element                 |
+| `Escape`     | Open modal or panel  | Closes the modal / panel              |
+| `ArrowLeft`  | Testimonial carousel | Navigates to the previous slide       |
+| `ArrowRight` | Testimonial carousel | Navigates to the next slide           |
 
-### 2.2 Focus Trap — Modals
+### 2.2 Focus Trap - Modals
 
 When any modal opens, focus must not be allowed to leave the modal container. `app.js` and
 `certification-modal-logic.js` implement a basic focus trap: `Escape` closes the modal and
@@ -121,8 +119,8 @@ returns focus to the trigger element. When implementing new modals, follow the s
 // On open
 modal.focus();
 // On Escape keydown inside modal
-modal.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeModal();
+modal.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeModal();
 });
 // On close
 triggerElement.focus();
@@ -163,21 +161,21 @@ the navigation bar. Pattern:
 
 ### 3.1 Contrast Ratios
 
-| Pairing                              | Ratio   | WCAG Level |
-| ------------------------------------ | ------- | ---------- |
-| `--text-dark` on `--bg-dark`         | 12.5:1  | AAA        |
-| Gold `#d4af37` on `--bg-dark`        | 6.2:1   | AA         |
-| `#1a1a1a` on gold `#d4af37`          | 8.1:1   | AAA        |
-| `--text-muted-dark` on `--bg-dark`   | 5.1:1   | AA         |
+| Pairing                            | Ratio  | WCAG Level |
+| ---------------------------------- | ------ | ---------- |
+| `--text-dark` on `--bg-dark`       | 12.5:1 | AAA        |
+| Green `#D4AF37` on `--bg-dark`     | 8.0:1  | AAA        |
+| `#1A1A1A` on green `#D4AF37`       | 8.0:1  | AAA        |
+| `--text-muted-dark` on `--bg-dark` | 5.1:1  | AA         |
 
-> These ratios apply to the default Gold Noir palette. Alternative palettes in the Theme
+> These ratios apply to the Gold Noir palette. Alternative palettes in the Theme
 > Customizer are not contrast-audited. If adding a new palette, verify contrast ratios for body
 > text and interactive labels before shipping.
 
 ### 3.2 Focus Indicators
 
 Never remove the browser default focus ring with `outline: none` without replacing it. The
-portfolio replaces default outlines with a gold ring:
+portfolio replaces default outlines with a green ring:
 
 ```css
 :focus-visible {
@@ -195,14 +193,14 @@ not mouse clicks.
 
 ### 4.1 `alt` Text Rules
 
-| Image context                  | `alt` rule                                             |
-| ------------------------------ | ------------------------------------------------------ |
-| Profile photo (coin front)     | `"Ubaid Ahmad"` — identifies the person                |
-| Project screenshots            | Brief description of what the screenshot shows         |
-| Client logos                   | `"{Client name} logo"`                                 |
-| Testimonial avatars            | `"{Reviewer name} photo"`                              |
-| Certificate images in modal    | `"{Certificate name} credential"`                      |
-| Decorative blobs / backgrounds | `alt=""` with `role="presentation"` or `aria-hidden`   |
+| Image context                  | `alt` rule                                           |
+| ------------------------------ | ---------------------------------------------------- |
+| Profile photo (coin front)     | `"Ubaid Ahmad"` - identifies the person              |
+| Project screenshots            | Brief description of what the screenshot shows       |
+| Client logos                   | `"{Client name} logo"`                               |
+| Testimonial avatars            | `"{Reviewer name} photo"`                            |
+| Certificate images in modal    | `"{Certificate name} credential"`                    |
+| Decorative blobs / backgrounds | `alt=""` with `role="presentation"` or `aria-hidden` |
 
 Never use the filename as alt text. Never leave `alt` undefined.
 
@@ -233,11 +231,11 @@ immediately:
 <span id="cf-name-error" role="alert" class="cf-error"></span>
 ```
 
-The form element itself carries `novalidate` to suppress browser-native validation bubbles —
+The form element itself carries `novalidate` to suppress browser-native validation bubbles -
 all validation is handled by `contact-form-validation.js` with accessible error messaging.
 
 `#cfSubmitBtn` uses the native `disabled` attribute (toggled by `updateSubmitState()`), which is
-exposed to assistive technology automatically — no additional `aria-disabled` is needed. Screen
+exposed to assistive technology automatically - no additional `aria-disabled` is needed. Screen
 readers announce the button as unavailable until all required fields for the active mode pass
 validation.
 

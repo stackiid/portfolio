@@ -59,7 +59,7 @@
 :root[data-theme="light"] .edu-badge {
   background: rgba(var(--accent-rgb), 0.13);
   border-color: rgba(var(--accent-rgb), 0.55);
-  color: #7a5c00;
+  color: #8b6914;
 }
 :root[data-theme="light"] .edu-badge.field {
   background: rgba(0, 0, 0, 0.06);
@@ -68,7 +68,7 @@
   opacity: 1;
 }
 :root[data-theme="light"] .edu-institution {
-  color: #8b6914;
+  color: #7a5c00;
 }
 
 /* -- Certification Cards -- */

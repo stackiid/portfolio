@@ -690,7 +690,7 @@ function renderProjects() {
 // --------------------------------------------------------─
 // Supports two card modes:
 //   • logo present  → shows the image (grayscale → color on hover)
-//   • no logo yet   → shows a gold initial pill + company name
+//   • no logo yet   → shows a green initial pill + company name
 // Each card links out via website > facebook > instagram,
 // indicated by a small icon badge in the corner.
 // =========================================================

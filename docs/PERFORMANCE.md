@@ -2,7 +2,7 @@
 
 This document defines the performance budget, optimisation techniques, measurement tooling, and
 Lighthouse targets for the portfolio. A fast portfolio signals engineering competence before a
-recruiter reads a single line of copy. Every section below is actionable — not aspirational.
+recruiter reads a single line of copy. Every section below is actionable - not aspirational.
 
 ---
 
@@ -11,20 +11,20 @@ recruiter reads a single line of copy. Every section below is actionable — not
 These are hard targets. If a change causes any metric to breach its budget, address the
 regression before deploying.
 
-| Metric                              | Target     | Critical Threshold |
-| ----------------------------------- | ---------- | ------------------ |
-| Lighthouse Performance Score        | ≥ 90       | < 80 = block deploy|
-| First Contentful Paint (FCP)        | < 1.2s     | > 2.0s             |
-| Largest Contentful Paint (LCP)      | < 2.0s     | > 3.0s             |
-| Total Blocking Time (TBT)           | < 100ms    | > 300ms            |
-| Cumulative Layout Shift (CLS)       | < 0.05     | > 0.1              |
-| Time to Interactive (TTI)           | < 2.5s     | > 4.0s             |
-| Total page weight (`index.html`)    | < 1.5MB    | > 3MB              |
-| Total JS payload (uncompressed)     | < 150KB    | > 300KB            |
-| Total CSS payload (uncompressed)    | < 60KB     | > 120KB            |
+| Metric                           | Target  | Critical Threshold  |
+| -------------------------------- | ------- | ------------------- |
+| Lighthouse Performance Score     | ≥ 90    | < 80 = block deploy |
+| First Contentful Paint (FCP)     | < 1.2s  | > 2.0s              |
+| Largest Contentful Paint (LCP)   | < 2.0s  | > 3.0s              |
+| Total Blocking Time (TBT)        | < 100ms | > 300ms             |
+| Cumulative Layout Shift (CLS)    | < 0.05  | > 0.1               |
+| Time to Interactive (TTI)        | < 2.5s  | > 4.0s              |
+| Total page weight (`index.html`) | < 1.5MB | > 3MB               |
+| Total JS payload (uncompressed)  | < 150KB | > 300KB             |
+| Total CSS payload (uncompressed) | < 60KB  | > 120KB             |
 
 Budgets are measured on a simulated mid-range mobile device (Moto G4 equivalent) with a
-4G connection in Lighthouse DevTools mode. Desktop scores will be higher — always measure on
+4G connection in Lighthouse DevTools mode. Desktop scores will be higher - always measure on
 the mobile preset.
 
 ---
@@ -36,34 +36,34 @@ image asset added to the project.
 
 ### 2.1 Format Rules
 
-| Image type                        | Format         | Reason                                              |
-| --------------------------------- | -------------- | --------------------------------------------------- |
-| Profile photo (hero coin)         | WebP           | Best quality-to-size ratio for photographs          |
-| Project screenshots               | WebP           | Lossless compression available for UI screenshots   |
-| Client logos (raster)             | WebP or PNG    | PNG for logos with transparency; WebP otherwise     |
-| Testimonial avatars               | WebP           | Small dimensions — WebP savings are significant     |
-| Credential / certificate images   | WebP or JPG    | Certificates are document-style images — JPG fine   |
-| OG image (`og-image.png`)         | PNG            | OG scrapers have inconsistent WebP support          |
-| Favicon                           | PNG            | Universal browser support required                  |
+| Image type                      | Format      | Reason                                            |
+| ------------------------------- | ----------- | ------------------------------------------------- |
+| Profile photo (hero coin)       | WebP        | Best quality-to-size ratio for photographs        |
+| Project screenshots             | WebP        | Lossless compression available for UI screenshots |
+| Client logos (raster)           | WebP or PNG | PNG for logos with transparency; WebP otherwise   |
+| Testimonial avatars             | WebP        | Small dimensions - WebP savings are significant   |
+| Credential / certificate images | WebP or JPG | Certificates are document-style images - JPG fine |
+| OG image (`og-image.png`)       | PNG         | OG scrapers have inconsistent WebP support        |
+| Favicon                         | PNG         | Universal browser support required                |
 
 ### 2.2 Dimension Targets
 
-| Asset                          | Max dimensions     | Notes                                    |
-| ------------------------------ | ------------------ | ---------------------------------------- |
-| Profile photo                  | 360 × 360px        | Renders at 180px — 2× for retina         |
-| Project screenshots            | 800 × 500px        | Cards render thumbnails only             |
-| Client logos                   | 200 × 200px        | Carousel tiles are square                |
-| Testimonial avatars            | 120 × 120px        | Rendered at 48–60px — 2× for retina      |
-| Certificate images (modal)     | 1200 × 900px max   | Full-size modal display — no upscaling   |
-| OG image                       | 1200 × 630px exact | Platform requirement                     |
+| Asset                      | Max dimensions     | Notes                                  |
+| -------------------------- | ------------------ | -------------------------------------- |
+| Profile photo              | 360 × 360px        | Renders at 180px - 2× for retina       |
+| Project screenshots        | 800 × 500px        | Cards render thumbnails only           |
+| Client logos               | 200 × 200px        | Carousel tiles are square              |
+| Testimonial avatars        | 120 × 120px        | Rendered at 48–60px - 2× for retina    |
+| Certificate images (modal) | 1200 × 900px max   | Full-size modal display - no upscaling |
+| OG image                   | 1200 × 630px exact | Platform requirement                   |
 
 ### 2.3 Compression Targets
 
-| Format | Tool                        | Quality setting      |
-| ------ | --------------------------- | -------------------- |
-| WebP   | `cwebp`, Squoosh, ImageMagick | 80–85               |
-| JPG    | `jpegoptim`, Squoosh        | 80–85                |
-| PNG    | `pngquant`, TinyPNG         | Lossy 256 colours    |
+| Format | Tool                          | Quality setting   |
+| ------ | ----------------------------- | ----------------- |
+| WebP   | `cwebp`, Squoosh, ImageMagick | 80–85             |
+| JPG    | `jpegoptim`, Squoosh          | 80–85             |
+| PNG    | `pngquant`, TinyPNG           | Lossy 256 colours |
 
 Target file sizes: profile photo < 60KB, project thumbnails < 80KB each, avatars < 20KB each.
 
@@ -72,7 +72,11 @@ Target file sizes: profile photo < 60KB, project thumbnails < 80KB each, avatars
 All images below the fold carry `loading="lazy"`:
 
 ```html
-<img src="./assets/work/project-screenshot.webp" alt="Project name" loading="lazy" />
+<img
+  src="./assets/work/project-screenshot.webp"
+  alt="Project name"
+  loading="lazy"
+/>
 ```
 
 The hero profile photo and any above-the-fold images should use `loading="eager"` (the default)
@@ -84,7 +88,13 @@ Always declare explicit `width` and `height` attributes on `<img>` elements to p
 The browser reserves the correct space before the image downloads, eliminating layout shifts.
 
 ```html
-<img src="./assets/work/project.webp" alt="..." width="800" height="500" loading="lazy" />
+<img
+  src="./assets/work/project.webp"
+  alt="..."
+  width="800"
+  height="500"
+  loading="lazy"
+/>
 ```
 
 ---
@@ -93,7 +103,7 @@ The browser reserves the correct space before the image downloads, eliminating l
 
 ### 3.1 Script Load Strategy
 
-All scripts load at the bottom of `<body>` with no `defer` or `async` attribute required —
+All scripts load at the bottom of `<body>` with no `defer` or `async` attribute required -
 they are non-blocking by position. Do not move scripts to `<head>` without adding `defer`.
 
 ### 3.2 No Unused Dependencies
@@ -101,12 +111,12 @@ they are non-blocking by position. Do not move scripts to `<head>` without addin
 The project has no npm dependencies and no bundler. Every CDN dependency loaded on every page
 must be actively used on that page. Current CDN payloads:
 
-| Library           | CDN Size (approx) | Pages loaded on   |
-| ----------------- | ----------------- | ----------------- |
-| Tailwind CSS      | ~28KB (gzip)      | All               |
-| Lucide Icons      | ~40KB (gzip)      | All               |
-| Font Awesome 6.5  | ~70KB (gzip)      | All               |
-| Plus Jakarta Sans | ~25KB (gzip)      | All               |
+| Library           | CDN Size (approx) | Pages loaded on |
+| ----------------- | ----------------- | --------------- |
+| Tailwind CSS      | ~28KB (gzip)      | All             |
+| Lucide Icons      | ~40KB (gzip)      | All             |
+| Font Awesome 6.5  | ~70KB (gzip)      | All             |
+| Plus Jakarta Sans | ~25KB (gzip)      | All             |
 
 Font Awesome 6.5 is the largest dependency. If Font Awesome usage is reduced in future, consider
 switching to a subsetting approach or an SVG sprite to reduce payload.
@@ -123,7 +133,7 @@ to `<head>`.
 The scroll direction tracker in `app.js` uses `{ passive: true }`:
 
 ```js
-window.addEventListener('scroll', handler, { passive: true });
+window.addEventListener("scroll", handler, { passive: true });
 ```
 
 Any future scroll listeners must also use `{ passive: true }` unless they call
@@ -153,7 +163,7 @@ helps.
 
 `style.css` is a single file and not processed by a bundler. There is no automatic dead code
 elimination. Periodically audit with the Chrome DevTools Coverage panel (`Ctrl+Shift+P` →
-"Coverage") to identify CSS rules that fire on no page. Remove genuinely unused rules — do not
+"Coverage") to identify CSS rules that fire on no page. Remove genuinely unused rules - do not
 remove rules that fire only on scroll or interaction, as the Coverage panel marks those as unused
 on initial load.
 
@@ -168,7 +178,10 @@ All pages should carry preconnect hints before the Google Fonts `<link>`:
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link
+  href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+  rel="stylesheet"
+/>
 ```
 
 `preconnect` establishes the TCP connection and TLS handshake to Google's font servers before
@@ -187,11 +200,11 @@ Without `swap`, text is invisible until the font file downloads, directly hurtin
 The portfolio is served as a static site from GitHub Pages, Netlify, or Vercel. All three
 platforms apply the following automatically:
 
-| Platform     | GZIP / Brotli | Asset caching         | HTTP/2  |
-| ------------ | ------------- | --------------------- | ------- |
-| GitHub Pages | Gzip          | 1 hour (HTML), 1 year (assets with hash) | Yes |
-| Netlify      | Brotli + Gzip | Configurable via `netlify.toml` | Yes |
-| Vercel       | Brotli + Gzip | Automatic edge caching | Yes    |
+| Platform     | GZIP / Brotli | Asset caching                            | HTTP/2 |
+| ------------ | ------------- | ---------------------------------------- | ------ |
+| GitHub Pages | Gzip          | 1 hour (HTML), 1 year (assets with hash) | Yes    |
+| Netlify      | Brotli + Gzip | Configurable via `netlify.toml`          | Yes    |
+| Vercel       | Brotli + Gzip | Automatic edge caching                   | Yes    |
 
 No configuration is required on GitHub Pages. On Netlify, add cache-control headers in
 `netlify.toml` for improved asset longevity:
@@ -223,9 +236,9 @@ exclude real network latency and CDN cold starts.
 
 ### Score History
 
-| Date       | Version | Perf | A11y | Best Practices | SEO  | Notes              |
-| ---------- | ------- | ---- | ---- | -------------- | ---- | ------------------ |
-| 2026-05    | v3.0.0  |  —   |  —   |       —        |  —   | Baseline pending   |
+| Date    | Version | Perf | A11y | Best Practices | SEO | Notes            |
+| ------- | ------- | ---- | ---- | -------------- | --- | ---------------- |
+| 2026-05 | v3.0.0  | -    | -    | -              | -   | Baseline pending |
 
 Update this table after every major deployment. If Performance drops below 80, investigate
 using the **Opportunities** and **Diagnostics** sections of the Lighthouse report before

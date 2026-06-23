@@ -1,5 +1,5 @@
 /* =========================================================
-                ROOT VARIABLES - Gold Noir Theme
+                ROOT VARIABLES - Dark Azure Theme
    ========================================================= */
 :root {
   --bg-dark: #1a1a1a;
@@ -139,7 +139,7 @@ body.modal-open {
   top: -200px;
   left: -200px;
   animation-delay: 0s;
-  background: linear-gradient(135deg, #d4af37, #c49a3a);
+  background: linear-gradient(135deg, #d4af37, #c49a1a);
 }
 
 .liquid-bg::after {
@@ -885,7 +885,8 @@ body.modal-open {
   height: 16px;
   border-radius: 50%;
   background: var(--accent-dark);
-  top: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
   box-shadow: 0 0 20px var(--shadow-color);
   z-index: 1;
 }
@@ -959,7 +960,7 @@ body.modal-open {
 
 .exp-toggle:hover {
   background: var(--accent-dark);
-  color: #1a1a2e;
+  color: #1a1a1a;
   transform: scale(1.1);
 }
 
@@ -1629,7 +1630,7 @@ a.client-logo {
   .experience-item::before {
     left: 1rem !important;
     right: auto !important;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(-50%);
   }
 
   /* Reset reversed header on mobile - single column, always LTR */
@@ -1690,7 +1691,7 @@ a.client-logo {
                   LIGHT / DARK MODE OVERRIDES
    ========================================================= */
 :root[data-theme="light"] {
-  --bg-dark: #f5f5f0;
+  --bg-dark: #f5f0e8;
   --text-dark: #1a1a1a;
   --glass-dark: rgba(255, 255, 255, 0.6);
   --border-dark: rgba(212, 175, 55, 0.2);
@@ -1699,7 +1700,7 @@ a.client-logo {
   --shadow-color: rgba(212, 175, 55, 0.5);
 }
 :root[data-theme="light"] body {
-  background: #f5f5f0;
+  background: #f5f0e8;
   color: #1a1a1a;
 }
 :root[data-theme="light"] .glass-card,
@@ -2782,7 +2783,7 @@ a.client-logo {
 .mobile-nav-link {
   font-size: 1.1rem;
   font-weight: 700;
-  padding: 0.65rem 0.25rem;
+  padding: 0.65rem 1.25rem;
   color: var(--text-dark);
   text-decoration: none;
   letter-spacing: 0.01em;
@@ -3501,14 +3502,14 @@ a.client-logo {
 
 /* -- Light mode: complete palette + panel override -- */
 :root[data-theme="light"] {
-  --bg-dark: #f5f5f0;
+  --bg-dark: #f5f0e8;
   --text-dark: #1a1a1a;
   --glass-dark: rgba(255, 255, 255, 0.65);
   --border-dark: rgba(var(--accent-rgb), 0.3);
   --shadow-color: rgba(var(--accent-rgb), 0.35);
 }
 :root[data-theme="light"] body {
-  background: #f5f5f0;
+  background: #f5f0e8;
   color: #1a1a1a;
 }
 :root[data-theme="light"] .glass-card,

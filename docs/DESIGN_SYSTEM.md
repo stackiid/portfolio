@@ -21,24 +21,24 @@ value that appears more than once in the codebase should be hardcoded. Reference
 
 #### Dark Mode (Default)
 
-| Variable              | Value                                      | Purpose                                       |
-| --------------------- | ------------------------------------------ | --------------------------------------------- |
-| `--bg-dark`           | `#1a1a1a`                                  | Page background, the base surface             |
-| `--text-dark`         | `#e8e8e8`                                  | Primary body text colour                      |
-| `--text-muted-dark`   | `rgba(232, 232, 232, 0.6)`                 | Secondary / muted text, captions, labels      |
-| `--accent-dark`       | `#d4af37`                                  | Gold accent — the single brand colour         |
-| `--accent-light`      | `#f0d896`                                  | Lighter gold tint for gradient text/headings  |
-| `--accent-hover-dark` | `#c49a1a`                                  | Gold accent on hover state                    |
-| `--accent-rgb`        | `212,175,55`                               | Raw RGB triplet of `--accent-dark` (no spaces)|
-| `--glass-dark`        | `rgba(255, 255, 255, 0.05)`                | Glass card fill                               |
-| `--glass-hover-dark`  | `rgba(255, 255, 255, 0.08)`                | Glass card fill on hover                      |
-| `--border-dark`       | `rgba(212, 175, 55, 0.2)`                  | Card border colour (gold at 20% opacity)      |
-| `--border-hover-dark` | `rgba(212, 175, 55, 0.5)`                  | Card border on hover (gold at 50% opacity)    |
-| `--shadow-color`      | `rgba(212, 175, 55, 0.5)`                  | Glow shadow colour for depth effects          |
-| `--nav-bg`            | `rgba(26, 26, 26, 0.9)`                    | Navigation bar background with blur           |
+| Variable              | Value                       | Purpose                                        |
+| --------------------- | --------------------------- | ---------------------------------------------- |
+| `--bg-dark`           | `#1A1A1A`                   | Page background, deep noir black surface       |
+| `--text-dark`         | `#e8e8e8`                   | Primary body text colour                       |
+| `--text-muted-dark`   | `rgba(232, 232, 232, 0.6)`  | Secondary / muted text, captions, labels       |
+| `--accent-dark`       | `#D4AF37`                   | Gold Noir - the primary brand colour           |
+| `--accent-light`      | `#F0D896`                   | Light green tint for gradient text/headings    |
+| `--accent-hover-dark` | `#C49A1A`                   | Gold Noir accent on hover state                |
+| `--accent-rgb`        | `212,175,55`                | Raw RGB triplet of `--accent-dark` (no spaces) |
+| `--glass-dark`        | `rgba(255, 255, 255, 0.05)` | Glass card fill                                |
+| `--glass-hover-dark`  | `rgba(255, 255, 255, 0.08)` | Glass card fill on hover                       |
+| `--border-dark`       | `rgba(212, 175, 55, 0.2)`   | Card border colour (green at 20% opacity)      |
+| `--border-hover-dark` | `rgba(212, 175, 55, 0.4)`   | Card border on hover (green at 50% opacity)    |
+| `--shadow-color`      | `rgba(212, 175, 55, 0.5)`   | Glow shadow colour for depth effects           |
+| `--nav-bg`            | `rgba(26, 26, 26, 0.9)`     | Navigation bar background with blur            |
 
 > **`--accent-rgb` is required.** This variable holds the raw comma-separated R,G,B triplet of
-> the current accent colour. It is consumed inside `rgba()` calls throughout the CSS — for
+> the current accent colour. It is consumed inside `rgba()` calls throughout the CSS - for
 > example, the client initial pill uses `rgba(var(--accent-rgb), 0.12)`. The Theme Customizer
 > updates `--accent-rgb` whenever a new palette is applied. If you add a new palette manually,
 > you must set this variable alongside `--accent-dark`.
@@ -49,20 +49,20 @@ Light mode tokens override the dark mode defaults when the `[data-theme="light"]
 present on the `:root` element (`<html>`). The JavaScript toggle writes this attribute and also
 persists the preference in `localStorage`.
 
-> **Implementation note:** Light mode is applied as `document.documentElement.setAttribute("data-theme", "light")` in `initThemeToggle()`. The CSS selector is `:root[data-theme="light"]`. **Do not use `.light-mode` as a class on `<body>`** — that pattern is not implemented in this codebase.
+> **Implementation note:** Light mode is applied as `document.documentElement.setAttribute("data-theme", "light")` in `initThemeToggle()`. The CSS selector is `:root[data-theme="light"]`. **Do not use `.light-mode` as a class on `<body>`** - that pattern is not implemented in this codebase.
 
-| Variable              | Light Mode Value                            |
-| --------------------- | ------------------------------------------- |
-| `--bg-dark`           | `#f5f0e8`                                   |
-| `--text-dark`         | `#1a1a1a`                                   |
-| `--text-muted-dark`   | `rgba(26, 26, 26, 0.6)`                     |
-| `--glass-dark`        | `rgba(255, 255, 255, 0.7)`                  |
-| `--glass-hover-dark`  | `rgba(255, 255, 255, 0.9)`                  |
-| `--border-dark`       | `rgba(212, 175, 55, 0.3)`                   |
-| `--nav-bg`            | `rgba(245, 240, 232, 0.9)`                  |
+| Variable             | Light Mode Value           |
+| -------------------- | -------------------------- |
+| `--bg-dark`          | `#f5f0e8`                  |
+| `--text-dark`        | `#1A1A1A`                  |
+| `--text-muted-dark`  | `rgba(26, 26, 26, 0.6)`    |
+| `--glass-dark`       | `rgba(255, 255, 255, 0.7)` |
+| `--glass-hover-dark` | `rgba(255, 255, 255, 0.9)` |
+| `--border-dark`      | `rgba(212, 175, 55, 0.3)`  |
+| `--nav-bg`           | `rgba(245, 240, 232, 0.9)` |
 
-The accent colour `--accent-dark` (`#d4af37`) does not change between modes. It is the permanent
-brand colour of the portfolio in its default Gold Noir palette.
+The accent colour `--accent-dark` (`#D4AF37`) does not change between modes. It is the permanent
+brand colour of the portfolio in the Gold Noir palette.
 
 #### To Retheme the Entire Site (Static)
 
@@ -80,17 +80,17 @@ adding new palettes.
 
 ### 1.2 Typography Tokens
 
-| Variable               | Value                                         | Usage                              |
-| ---------------------- | --------------------------------------------- | ---------------------------------- |
-| `--font-primary`       | `'Plus Jakarta Sans', sans-serif`             | All body text, UI labels, headings |
-| `--font-mono`          | `'Courier New', monospace`                    | Code snippets, technical strings   |
-| `--font-weight-light`  | `300`                                         | Muted captions, secondary labels   |
-| `--font-weight-base`   | `400`                                         | Body copy                          |
-| `--font-weight-medium` | `500`                                         | Card subtitles, nav links          |
-| `--font-weight-semi`   | `600`                                         | Section titles, card headings      |
-| `--font-weight-bold`   | `700`                                         | Hero title, major CTAs             |
+| Variable               | Value                             | Usage                              |
+| ---------------------- | --------------------------------- | ---------------------------------- |
+| `--font-primary`       | `'Plus Jakarta Sans', sans-serif` | All body text, UI labels, headings |
+| `--font-mono`          | `'Courier New', monospace`        | Code snippets, technical strings   |
+| `--font-weight-light`  | `300`                             | Muted captions, secondary labels   |
+| `--font-weight-base`   | `400`                             | Body copy                          |
+| `--font-weight-medium` | `500`                             | Card subtitles, nav links          |
+| `--font-weight-semi`   | `600`                             | Section titles, card headings      |
+| `--font-weight-bold`   | `700`                             | Hero title, major CTAs             |
 
-The font stack falls back to `sans-serif` if Google Fonts fails to load. This is intentional —
+The font stack falls back to `sans-serif` if Google Fonts fails to load. This is intentional -
 the layout should remain legible at all times.
 
 ---
@@ -100,41 +100,41 @@ the layout should remain legible at all times.
 The spacing system is based on a `0.5rem` (8px) baseline unit. All padding, margin, and gap
 values should be multiples of this unit.
 
-| Token name (informal) | Value    | Usage                                      |
-| --------------------- | -------- | ------------------------------------------ |
-| XS                    | `0.5rem` | Icon padding, tight inline spacing         |
-| SM                    | `1rem`   | Card internal padding (compact sections)   |
-| MD                    | `1.5rem` | Standard card padding                      |
-| LG                    | `2rem`   | Section internal spacing                   |
-| XL                    | `3rem`   | Section vertical padding                   |
-| XXL                   | `5rem`   | Hero vertical padding                      |
+| Token name (informal) | Value    | Usage                                    |
+| --------------------- | -------- | ---------------------------------------- |
+| XS                    | `0.5rem` | Icon padding, tight inline spacing       |
+| SM                    | `1rem`   | Card internal padding (compact sections) |
+| MD                    | `1.5rem` | Standard card padding                    |
+| LG                    | `2rem`   | Section internal spacing                 |
+| XL                    | `3rem`   | Section vertical padding                 |
+| XXL                   | `5rem`   | Hero vertical padding                    |
 
 ---
 
 ### 1.4 Border Radius Tokens
 
-| Variable        | Value    | Usage                                      |
-| --------------- | -------- | ------------------------------------------ |
-| `--radius-sm`   | `8px`    | Tags, badges, small buttons                |
-| `--radius-md`   | `12px`   | Input fields, compact cards                |
-| `--radius-lg`   | `16px`   | Standard glass cards                       |
-| `--radius-xl`   | `24px`   | Large hero cards, modal containers         |
-| `--radius-full` | `9999px` | Pill buttons, availability badge           |
+| Variable        | Value    | Usage                              |
+| --------------- | -------- | ---------------------------------- |
+| `--radius-sm`   | `8px`    | Tags, badges, small buttons        |
+| `--radius-md`   | `12px`   | Input fields, compact cards        |
+| `--radius-lg`   | `16px`   | Standard glass cards               |
+| `--radius-xl`   | `24px`   | Large hero cards, modal containers |
+| `--radius-full` | `9999px` | Pill buttons, availability badge   |
 
 ---
 
 ### 1.5 Animation Tokens
 
-| Variable           | Value                                      | Usage                                         |
-| ------------------ | ------------------------------------------ | --------------------------------------------- |
-| `--spring`         | `cubic-bezier(0.175, 0.885, 0.32, 1.275)` | Standard spring — cards, skill tabs           |
-| `--coin-ease`      | `cubic-bezier(0.34, 1.56, 0.64, 1)`       | Coin-toss overshoot easing                    |
-| `--ease-out`       | `cubic-bezier(0.22, 1, 0.36, 1)`          | Fast-exit animations, modal open              |
-| `--ease-in`        | `cubic-bezier(0.64, 0, 0.78, 0)`          | Gradual entry animations                      |
-| `--duration-fast`  | `0.15s`                                    | Micro-interactions (hover state changes)      |
-| `--duration-base`  | `0.3s`                                     | Standard transitions                          |
-| `--duration-slow`  | `0.6s`                                     | Hero entrance, modal fade                     |
-| `--coin-size`      | `180px` desktop / `140px` at 480px         | Profile coin diameter CSS variable            |
+| Variable          | Value                                     | Usage                                    |
+| ----------------- | ----------------------------------------- | ---------------------------------------- |
+| `--spring`        | `cubic-bezier(0.175, 0.885, 0.32, 1.275)` | Standard spring - cards, skill tabs      |
+| `--coin-ease`     | `cubic-bezier(0.34, 1.56, 0.64, 1)`       | Coin-toss overshoot easing               |
+| `--ease-out`      | `cubic-bezier(0.22, 1, 0.36, 1)`          | Fast-exit animations, modal open         |
+| `--ease-in`       | `cubic-bezier(0.64, 0, 0.78, 0)`          | Gradual entry animations                 |
+| `--duration-fast` | `0.15s`                                   | Micro-interactions (hover state changes) |
+| `--duration-base` | `0.3s`                                    | Standard transitions                     |
+| `--duration-slow` | `0.6s`                                    | Hero entrance, modal fade                |
+| `--coin-size`     | `180px` desktop / `140px` at 480px        | Profile coin diameter CSS variable       |
 
 ---
 
@@ -143,7 +143,7 @@ values should be multiples of this unit.
 ### 2.1 Glass Card
 
 The `.glass-card` class is the primary surface component of the portfolio. It implements the
-full glassmorphism treatment: semi-transparent fill, backdrop blur, gold border, depth shadow,
+full glassmorphism treatment: semi-transparent fill, backdrop blur, green border, depth shadow,
 and hover state transitions.
 
 ```css
@@ -154,9 +154,10 @@ and hover state transitions.
   border: 1px solid var(--border-dark);
   border-radius: var(--radius-lg);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s var(--spring),
-              border-color 0.3s ease,
-              box-shadow 0.3s ease;
+  transition:
+    transform 0.3s var(--spring),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .glass-card:hover {
@@ -187,12 +188,18 @@ service CTAs, and page-level primary actions.
   align-items: center;
   gap: 0.5rem;
   padding: 0.875rem 2rem;
-  background: linear-gradient(135deg, var(--accent-dark), var(--accent-hover-dark));
+  background: linear-gradient(
+    135deg,
+    var(--accent-dark),
+    var(--accent-hover-dark)
+  );
   color: #1a1a1a;
   font-weight: var(--font-weight-bold);
   border-radius: var(--radius-full);
   text-decoration: none;
-  transition: transform 0.2s var(--spring), box-shadow 0.2s ease;
+  transition:
+    transform 0.2s var(--spring),
+    box-shadow 0.2s ease;
 }
 
 .cta-button:hover {
@@ -221,12 +228,12 @@ All sections follow a consistent layout pattern:
 </section>
 ```
 
-| Class               | Purpose                                                              |
-| ------------------- | -------------------------------------------------------------------- |
-| `.section`          | Vertical padding (typically `5rem` top and bottom)                   |
-| `.container-custom` | Max-width constraint with horizontal padding                         |
-| `.section-wrapper`  | Inner flex or grid layout wrapper                                    |
-| `.section-title`    | Section heading with gold underline accent and uppercase tracking     |
+| Class               | Purpose                                                            |
+| ------------------- | ------------------------------------------------------------------ |
+| `.section`          | Vertical padding (typically `5rem` top and bottom)                 |
+| `.container-custom` | Max-width constraint with horizontal padding                       |
+| `.section-wrapper`  | Inner flex or grid layout wrapper                                  |
+| `.section-title`    | Section heading with green underline accent and uppercase tracking |
 
 ---
 
@@ -250,7 +257,7 @@ The navigation uses a floating glass header that becomes visible immediately on 
 Navigation links use the `.nav-link` class. The active state is tracked by `IntersectionObserver`
 on all pages and applies `.nav-active` to the link whose destination section is currently in view.
 
-The nav includes a theme toggle button (`#themeToggle`) and — on mobile — a hamburger button
+The nav includes a theme toggle button (`#themeToggle`) and - on mobile - a hamburger button
 (`#mobileMenuBtn`) that opens the full-screen overlay (`#mobileMenu`). See
 `docs/PROJECT_EDITING_GUIDE.md` section 19 for mobile sub-nav documentation.
 
@@ -259,7 +266,7 @@ The nav includes a theme toggle button (`#themeToggle`) and — on mobile — a 
 `.glass-header` carries `overflow: hidden` so the inner `.header-progress-fill` layer is clipped to
 its rounded corners. `initHeaderScrollProgress()` in `scripts/app.js` sets the fill's `width` (0%
 at the top of the page, 100% at the bottom) on a rAF-throttled scroll listener. Two
-`.header-progress-wave` elements — rotating, low-opacity gold blobs built from `--accent-rgb` —
+`.header-progress-wave` elements - rotating, low-opacity green blobs built from `--accent-rgb` -
 sit at the fill's leading edge and animate continuously via `@keyframes header-wave-spin` /
 `header-wave-spin-reverse`, even while scrolling is idle. `.header-content` is given
 `position: relative; z-index: 1` so nav links, the logo, and the theme toggle always render above
@@ -284,7 +291,7 @@ Project type tags use the `.type-tag` base class combined with a type-specific m
 ```
 
 Type tags are rendered by `renderProjects()` in `app.js` based on the `type` array on each
-project object. Do not hardcode type tag HTML — always add the type to the data array and let
+project object. Do not hardcode type tag HTML - always add the type to the data array and let
 the render function handle the markup.
 
 ---
@@ -306,7 +313,11 @@ corner:
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  background: linear-gradient(135deg, var(--accent-dark), var(--accent-hover-dark));
+  background: linear-gradient(
+    135deg,
+    var(--accent-dark),
+    var(--accent-hover-dark)
+  );
   color: #1a1a1a;
   padding: 0.5rem 1rem;
   border-radius: var(--radius-full);
@@ -334,6 +345,7 @@ The client carousel renders two card variants driven by the `clients` array in
 `scripts/clients-data.js`. Both variants are wrapped in an `<a>` tag with a link-type icon badge.
 
 **Logo variant** (when `logo` field is present):
+
 ```html
 <a href="{link}" class="client-logo" ...>
   <img src="{logo}" alt="{name} logo" />
@@ -342,6 +354,7 @@ The client carousel renders two card variants driven by the `clients` array in
 ```
 
 **No-logo variant** (when `logo` field is absent):
+
 ```html
 <a href="{link}" class="client-logo client-logo-text" ...>
   <div class="client-initial-pill">{initial}</div>
@@ -391,13 +404,13 @@ Clicking the card opens `#certModal`, which renders the credential image at full
 
 The dual-mode contact form (`id="contactForm"`) on `index.html` uses these structural classes:
 
-| Class           | Purpose                                          |
-| --------------- | ------------------------------------------------ |
-| `.cf-form`      | Form container — `novalidate` attribute required |
-| `.cf-tab-pill`  | Animated sliding tab indicator                   |
-| `.cf-field`     | Individual field wrapper (label + input + error) |
-| `#cfToast`      | Toast notification container                     |
-| `#cfSubmitBtn`  | Submit button — label and icon update per mode   |
+| Class          | Purpose                                          |
+| -------------- | ------------------------------------------------ |
+| `.cf-form`     | Form container - `novalidate` attribute required |
+| `.cf-tab-pill` | Animated sliding tab indicator                   |
+| `.cf-field`    | Individual field wrapper (label + input + error) |
+| `#cfToast`     | Toast notification container                     |
+| `#cfSubmitBtn` | Submit button - label and icon update per mode   |
 
 All form logic (mode switching, field visibility, validation, URI construction, toast lifecycle)
 lives in `scripts/contact-form-validation.js`. Do not write inline `onsubmit` or `onclick`
@@ -408,8 +421,8 @@ attributes on any form element.
 - **Full Name** (`#cf-name`) must contain at least two space-separated words, each made up of
   alphabetic characters with optional internal apostrophes or hyphens (`O'Brien`, `Anne-Marie`).
   Digits and other special characters are rejected. Multiple spaces are collapsed and
-  leading/trailing spaces are trimmed on blur. Invalid input shows *"Please enter your first and
-  last name."*
+  leading/trailing spaces are trimmed on blur. Invalid input shows _"Please enter your first and
+  last name."_
 - **Email** (`#cf-email`, Mail mode) and **WhatsApp Number** (`#cf-contact`, WhatsApp mode) keep
   their existing format checks.
 - **Subject** (`#cf-subject`, Mail mode) and **Message** (`#cf-message`) are required non-empty
@@ -438,7 +451,9 @@ modifier class.
 ```css
 .animate-on-scroll {
   opacity: 0;
-  transition: opacity 0.6s ease, transform 0.6s var(--spring);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s var(--spring);
 }
 
 .animate-on-scroll.visible {
@@ -451,15 +466,25 @@ modifier class.
 
 ```css
 /* Slide up (direction-aware) */
-.animate-on-scroll.slide-up.from-below { transform: translateY(40px); }
-.animate-on-scroll.slide-up.from-above { transform: translateY(-40px); }
+.animate-on-scroll.slide-up.from-below {
+  transform: translateY(40px);
+}
+.animate-on-scroll.slide-up.from-above {
+  transform: translateY(-40px);
+}
 
 /* Zoom in (direction-agnostic) */
-.animate-on-scroll.zoom-in { transform: scale(0.88); }
+.animate-on-scroll.zoom-in {
+  transform: scale(0.88);
+}
 
 /* Fade in (direction-aware, subtle) */
-.animate-on-scroll.fade-in.from-below { transform: translateY(12px); }
-.animate-on-scroll.fade-in.from-above { transform: translateY(-12px); }
+.animate-on-scroll.fade-in.from-below {
+  transform: translateY(12px);
+}
+.animate-on-scroll.fade-in.from-above {
+  transform: translateY(-12px);
+}
 ```
 
 The `from-below` and `from-above` classes are applied by `app.js` at the moment an element
@@ -474,15 +499,15 @@ Do not apply `animate-on-scroll` to the hero section. The hero uses its own keyf
 
 ### 3.2 Keyframe Animations
 
-| Keyframe Name   | Used On                          | Description                                        |
-| --------------- | -------------------------------- | -------------------------------------------------- |
-| `heroFadeUp`    | Hero section (all pages)         | Fades in + slides up 20px on page load             |
-| `coinGlow`      | Profile coin outer ring          | Pulses gold box-shadow at idle                     |
-| `bounce`        | Available for Work badge         | Vertical bounce loop at 2s interval                |
-| `carouselSlide` | Client logo carousel track       | Infinite horizontal scroll, pauses on hover        |
-| `liquidFloat`   | Background blob elements         | Slow radial float cycle (20s), purely decorative   |
-| `shimmerSweep`  | Handled via CSS transition       | Not a keyframe — uses `left` property transition   |
-| `fadeInScale`   | Page loader exit                 | Fades and scales out the loader overlay            |
+| Keyframe Name   | Used On                    | Description                                      |
+| --------------- | -------------------------- | ------------------------------------------------ |
+| `heroFadeUp`    | Hero section (all pages)   | Fades in + slides up 20px on page load           |
+| `coinGlow`      | Profile coin outer ring    | Pulses green box-shadow at idle                  |
+| `bounce`        | Available for Work badge   | Vertical bounce loop at 2s interval              |
+| `carouselSlide` | Client logo carousel track | Infinite horizontal scroll, pauses on hover      |
+| `liquidFloat`   | Background blob elements   | Slow radial float cycle (20s), purely decorative |
+| `shimmerSweep`  | Handled via CSS transition | Not a keyframe - uses `left` property transition |
+| `fadeInScale`   | Page loader exit           | Fades and scales out the loader overlay          |
 
 All keyframe definitions live inside `style.css` under their respective named comment blocks.
 Do not define keyframes inside component-level style rules.
@@ -492,17 +517,17 @@ Do not define keyframes inside component-level style rules.
 ### 3.3 Testimonial Carousel
 
 The testimonial carousel (`id="testimonialCarousel"`) is a single-card slide system managed
-entirely by `app.js`. Slide transitions are driven by CSS class toggling — not keyframes:
+entirely by `app.js`. Slide transitions are driven by CSS class toggling - not keyframes:
 
-| Class          | Applied to   | Effect                              |
-| -------------- | ------------ | ----------------------------------- |
-| `exit-left`    | Outgoing     | Slides out to the left              |
-| `exit-right`   | Outgoing     | Slides out to the right             |
-| `enter-left`   | Incoming     | Enters from the right               |
-| `enter-right`  | Incoming     | Enters from the left                |
+| Class         | Applied to | Effect                  |
+| ------------- | ---------- | ----------------------- |
+| `exit-left`   | Outgoing   | Slides out to the left  |
+| `exit-right`  | Outgoing   | Slides out to the right |
+| `enter-left`  | Incoming   | Enters from the right   |
+| `enter-right` | Incoming   | Enters from the left    |
 
 The `carouselAnimating` boolean guard in `app.js` prevents stacked transitions. Do not apply
-these classes manually — `tcGoTo()` manages the full class lifecycle including `transitionend`
+these classes manually - `tcGoTo()` manages the full class lifecycle including `transitionend`
 cleanup.
 
 Auto-advance interval: `TC_INTERVAL = 120_000` (2 minutes). The timer resets on any manual
@@ -539,7 +564,7 @@ The 3D coin-toss uses CSS `transform: rotateY` rather than keyframes. Key values
 }
 ```
 
-The `1500px` perspective value is not arbitrary — it produces the correct depth curve for a
+The `1500px` perspective value is not arbitrary - it produces the correct depth curve for a
 `180px` coin at standard desktop viewing distances. Do not change this value.
 
 ---
@@ -562,8 +587,8 @@ background: linear-gradient(
   transparent 100%
 );
 
-left: -110%;            /* resting position (off-screen left) */
-left: 160%;             /* hover position (off-screen right)  */
+left: -110%; /* resting position (off-screen left) */
+left: 160%; /* hover position (off-screen right)  */
 transition: left 0.65s ease;
 ```
 
@@ -591,7 +616,7 @@ adjust the skew angle without adjusting the stripe width proportionally.
 - Body font size reduces by approximately 10% for comfortable reading.
 - Card padding reduces to maintain usable content width.
 
-Never remove `@media` blocks. Never use `px` values inside responsive blocks — use `rem` or
+Never remove `@media` blocks. Never use `px` values inside responsive blocks - use `rem` or
 percentages to ensure the layout responds to the user's base font size setting.
 
 ---
@@ -622,6 +647,7 @@ To use a Lucide icon in HTML:
 ### 5.2 Font Awesome 6.5 (Supplemental)
 
 Font Awesome is used for:
+
 - Profile coin back-face badge (`fa-certificate` + `fa-check`)
 - Pinned badge thumbtack (`fa-thumbtack`)
 - Theme Customizer trigger (`fa-palette`) and panel controls (`fa-sliders-h`, `fa-times`)
@@ -638,19 +664,19 @@ a Lucide equivalent exists.
 
 ## 6. Colour Usage Rules
 
-- **Gold (`#d4af37`) is for emphasis only.** It should not be used as a fill colour for large
+- **Gold Noir (`#D4AF37`) is for emphasis only.** It should not be used as a fill colour for large
   surfaces. It is used for borders, glows, text highlights, gradients on buttons and badges,
   and the shimmer stripe. Predominantly gold backgrounds will overwhelm the dark palette.
 
 - **Text on dark surfaces** should use `--text-dark` (`#e8e8e8`) for primary copy and
   `--text-muted-dark` for secondary copy. Never use pure white (`#ffffff`) as a text colour
-  against the dark background — it creates too much contrast and fights the gold.
+  against the dark background - it creates too much contrast and fights the green.
 
-- **Text on gold surfaces** (buttons, badges, the coin back face) should use `#1a1a1a` for
+- **Text on green surfaces** (buttons, badges, the coin back face) should use `#1A1A1A` for
   maximum legibility and visual consistency.
 
 - **Palette-aware colours** that must follow the active palette should reference CSS variables
-  (`var(--accent-dark)`, `var(--border-dark)`, etc.). Hardcoded hex values like `#d4af37`
+  (`var(--accent-dark)`, `var(--border-dark)`, etc.). Hardcoded hex values like `#D4AF37`
   inside component rules will not update when the user changes palettes via the Theme Customizer.
 
 ---
@@ -702,7 +728,7 @@ checklist to maintain design system consistency:
    from `localStorage` before the DOM renders to prevent a flash of the wrong theme.
 8. Load scripts in the correct order: data files → `app.js` → any page-specific scripts.
    `initThemeCustomizer()` and `initThemeToggle()` are called automatically by `app.js` on
-   `DOMContentLoaded` — no manual call needed.
+   `DOMContentLoaded` - no manual call needed.
 9. If the page needs a certification section, copy the `.cert-grid` block from `pages/about.html`
    and load `scripts/certification-modal-logic.js` after `app.js`.
 10. Test at 768px and 480px viewport widths before committing.
@@ -711,4 +737,4 @@ checklist to maintain design system consistency:
 
 This design system is a living document. When a new component is built that introduces a new
 token, class, or pattern, document it here immediately. A design system that is not maintained
-is not a design system — it is a collection of coincidences.
+is not a design system - it is a collection of coincidences.

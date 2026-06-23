@@ -12,28 +12,28 @@ this guide.
 
 ### Core Files
 
-| File                                  | Role                                                         |
-| ------------------------------------- | ------------------------------------------------------------ |
-| `index.html`                          | Layout shell, SEO metadata, modal containers, contact form   |
-| `pages/about.html`                    | About / Story page - bio, timeline, certifications, currently|
-| `pages/services.html`                 | Services page - tiers, process, mailto CTAs only             |
-| `styles/style.css`                    | Design system, animation engine, responsive breakpoints      |
-| `styles/about.css`                    | About / certifications page-specific styles                  |
-| `scripts/app.js`                      | All render functions, state, animations, theme logic         |
-| `scripts/projects-data.js`            | Single source of truth for all project objects               |
-| `scripts/skills-data.js`              | `skillCategories` array - tabbed skills grid                 |
-| `scripts/experience-data.js`          | `experience` array - paginated timeline                      |
-| `scripts/clients-data.js`             | `clients` array - logo carousel                              |
-| `scripts/testimonials-data.js`        | `testimonials` array - carousel + modal                      |
-| `scripts/certification-modal-logic.js`| Cert card → modal wiring (`about.html` only)                 |
-| `scripts/contact-form-validation.js`  | Dual-mode contact form logic (`index.html` only)             |
-| `assets/`                             | Images, credentials, work screenshots                        |
-| `docs/`                               | Project documentation (this file and DESIGN_SYSTEM.md)       |
+| File                                   | Role                                                          |
+| -------------------------------------- | ------------------------------------------------------------- |
+| `index.html`                           | Layout shell, SEO metadata, modal containers, contact form    |
+| `pages/about.html`                     | About / Story page - bio, timeline, certifications, currently |
+| `pages/services.html`                  | Services page - tiers, process, mailto CTAs only              |
+| `styles/style.css`                     | Design system, animation engine, responsive breakpoints       |
+| `styles/about.css`                     | About / certifications page-specific styles                   |
+| `scripts/app.js`                       | All render functions, state, animations, theme logic          |
+| `scripts/projects-data.js`             | Single source of truth for all project objects                |
+| `scripts/skills-data.js`               | `skillCategories` array - tabbed skills grid                  |
+| `scripts/experience-data.js`           | `experience` array - paginated timeline                       |
+| `scripts/clients-data.js`              | `clients` array - logo carousel                               |
+| `scripts/testimonials-data.js`         | `testimonials` array - carousel + modal                       |
+| `scripts/certification-modal-logic.js` | Cert card → modal wiring (`about.html` only)                  |
+| `scripts/contact-form-validation.js`   | Dual-mode contact form logic (`index.html` only)              |
+| `assets/`                              | Images, credentials, work screenshots                         |
+| `docs/`                                | Project documentation (this file and DESIGN_SYSTEM.md)        |
 
 ### Script Load Order
 
 All HTML pages must load scripts in this exact sequence. `app.js` reads from the variables
-populated by the preceding data files — order is mandatory:
+populated by the preceding data files - order is mandatory:
 
 ```html
 <script src="./scripts/projects-data.js"></script>
@@ -43,8 +43,10 @@ populated by the preceding data files — order is mandatory:
 <script src="./scripts/testimonials-data.js"></script>
 <script src="./scripts/app.js"></script>
 <!-- page-specific scripts load after app.js -->
-<script src="./scripts/contact-form-validation.js"></script>   <!-- index.html only -->
-<script src="./scripts/certification-modal-logic.js"></script>  <!-- about.html only -->
+<script src="./scripts/contact-form-validation.js"></script>
+<!-- index.html only -->
+<script src="./scripts/certification-modal-logic.js"></script>
+<!-- about.html only -->
 ```
 
 ### Rendering Pattern
@@ -64,7 +66,7 @@ structure, then the browser console. All render functions log to `console.error`
 ## 2. Editing Static Hero Content
 
 Static text lives directly in `index.html`. Find elements by class or `id` and edit the text
-content only. Do not remove class names — they are required for CSS targeting and animation.
+content only. Do not remove class names - they are required for CSS targeting and animation.
 
 | Content               | Selector to find                                            |
 | --------------------- | ----------------------------------------------------------- |
@@ -74,7 +76,7 @@ content only. Do not remove class names — they are required for CSS targeting 
 | CV download button    | `<a class="cta-button" download>` - update `href` path only |
 
 The hero entrance animation (`heroFadeUp`) fires automatically on page load. Do not wrap the hero
-section in an `animate-on-scroll` class — it will conflict.
+section in an `animate-on-scroll` class - it will conflict.
 
 ---
 
@@ -198,7 +200,7 @@ Append a new object to the `skillCategories` array in `scripts/skills-data.js`:
 ```
 
 `renderSkills()` automatically creates a new tab button and grid view. Do not rename the
-`category` or `skills` keys — the render function expects these exact key names.
+`category` or `skills` keys - the render function expects these exact key names.
 
 ---
 
@@ -229,7 +231,7 @@ The Experience section uses two constants defined near the top of `app.js`:
 
 ```js
 const INITIAL_EXP_COUNT = 2; // cards shown on first render
-const EXP_BATCH_SIZE = 3;    // cards revealed per "Show More" click
+const EXP_BATCH_SIZE = 3; // cards revealed per "Show More" click
 ```
 
 The first `INITIAL_EXP_COUNT` entries always render immediately. Every entry beyond that index
@@ -240,7 +242,7 @@ is hidden and revealed in batches of `EXP_BATCH_SIZE`. The "Show Less" button co
 
 - **Most recent role goes first.** The timeline renders top-to-bottom in array order.
 - **Adjust the constants freely.** Changing `INITIAL_EXP_COUNT` or `EXP_BATCH_SIZE` in `app.js`
-  is the only code change needed — the pagination system adapts automatically.
+  is the only code change needed - the pagination system adapts automatically.
 - The system is array-length-agnostic. It works with 2 entries or 80.
 
 ---
@@ -288,7 +290,7 @@ Clients live in the `clients` array in `scripts/clients-data.js`.
 
 `link` and `linkType` are both required. `linkType` controls the badge icon: `"website"` → globe,
 `"facebook"` → Facebook icon, `"instagram"` → Instagram icon. If `logo` is omitted, the card
-auto-renders a gold initial pill using the first letter of `name`.
+auto-renders a green initial pill using the first letter of `name`.
 
 > **Note:** The `#clients` section in `index.html` is currently commented out. Uncomment it when
 > real client asset data is ready.
@@ -306,7 +308,7 @@ Testimonials live in the `testimonials` array in `scripts/testimonials-data.js`.
   name: "Full Name",
   role: "Job Title at Company",
   avatar: "./assets/avatars/their-photo.jpg",
-  text: "The full testimonial text. As long as needed — the modal shows it all.",
+  text: "The full testimonial text. As long as needed - the modal shows it all.",
   stars: 5, // Integer from 1 to 5
 }
 ```
@@ -351,8 +353,8 @@ Copy this block and paste it inside `.cert-grid`, above the `ADD NEW CERTIFICATI
 
 ### `data-cert-img` Behaviour
 
-- **Filled** — the `#certModal` displays the certificate image at full size.
-- **Empty string `""`** — the modal falls back to a `.cert-modal-placeholder` block with a
+- **Filled** - the `#certModal` displays the certificate image at full size.
+- **Empty string `""`** - the modal falls back to a `.cert-modal-placeholder` block with a
   `fa-certificate` icon and the message "Certificate image coming soon."
 
 ### Adding the Image Asset
@@ -365,7 +367,7 @@ data-cert-img="../assets/credentials/your-cert-image.jpg"
 ```
 
 The modal is wired entirely by `scripts/certification-modal-logic.js` (an IIFE). It automatically
-registers every `.cert-card` found on the page — no JavaScript changes needed when adding new cards.
+registers every `.cert-card` found on the page - no JavaScript changes needed when adding new cards.
 
 ---
 
@@ -373,10 +375,10 @@ registers every `.cert-card` found on the page — no JavaScript changes needed 
 
 The contact form on `index.html` (`id="contactForm"`) supports two send paths:
 
-| Mode      | Tab selector                  | Send action                          |
-| --------- | ----------------------------- | ------------------------------------ |
-| Mail      | `data-mode="mail"`            | Opens a `mailto:` URI                |
-| WhatsApp  | `data-mode="whatsapp"`        | Opens a `https://wa.me/` deep-link   |
+| Mode     | Tab selector           | Send action                        |
+| -------- | ---------------------- | ---------------------------------- |
+| Mail     | `data-mode="mail"`     | Opens a `mailto:` URI              |
+| WhatsApp | `data-mode="whatsapp"` | Opens a `https://wa.me/` deep-link |
 
 All logic lives in `scripts/contact-form-validation.js`. The form is loaded on `index.html` only.
 
@@ -387,26 +389,26 @@ In `contact-form-validation.js`, find the `mailto:` URI builder and update the a
 ### To Update the WhatsApp Number
 
 In `contact-form-validation.js`, find the `wa.me/` URI builder and update the phone number
-(international format, no `+`, no spaces — e.g. `923001234567`).
+(international format, no `+`, no spaces - e.g. `923001234567`).
 
 ### Form Field IDs
 
-| Field        | ID              | Visible in mode     |
-| ------------ | --------------- | ------------------- |
-| Name         | `cf-name`       | Both                |
-| Email        | `cf-email`      | Mail only           |
-| WhatsApp no. | `cf-contact`    | WhatsApp only       |
-| Subject      | `cf-subject`    | Mail only           |
-| Message      | `cf-message`    | Both                |
-| Submit btn   | `cfSubmitBtn`   | Both                |
-| Toast        | `cfToast`       | Both (confirmation) |
+| Field        | ID            | Visible in mode     |
+| ------------ | ------------- | ------------------- |
+| Name         | `cf-name`     | Both                |
+| Email        | `cf-email`    | Mail only           |
+| WhatsApp no. | `cf-contact`  | WhatsApp only       |
+| Subject      | `cf-subject`  | Mail only           |
+| Message      | `cf-message`  | Both                |
+| Submit btn   | `cfSubmitBtn` | Both                |
+| Toast        | `cfToast`     | Both (confirmation) |
 
 ### Full Name Validation
 
 `cf-name` requires at least two space-separated words, each containing only alphabetic
 characters with optional internal apostrophes/hyphens (e.g. `Ubaid Ahmad`, `O'Brien Smith`).
-Single words, digits, and other special characters are rejected with the message *"Please enter
-your first and last name."* — see `validateFullName()` in `contact-form-validation.js`.
+Single words, digits, and other special characters are rejected with the message _"Please enter
+your first and last name."_ - see `validateFullName()` in `contact-form-validation.js`.
 
 ### Submit Button Gating
 
@@ -419,13 +421,13 @@ and disables again immediately if any field becomes invalid.
 ## 12. Scroll Animation Classes
 
 Apply `animate-on-scroll` plus one modifier class to any new element. The `IntersectionObserver`
-in `app.js` handles timing automatically — no additional JavaScript is needed.
+in `app.js` handles timing automatically - no additional JavaScript is needed.
 
-| Class combination             | Effect                                              |
-| ----------------------------- | --------------------------------------------------- |
-| `animate-on-scroll slide-up`  | Slides from +/-40px Y depending on scroll direction |
-| `animate-on-scroll zoom-in`   | Scales from 0.88 to 1.0, direction-agnostic         |
-| `animate-on-scroll fade-in`   | Fades from +/-12px Y depending on scroll direction  |
+| Class combination            | Effect                                              |
+| ---------------------------- | --------------------------------------------------- |
+| `animate-on-scroll slide-up` | Slides from +/-40px Y depending on scroll direction |
+| `animate-on-scroll zoom-in`  | Scales from 0.88 to 1.0, direction-agnostic         |
+| `animate-on-scroll fade-in`  | Fades from +/-12px Y depending on scroll direction  |
 
 Direction awareness is automatic. Both direction classes (`from-below` and `from-above`) are
 cleared on exit so every scroll pass re-evaluates correctly.
@@ -477,7 +479,7 @@ In `styles/style.css`, edit `--accent-dark` inside `:root`:
 Always update `--accent-rgb` to the matching raw `R,G,B` triplet:
 
 ```css
---accent-rgb: 212,175,55; /* Must match --accent-dark as raw R,G,B */
+--accent-rgb: 212, 175, 55; /* Must match --accent-dark as raw R,G,B */
 ```
 
 ### Add a New Glass Section
@@ -487,9 +489,7 @@ Always update `--accent-rgb` to the matching raw `R,G,B` triplet:
   <div class="container-custom">
     <div class="section-wrapper">
       <h2 class="section-title">Section Title</h2>
-      <div class="glass-card animate-on-scroll fade-in">
-        Content goes here
-      </div>
+      <div class="glass-card animate-on-scroll fade-in">Content goes here</div>
     </div>
   </div>
 </section>
@@ -497,49 +497,49 @@ Always update `--accent-rgb` to the matching raw `R,G,B` triplet:
 
 ### Mobile Breakpoints
 
-- `768px` — Desktop nav hides; mobile hamburger shows. Grids collapse to single column.
-- `480px` — Hero padding reduces. Profile coin shrinks to `140px` via `--coin-size`. Font
+- `768px` - Desktop nav hides; mobile hamburger shows. Grids collapse to single column.
+- `480px` - Hero padding reduces. Profile coin shrinks to `140px` via `--coin-size`. Font
   sizes reduce for readability on small screens.
 
 ---
 
-## 15. Container IDs — Never Delete or Rename
+## 15. Container IDs - Never Delete or Rename
 
 These HTML element IDs are referenced directly by functions in `app.js` or the page-specific
 scripts. Removing or renaming any of them will silently break the corresponding function.
 
-| ID                        | Used by                               |
-| ------------------------- | ------------------------------------- |
-| `skillsCategoryBar`       | `renderSkills()`                      |
-| `skillsDisplayGrid`       | `renderSkills()`                      |
-| `experienceTimeline`      | `renderExperience()`                  |
-| `loadMoreExperience`      | `loadMoreExperience()`                |
-| `showLessExperience`      | `showLessExperience()`                |
-| `projectsGrid`            | `renderProjects()`                    |
-| `clientsTrack`            | `renderClients()`                     |
-| `testimonialCarousel`     | `renderTestimonials()`, keyboard nav  |
-| `tcTrack`                 | `renderTestimonials()`, `tcGoTo()`    |
-| `tcDots`                  | `renderTestimonials()`, `tcUpdateDots()`|
-| `projectModal`            | `openProjectModal()`                  |
-| `projectModalContent`     | `openProjectModal()`                  |
-| `testimonialModal`        | `openTestimonialModal()`              |
-| `testimonialModalContent` | `openTestimonialModal()`              |
-| `closeProjectModal`       | modal close listener                  |
-| `closeTestimonialModal`   | modal close listener                  |
-| `page-loader`             | `hideLoader()`                        |
-| `themeToggle`             | `initThemeToggle()`                   |
-| `mobileMenuBtn`           | `initMobileMenu()`                    |
-| `mobileMenu`              | `initMobileMenu()`                    |
-| `closeMobileMenu`         | `initMobileMenu()`                    |
-| `headerProgressFill`      | `initHeaderScrollProgress()`          |
-| `contactForm`             | `contact-form-validation.js`          |
-| `cfSubmitBtn`             | `contact-form-validation.js`          |
-| `cfToast`                 | `contact-form-validation.js`          |
-| `certModal`               | `certification-modal-logic.js`        |
-| `certModalTitle`          | `certification-modal-logic.js`        |
-| `certModalSub`            | `certification-modal-logic.js`        |
-| `certModalBody`           | `certification-modal-logic.js`        |
-| `closeCertModal`          | `certification-modal-logic.js`        |
+| ID                        | Used by                                  |
+| ------------------------- | ---------------------------------------- |
+| `skillsCategoryBar`       | `renderSkills()`                         |
+| `skillsDisplayGrid`       | `renderSkills()`                         |
+| `experienceTimeline`      | `renderExperience()`                     |
+| `loadMoreExperience`      | `loadMoreExperience()`                   |
+| `showLessExperience`      | `showLessExperience()`                   |
+| `projectsGrid`            | `renderProjects()`                       |
+| `clientsTrack`            | `renderClients()`                        |
+| `testimonialCarousel`     | `renderTestimonials()`, keyboard nav     |
+| `tcTrack`                 | `renderTestimonials()`, `tcGoTo()`       |
+| `tcDots`                  | `renderTestimonials()`, `tcUpdateDots()` |
+| `projectModal`            | `openProjectModal()`                     |
+| `projectModalContent`     | `openProjectModal()`                     |
+| `testimonialModal`        | `openTestimonialModal()`                 |
+| `testimonialModalContent` | `openTestimonialModal()`                 |
+| `closeProjectModal`       | modal close listener                     |
+| `closeTestimonialModal`   | modal close listener                     |
+| `page-loader`             | `hideLoader()`                           |
+| `themeToggle`             | `initThemeToggle()`                      |
+| `mobileMenuBtn`           | `initMobileMenu()`                       |
+| `mobileMenu`              | `initMobileMenu()`                       |
+| `closeMobileMenu`         | `initMobileMenu()`                       |
+| `headerProgressFill`      | `initHeaderScrollProgress()`             |
+| `contactForm`             | `contact-form-validation.js`             |
+| `cfSubmitBtn`             | `contact-form-validation.js`             |
+| `cfToast`                 | `contact-form-validation.js`             |
+| `certModal`               | `certification-modal-logic.js`           |
+| `certModalTitle`          | `certification-modal-logic.js`           |
+| `certModalSub`            | `certification-modal-logic.js`           |
+| `certModalBody`           | `certification-modal-logic.js`           |
+| `closeCertModal`          | `certification-modal-logic.js`           |
 
 ---
 
@@ -559,7 +559,7 @@ scripts. Removing or renaming any of them will silently break the corresponding 
 - Keep project `id` values as unique positive integers.
 - Verify that asset paths exist in `assets/` before referencing them in arrays.
 - Test in both desktop and mobile viewports (768px and 480px) after any structural change.
-- Check the browser console after changes — all render functions log `console.error` on failure.
+- Check the browser console after changes - all render functions log `console.error` on failure.
 - Call `createIcons()` after any render function that injects Lucide placeholder elements.
 - Maintain script load order (data files → `app.js` → page-specific scripts).
 
@@ -567,41 +567,41 @@ scripts. Removing or renaming any of them will silently break the corresponding 
 
 ## 17. Debugging Checklist
 
-| Symptom                             | First Thing to Check                                                  |
-| ----------------------------------- | --------------------------------------------------------------------- |
-| Section content not rendering       | Container `id` matches the JS selector exactly (case-sensitive)       |
-| Project card not appearing          | Array object has all required fields; `id` is a unique integer        |
-| Animation not triggering            | Element has both `animate-on-scroll` and exactly one modifier class   |
-| Modal not scrolling                 | `.modal-content` accidentally received `overflow: hidden` somewhere   |
-| Pinned badge not showing            | Project is at array index 0, 1, or 2 in the `projects` array         |
-| Coin-toss not animating             | `.coin-front` or `.coin-back` missing `backface-visibility: hidden`   |
-| Shimmer sweep not appearing         | Element selector missing from all three shimmer CSS rule blocks       |
-| Lucide icon renders as empty        | `createIcons()` not being called after the element renders            |
-| Experience count wrong              | `INITIAL_EXP_COUNT` or `EXP_BATCH_SIZE` constants set incorrectly    |
-| Theme not persisting on reload      | `localStorage.setItem('theme', ...)` not called on toggle click       |
-| CV button downloads wrong file      | `href` on the CV `<a>` does not point to the correct path             |
-| Palette not restoring on reload     | `localStorage.getItem('ua-palette')` key is correct; see section 18  |
-| Client card has no link icon        | `linkType` field is missing or uses an unrecognised string            |
-| Mobile sub-nav not toggling         | `.mobile-nav-group` missing or `initMobileMenu()` not called          |
-| Testimonial carousel not advancing  | `TC_INTERVAL` constant; check `tcStart()` is called after render      |
-| Cert modal not opening              | `certification-modal-logic.js` not loaded; `data-cert-*` attrs set   |
-| Contact form not sending            | `contact-form-validation.js` not loaded; `id="contactForm"` present  |
-| Data array changes not rendering    | Script load order violated — data file must load before `app.js`      |
+| Symptom                            | First Thing to Check                                                |
+| ---------------------------------- | ------------------------------------------------------------------- |
+| Section content not rendering      | Container `id` matches the JS selector exactly (case-sensitive)     |
+| Project card not appearing         | Array object has all required fields; `id` is a unique integer      |
+| Animation not triggering           | Element has both `animate-on-scroll` and exactly one modifier class |
+| Modal not scrolling                | `.modal-content` accidentally received `overflow: hidden` somewhere |
+| Pinned badge not showing           | Project is at array index 0, 1, or 2 in the `projects` array        |
+| Coin-toss not animating            | `.coin-front` or `.coin-back` missing `backface-visibility: hidden` |
+| Shimmer sweep not appearing        | Element selector missing from all three shimmer CSS rule blocks     |
+| Lucide icon renders as empty       | `createIcons()` not being called after the element renders          |
+| Experience count wrong             | `INITIAL_EXP_COUNT` or `EXP_BATCH_SIZE` constants set incorrectly   |
+| Theme not persisting on reload     | `localStorage.setItem('theme', ...)` not called on toggle click     |
+| CV button downloads wrong file     | `href` on the CV `<a>` does not point to the correct path           |
+| Palette not restoring on reload    | `localStorage.getItem('ua-palette')` key is correct; see section 18 |
+| Client card has no link icon       | `linkType` field is missing or uses an unrecognised string          |
+| Mobile sub-nav not toggling        | `.mobile-nav-group` missing or `initMobileMenu()` not called        |
+| Testimonial carousel not advancing | `TC_INTERVAL` constant; check `tcStart()` is called after render    |
+| Cert modal not opening             | `certification-modal-logic.js` not loaded; `data-cert-*` attrs set  |
+| Contact form not sending           | `contact-form-validation.js` not loaded; `id="contactForm"` present |
+| Data array changes not rendering   | Script load order violated - data file must load before `app.js`    |
 
 ---
 
 ## 18. Theme Customizer
 
 The portfolio includes a runtime palette-switching panel (v2.9+) managed by
-`initThemeCustomizer()` in `app.js` and styled under the `v2.9 — THEME CUSTOMIZER` comment
+`initThemeCustomizer()` in `app.js` and styled under the `v2.9 - THEME CUSTOMIZER` comment
 block in `style.css`.
 
 ### Quick Reference
 
-- **Trigger button:** `#cs-trigger` — fixed-position, bottom-right, above the Available for
+- **Trigger button:** `#cs-trigger` - fixed-position, bottom-right, above the Available for
   Work badge.
-- **Panel:** `#cs-panel` — slides in from the right on trigger click.
-- **Palette storage key:** `localStorage.getItem('ua-palette')` — persists selection across
+- **Panel:** `#cs-panel` - slides in from the right on trigger click.
+- **Palette storage key:** `localStorage.getItem('ua-palette')` - persists selection across
   page loads.
 - **Apply programmatically:** `applyPalette(paletteId)` where `paletteId` is one of the ten
   `id` strings in the `PALETTES` array inside `initThemeCustomizer()`.
@@ -623,7 +623,7 @@ Inside `initThemeCustomizer()` in `app.js`, append to the `PALETTES` array:
   glass: "rgba(...)",
   border: "rgba(...)",
   shadow: "rgba(...)",
-  rgb: "R,G,B",       // Must match accent as raw R,G,B — no spaces
+  rgb: "R,G,B",       // Must match accent as raw R,G,B - no spaces
   blobs: ["#HEXVAL", "#HEXVAL"],
 }
 ```
