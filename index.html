@@ -109,6 +109,7 @@
           <div class="header-actions">
             <!-- Theme Toggle -->
             <button
+              type="button"
               id="themeToggle"
               class="theme-toggle-btn"
               aria-label="Toggle light/dark mode"
@@ -118,6 +119,7 @@
             </button>
             <!-- Hamburger - always after theme toggle on mobile -->
             <button
+              type="button"
               id="mobileMenuBtn"
               class="mobile-menu-btn"
               aria-label="Open mobile menu"
@@ -133,6 +135,7 @@
     <div id="mobileMenu" class="mobile-menu">
       <div class="mobile-menu-content glass-card">
         <button
+          type="button"
           id="closeMobileMenu"
           class="close-menu-btn"
           aria-label="Close mobile menu"
@@ -174,6 +177,7 @@
             <!-- 3D Coin-Toss Profile -->
             <div
               class="profile-coin-container"
+              role="group"
               aria-label="Profile photo of Ubaid Ahmad"
             >
               <div class="coin-inner">
@@ -284,6 +288,7 @@
           <div id="experienceTimeline" class="experience-timeline"></div>
           <div class="experience-btn-group animate-on-scroll fade-in">
             <button
+              type="button"
               id="loadMoreExperience"
               class="load-more-btn glow-hover"
               style="display: none"
@@ -292,6 +297,7 @@
               <i class="fas fa-chevron-down"></i> Show More Experience
             </button>
             <button
+              type="button"
               id="showLessExperience"
               class="load-more-btn load-less-btn glow-hover"
               style="display: none"
@@ -322,10 +328,12 @@
           <!-- Carousel Wrapper -->
           <div
             class="pc-wrapper animate-on-scroll slide-up"
+            role="region"
             aria-label="Projects carousel"
           >
             <!-- Left Arrow -->
             <button
+              type="button"
               class="pc-arrow pc-arrow--left"
               id="pcPrev"
               aria-label="Previous project"
@@ -342,6 +350,7 @@
 
             <!-- Right Arrow -->
             <button
+              type="button"
               class="pc-arrow pc-arrow--right"
               id="pcNext"
               aria-label="Next project"
@@ -354,6 +363,7 @@
           <div
             class="pc-dots animate-on-scroll fade-in"
             id="pcDots"
+            role="group"
             aria-label="Project navigation dots"
           ></div>
         </div>
@@ -447,6 +457,7 @@
     >
       <div class="modal-content glass-card testimonial-modal-content">
         <button
+          type="button"
           class="modal-close"
           id="closeTestimonialModal"
           aria-label="Close testimonial modal"
@@ -477,6 +488,7 @@
             <div class="cf-switcher" role="tablist" aria-label="Contact method">
               <div class="cf-switcher-track">
                 <button
+                  type="button"
                   class="cf-tab cf-tab--active"
                   data-mode="mail"
                   role="tab"
@@ -485,6 +497,7 @@
                   <i class="fas fa-envelope"></i><span>Mail</span>
                 </button>
                 <button
+                  type="button"
                   class="cf-tab"
                   data-mode="whatsapp"
                   role="tab"
@@ -624,7 +637,12 @@
     <div class="cf-toast" id="cfToast" role="alert" aria-live="polite" hidden>
       <i class="cf-toast-icon" id="cfToastIcon"></i>
       <p class="cf-toast-msg" id="cfToastMsg"></p>
-      <button class="cf-toast-close" id="cfToastClose" aria-label="Dismiss">
+      <button
+        type="button"
+        class="cf-toast-close"
+        id="cfToastClose"
+        aria-label="Dismiss"
+      >
         &#x2715;
       </button>
     </div>

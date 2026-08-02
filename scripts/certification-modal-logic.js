@@ -1,16 +1,16 @@
 //  -- Certification Modal Logic --
 (function () {
-  var modal = document.getElementById("certModal");
-  var modalTitle = document.getElementById("certModalTitle");
-  var modalSub = document.getElementById("certModalSub");
-  var modalBody = document.getElementById("certModalBody");
-  var closeBtn = document.getElementById("closeCertModal");
+  const modal = document.getElementById("certModal");
+  const modalTitle = document.getElementById("certModalTitle");
+  const modalSub = document.getElementById("certModalSub");
+  const modalBody = document.getElementById("certModalBody");
+  const closeBtn = document.getElementById("closeCertModal");
 
   function openCertModal(card) {
-    var name = card.dataset.certName;
-    var institute = card.dataset.certInstitute;
-    var date = card.dataset.certDate;
-    var imgSrc = card.dataset.certImg;
+    const name = card.dataset.certName;
+    const institute = card.dataset.certInstitute;
+    const date = card.dataset.certDate;
+    const imgSrc = card.dataset.certImg;
 
     modalTitle.textContent = name;
     modalSub.textContent = institute + " · " + date;

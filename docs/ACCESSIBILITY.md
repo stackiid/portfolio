@@ -16,10 +16,14 @@ Every page uses semantic HTML5 landmarks. Do not replace these with generic `<di
 | Element     | Role          | Used For                                  |
 | ----------- | ------------- | ----------------------------------------- |
 | `<header>`  | `banner`      | Site navigation and logo                  |
-| `<main>`    | `main`        | Primary page content                      |
 | `<nav>`     | `navigation`  | Desktop nav bar and mobile menu           |
 | `<footer>`  | `contentinfo` | Footer links, social row, copyright       |
 | `<section>` | `region`      | Each named section with `aria-labelledby` |
+
+**Gap:** no page currently wraps its primary content in a `<main>` element. Screen reader users
+lose the "skip to main content" landmark shortcut as a result. Recommended fix: wrap each page's
+content (between the header and footer) in `<main id="main-content">` - this also gives the
+skip-link recommendation in section 2.3 something to target.
 
 All `<section>` elements with visible headings use `aria-labelledby` pointing to the heading's
 `id`. Example:
@@ -34,7 +38,7 @@ All `<section>` elements with visible headings use `aria-labelledby` pointing to
 
 ### 1.2 Interactive Components
 
-#### Modals (`#projectModal`, `#testimonialModal`, `#certModal`)
+#### Modals (`#testimonialModal`, `#certModal`)
 
 | Attribute         | Value                             | Purpose                               |
 | ----------------- | --------------------------------- | ------------------------------------- |
@@ -47,11 +51,15 @@ On close: focus is returned to the element that triggered the open.
 
 #### Testimonial Carousel (`#testimonialCarousel`)
 
-| Attribute              | Value        | Purpose                                      |
-| ---------------------- | ------------ | -------------------------------------------- |
-| `role`                 | `"carousel"` | Identifies the widget type                   |
-| `aria-live`            | `"polite"`   | Announces slide changes without interrupting |
-| `aria-roledescription` | `"slide"`    | Applied to each `.carousel-slide`            |
+| Attribute              | Value                       | Purpose                                      |
+| ---------------------- | ---------------------------- | ----------------------------------------------- |
+| `role`                 | `"region"`                  | Identifies the widget as a landmark region   |
+| `aria-label`           | `"Client testimonials"`     | Names the region for screen readers          |
+| `aria-roledescription` | `"carousel"`                | Describes the region's interaction pattern   |
+
+Each slide (`.carousel-slide`) carries `role="group"`, `aria-roledescription="slide"`, an
+`aria-label` of `"Slide X of Y: <name>"`, and `aria-hidden`/`tabindex` toggled based on whether
+it's the active slide.
 
 Previous / next buttons carry `aria-label="Previous testimonial"` and
 `aria-label="Next testimonial"`. Dot buttons carry `aria-label="Go to testimonial {n}"` and
@@ -82,16 +90,6 @@ overlay is open. Updated by `initMobileMenu()` in `app.js`.
 
 Carries `aria-label` updated dynamically: `"Switch to light mode"` in dark mode,
 `"Switch to dark mode"` in light mode.
-
-#### Theme Customizer (`#cs-panel`)
-
-| Attribute    | Value                |
-| ------------ | -------------------- |
-| `role`       | `"dialog"`           |
-| `aria-label` | `"Theme customizer"` |
-
-Each swatch button carries `title` and `aria-label` set to the palette display name.
-The active swatch receives `aria-pressed="true"`.
 
 ---
 
@@ -128,9 +126,10 @@ triggerElement.focus();
 
 ### 2.3 Skip Navigation
 
-A visually hidden "Skip to main content" link should be the first focusable element on every
-page. It becomes visible only when focused, allowing keyboard and screen reader users to bypass
-the navigation bar. Pattern:
+**Not currently implemented.** The site does not have a "Skip to main content" link. This is a
+recommended addition: a visually hidden link, first in the DOM on every page, that becomes
+visible only on focus and lets keyboard/screen-reader users jump past the header navigation
+straight to the main content. Suggested pattern:
 
 ```html
 <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -144,8 +143,8 @@ the navigation bar. Pattern:
   background: var(--accent-dark);
   color: #1a1a1a;
   padding: 0.5rem 1rem;
-  border-radius: var(--radius-md);
-  font-weight: var(--font-weight-bold);
+  border-radius: 8px;
+  font-weight: 700;
   z-index: 9999;
   transition: top 0.2s;
 }
@@ -154,6 +153,8 @@ the navigation bar. Pattern:
   top: 1rem;
 }
 ```
+
+Would also require adding `id="main-content"` to each page's primary content wrapper.
 
 ---
 
@@ -164,18 +165,17 @@ the navigation bar. Pattern:
 | Pairing                            | Ratio  | WCAG Level |
 | ---------------------------------- | ------ | ---------- |
 | `--text-dark` on `--bg-dark`       | 12.5:1 | AAA        |
-| Green `#D4AF37` on `--bg-dark`     | 8.0:1  | AAA        |
-| `#1A1A1A` on green `#D4AF37`       | 8.0:1  | AAA        |
-| `--text-muted-dark` on `--bg-dark` | 5.1:1  | AA         |
+| Gold `#D4AF37` on `--bg-dark`      | 8.0:1  | AAA        |
+| `#1A1A1A` on gold `#D4AF37`        | 8.0:1  | AAA        |
 
-> These ratios apply to the Gold Noir palette. Alternative palettes in the Theme
-> Customizer are not contrast-audited. If adding a new palette, verify contrast ratios for body
-> text and interactive labels before shipping.
+> These ratios apply to the site's dark theme. Secondary/muted text is produced by applying
+> `opacity` (commonly 0.7-0.9) to `--text-dark` rather than a separate colour token - verify
+> contrast at the specific opacity used before relying on it for essential information.
 
 ### 3.2 Focus Indicators
 
 Never remove the browser default focus ring with `outline: none` without replacing it. The
-portfolio replaces default outlines with a green ring:
+portfolio replaces default outlines with a gold ring:
 
 ```css
 :focus-visible {
@@ -206,13 +206,19 @@ Never use the filename as alt text. Never leave `alt` undefined.
 
 ### 4.2 `aria-hidden` on Decorative Icons
 
-All purely decorative Font Awesome and Lucide icons carry `aria-hidden="true"`. Icons that
-convey meaning (e.g., the star rating icons in testimonials) should not use `aria-hidden` and
-should have a visually hidden label nearby:
+All purely decorative Font Awesome icons carry `aria-hidden="true"`. For icons that convey
+meaning as a group (e.g. the star rating in testimonials), the actual pattern used in this
+codebase is a single `aria-label` on the *container*, rather than a visually-hidden label per
+icon (there is no `.sr-only` utility class defined):
 
 ```html
-<span class="sr-only">5 out of 5 stars</span>
-<i class="fas fa-star" aria-hidden="true"></i>
+<div class="testimonial-stars" aria-label="5 out of 5 stars">
+  <i class="fas fa-star"></i>
+  <i class="fas fa-star"></i>
+  <i class="fas fa-star"></i>
+  <i class="fas fa-star"></i>
+  <i class="fas fa-star"></i>
+</div>
 ```
 
 ---
@@ -222,13 +228,13 @@ should have a visually hidden label nearby:
 ### 5.1 Contact Form (`#contactForm`)
 
 Every input in the dual-mode contact form is associated with its label via `for` / `id` pairing.
-Inline error spans carry `role="alert"` so screen readers announce validation failures
-immediately:
+Inline error spans carry `aria-live="polite"` so screen readers announce validation failures as
+they appear:
 
 ```html
 <label for="cf-name">Name</label>
 <input id="cf-name" type="text" autocomplete="name" />
-<span id="cf-name-error" role="alert" class="cf-error"></span>
+<span id="cf-name-error" class="cf-field-error" aria-live="polite"></span>
 ```
 
 The form element itself carries `novalidate` to suppress browser-native validation bubbles -
@@ -241,7 +247,7 @@ validation.
 
 ### 5.2 Toast Notification (`#cfToast`)
 
-The toast uses `role="status"` and `aria-live="polite"` so screen readers announce the
+The toast uses `role="alert"` and `aria-live="polite"` so screen readers announce the
 confirmation message after a successful send without interrupting other announcements.
 
 ---

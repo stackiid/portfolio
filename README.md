@@ -2,10 +2,10 @@
 
 A high-performance, multi-page developer portfolio built on a **data-driven vanilla JavaScript
 architecture**. Engineered for speed, structured for long-term scalability, and designed without a
-single build dependency. The 2026 edition introduces a premium 3D interaction layer, direction-aware
-scroll animations, smart pagination, a universal shimmer-gradient design system, a runtime 10-palette
-theme customizer, a full certifications section, and a dual-mode contact form - all written in
-pure HTML, CSS, and JavaScript.
+single build dependency. It features a premium 3D interaction layer, direction-aware
+scroll animations, smart pagination, a universal shimmer-gradient design system, a full
+certifications section, and a dual-mode contact form - all written in pure HTML, CSS, and
+JavaScript.
 
 ---
 
@@ -56,12 +56,11 @@ in a browser is a running site.
 
 ### CDN Dependencies (No npm Required)
 
-| Dependency        | Source       | Purpose                               |
-| ----------------- | ------------ | ------------------------------------- |
-| Tailwind CSS      | CDN          | Utility classes and responsive grid   |
-| Lucide Icons      | unpkg CDN    | SVG icon system (replaces all emojis) |
-| Font Awesome 6.5  | CDN          | Supplemental icon library             |
-| Plus Jakarta Sans | Google Fonts | Primary typeface                      |
+| Dependency        | Source       | Purpose                             |
+| ----------------- | ------------ | ----------------------------------- |
+| Tailwind CSS      | CDN          | Utility classes and responsive grid |
+| Font Awesome 6.5  | CDN          | Icon library (all icons site-wide)  |
+| Plus Jakarta Sans | Google Fonts | Primary typeface                    |
 
 ---
 
@@ -81,8 +80,11 @@ Ubaid Ahmad/
 |   |   |- wajeeha-sultan-frontend-developer-avatar.jpg
 |   |   `- zaheer-abbas-fullstack-dev-avatar.jpg
 |   |- credentials/                    # Certificate images for About page modal
+|   |   |- Designing User Interfaces and Experiences (UIUX).jpg
 |   |   |- Introduction to Jupyter.jpg
-|   |   `- Legacy Responsive Web Design V8.png
+|   |   |- JavaScript.png
+|   |   |- Legacy Responsive Web Design V8.png
+|   |   `- Responsive Web Design.png
 |   `- work/                           # Project screenshot thumbnails
 |       |- hadaf-immigration.jpeg
 |       |- portfolio-landing-page.png
@@ -99,7 +101,7 @@ Ubaid Ahmad/
 |   |- clients-data.js                 # clients - logo carousel
 |   |- testimonials-data.js            # testimonials - carousel + modal
 |   |- app.js                          # All render functions, state, animations, theme toggle,
-|   |                                  #   theme customizer, mobile menu, testimonial carousel
+|   |                                  #   mobile menu, testimonial carousel
 |   |- certification-modal-logic.js    # Cert card → modal wiring (about.html only)
 |   `- contact-form-validation.js      # Dual-mode contact form logic (index.html only)
 |
@@ -109,10 +111,11 @@ Ubaid Ahmad/
 |
 |- docs/
 |   |- PROJECT_EDITING_GUIDE.md        # How to safely extend and maintain the codebase
-|   `- DESIGN_SYSTEM.md               # Complete design token and component reference
+|   |- DESIGN_SYSTEM.md                # Design token and component reference
+|   |- ACCESSIBILITY.md                # ARIA, keyboard nav, and focus management reference
+|   `- PERFORMANCE.md                  # Performance budget and optimisation reference
 |
 |- README.md
-|- CHANGELOG.md
 `- LICENSE
 ```
 
@@ -156,87 +159,63 @@ All HTML pages load scripts in this sequence:
 
 ---
 
-## What is New in v3.1
+## Features
 
 ### Liquid Scroll-Progress Header
 
-The floating header (`.glass-header`) now doubles as a page scroll indicator. A
+The floating header (`.glass-header`) doubles as a page scroll indicator. A
 `.header-progress-fill` layer grows left-to-right in sync with scroll position - 0% at the top of
 the page, 100% at the bottom - driven by `initHeaderScrollProgress()` in `scripts/app.js`. Two
-rotating, low-opacity green blobs (`.header-progress-wave`, `.header-progress-wave--b`) sit at the
+rotating, low-opacity gold blobs (`.header-progress-wave`, `.header-progress-wave--b`) sit at the
 fill's leading edge and continuously animate via CSS `@keyframes`, producing a subtle liquid
-ripple that keeps moving even once scrolling stops. The fill uses the existing `--accent-rgb`
-green tone at low opacity, scroll updates are rAF-throttled and only touch `width` on a small
-absolutely-positioned layer (no layout thrash), and the wave animation is disabled under
-`prefers-reduced-motion: reduce`.
-
-### Stricter Contact Form Validation
-
-- **Full Name** now requires a first and last name (e.g. `Ubaid Ahmad`, `Muhammad Usama`). A
-  single word, digits, or most special characters are rejected; apostrophes and hyphens remain
-  allowed for names like `O'Brien` or `Anne-Marie`. Extra internal spaces are normalised and
-  leading/trailing spaces are trimmed on blur, with the message _"Please enter your first and last
-  name."_ shown for invalid input.
-- The **Send Message** button is disabled by default and only enables once every required field
-  for the active mode (Mail or WhatsApp) passes validation, immediately re-disabling if any field
-  becomes invalid again.
-- `scripts/contact-form-validation.js` was consolidated from two duplicated initialisation blocks
-  into a single module, removing a pre-existing double-submit bug (the form previously fired its
-  WhatsApp/Email send logic twice per submission).
-
----
-
-## What is New in v3.0
-
-### Script Modularisation
-
-`script.js` has been retired. All render and animation logic lives in `scripts/app.js`. All
-content data has been extracted into four dedicated files: `skills-data.js`, `experience-data.js`,
-`clients-data.js`, and `testimonials-data.js`. This means editing content never requires opening
-`app.js`. Each data file is self-contained, documented, and independently editable.
-
-### Testimonial Carousel
-
-The static testimonial grid is replaced with a production-grade single-card carousel
-(`id="testimonialCarousel"`). Features: bidirectional slide animation (`enter-left`/`enter-right`
-CSS class toggling), dot navigation, previous/next buttons, keyboard support (`ArrowLeft`/`ArrowRight`),
-auto-advance every 2 minutes (`TC_INTERVAL`), and hover/focus pause. Clicking any slide still
-opens the full testimonial modal. A `carouselAnimating` guard prevents stacked transitions on
-rapid input.
-
-### Certifications Section
-
-`pages/about.html` now includes a `.cert-grid` section with four credential cards. Each card
-carries `data-cert-*` attributes and opens a full-screen `#certModal` displaying the certificate
-image. Falls back to a placeholder icon when the image asset is not yet available. Wired by
-`scripts/certification-modal-logic.js` (loaded on `about.html` only).
+ripple that keeps moving even once scrolling stops. Scroll updates are rAF-throttled and only
+touch `width` on a small absolutely-positioned layer (no layout thrash), and the wave animation
+is disabled under `prefers-reduced-motion: reduce`.
 
 ### Dual-Mode Contact Form
 
-The contact form is back on `index.html` - rebuilt as a dual-mode widget. A tab selector
-switches between **Mail** mode (builds a `mailto:` URI) and **WhatsApp** mode (builds a
-`https://wa.me/` deep-link). Fields show/hide conditionally per mode. Each field has an inline
-error span for real-time validation. A toast notification confirms send or reports errors. All
-logic lives in `scripts/contact-form-validation.js`.
+The contact form on `index.html` (`#contactForm`) is a dual-mode widget. A tab selector switches
+between **Mail** mode (builds a `mailto:` submission via Formspree) and **WhatsApp** mode (builds
+a `https://wa.me/` deep-link). Fields show/hide conditionally per mode and each field keeps its
+own independent state so switching tabs never loses what's already typed. **Full Name** requires
+a first and last name (apostrophes/hyphens allowed for names like `O'Brien` or `Anne-Marie`);
+**Email**, **WhatsApp Number**, **Subject**, and **Message** have their own real-time validators.
+The **Send Message** button stays disabled until every required field for the active mode passes
+validation. A toast notification confirms send or reports errors. All logic lives in
+`scripts/contact-form-validation.js`.
 
-### Homepage Sections Added
+### Testimonial Carousel
+
+A single-card carousel (`id="testimonialCarousel"`) built on `#tcTrack .carousel-slide` elements.
+Slide transitions animate via inline `transform: translateX()` / `opacity` (not CSS keyframes),
+managed by `tcGoTo()` in `app.js`. Features dot navigation (`.carousel-dot`, active state via
+`.tc-dot-active`), previous/next controls, auto-advance every 2 minutes (`TC_INTERVAL`), and a
+`carouselAnimating` guard that prevents stacked transitions on rapid input. Clicking a slide opens
+the full testimonial modal (`openTestimonialModal()`).
+
+### Certifications Section
+
+`pages/about.html` includes a `.cert-grid` section with credential cards. Each card carries
+`data-cert-*` attributes and opens a full-screen `#certModal` displaying the certificate image,
+falling back to a placeholder icon when no image is set. Wired by
+`scripts/certification-modal-logic.js` (loaded on `about.html` only).
+
+### Homepage Sections
 
 - `#collaboration` - a CTA block positioned after the projects carousel.
-- `#social` - a social-icon grid with `.social-icon.glass-card.glow-hover` cards for
-  GitHub, LinkedIn, Instagram, WhatsApp, Telegram, and email.
-
----
-
-## What is New in the 2026 Edition (v2.x)
+- `#social` - a social-icon grid (`.social-icon.glass-card.glow-hover`) linking to GitHub,
+  LinkedIn, Instagram, Facebook, Threads, and Discord.
+- `#clients` - an infinite-scroll client logo carousel driven by `scripts/clients-data.js`,
+  currently commented out in `index.html` pending real client logos/testimonial data.
 
 ### Dynamic 3D Coin-Toss Profile Card
 
-The hero profile image is a fully interactive 3D flip card. On hover, `.coin-inner` performs a
+The hero profile image is an interactive 3D flip card. On hover, `.coin-inner` performs a
 **720-degree rotation** (two full Y-axis turns) in `0.9s` using a springy
-`cubic-bezier(0.34, 1.56, 0.64, 1)` easing. A green-gradient **"TRUSTED EXPERT"** verification
-badge renders on the reverse face. `perspective: 1500px` and `backface-visibility: hidden` on
-both faces ensure mathematically correct depth. The `coinGlow` keyframe pulses the outer ring
-at idle. The CSS custom property `--coin-size` controls diameter at all breakpoints.
+`cubic-bezier(0.34, 1.56, 0.64, 1)` easing. A gold-gradient **"VERIFIED DEVELOPER"** badge
+renders on the reverse face. `perspective: 1500px` and `backface-visibility: hidden` on both
+faces produce the depth effect, and the `coinGlow` keyframe pulses the outer ring at idle. The
+`--coin-size` custom property controls diameter (`180px` desktop, `140px` at 480px).
 
 ### Direction-Aware Scroll Animations
 
@@ -249,48 +228,33 @@ before firing the `visible` transition. A `requestAnimationFrame` wrapper preven
 ### Smart Experience Pagination
 
 `INITIAL_EXP_COUNT = 2` controls the initial render; `EXP_BATCH_SIZE = 3` controls how many cards
-are revealed per click. A `updateExperienceButtons()` function syncs both **Show More** and
-**Show Less** buttons on every state change, updating label text dynamically. The system is
-array-length-agnostic.
+are revealed per "Load More" click. `updateExperienceButtons()` syncs both **Load More** and
+**Show Less** buttons on every state change. The system is array-length-agnostic - it works with
+any number of experience entries.
 
-### Auto-Pinned Projects
+### Featured Projects Carousel
 
-The first three entries in `window.projects` are automatically detected and receive a green
-`.pinned-badge` ribbon. No manual tagging required.
+Projects tagged `type: ["featured"]` in `scripts/projects-data.js` render into a swipeable
+carousel (`.pc-card`, `.pc-preview`, `.pc-visit-btn`) with responsive cards-per-view (3 / 2 / 1),
+dot navigation, and a hover scroll-preview effect on each screenshot.
 
 ### Universal Shimmer-Gradient Hover
 
-All `.glass-card`, `.cta-button`, `.load-more-btn`, `.connect-btn`, `.modal-link`, and
-`.category-btn` elements carry a `::after` pseudo-element shimmer stripe.
-`.modal-content` is deliberately excluded via `:not(.modal-content)`.
-
-### Theme Customizer - 10-Palette Runtime Switcher
-
-A floating palette trigger button (`#cs-trigger`) opens a slide-in panel (`#cs-panel`) that
-allows visitors to switch between 10 colour palettes at runtime. Palettes: Gold Noir,
-Amethyst, Cyber Teal, Rose Prestige, Emerald, Arctic Frost, Amber Forge, Crimson, Silver Ghost,
-and Coral Flame. The selected palette persists across page loads via `localStorage('ua-palette')`.
-The `--accent-rgb` CSS variable is updated per-palette to keep rgba-based component colours
-consistent with the active accent.
+`.glass-card` (excluding `.modal-content`), `.cta-button`, `.load-more-btn`, and `.category-btn`
+elements carry a `::after` pseudo-element diagonal shimmer stripe that sweeps on hover.
 
 ### Interactive Client Carousel
 
-The `clients` array (in `scripts/clients-data.js`) accepts `link` and `linkType` fields.
-Cards with no `logo` field render a green initial pill + company name. A link-type badge icon
-renders in the card corner based on `linkType`. `mouseenter` pauses the animation; `mouseleave`
-resumes it. The clients section is currently commented out in `index.html` pending updated asset
-data.
+The `clients` array (in `scripts/clients-data.js`) accepts `link` and `linkType` fields. Cards
+with no `logo` field render a gold initial pill + company name instead. A link-type badge icon
+renders in the card corner based on `linkType`. `mouseenter` pauses the auto-scroll animation;
+`mouseleave` resumes it.
 
 ### Light / Dark Mode Toggle
 
-A persistent theme toggle backed by `localStorage("theme")` allows users to switch between dark
-and light modes. Light mode is applied via `data-theme="light"` on the `<html>` element. The
-active theme persists across page loads.
-
-### Available for Work Badge
-
-A sticky "Available for Work" badge is fixed to the bottom-right corner of every page. It uses
-a `bounce` keyframe animation and links directly to the primary contact `mailto:` address.
+A persistent theme toggle backed by `localStorage("theme")` lets visitors switch between dark and
+light modes. Light mode is applied via `data-theme="light"` on the `<html>` element and persists
+across page loads.
 
 ### Mobile Menu Sub-Navigation
 
@@ -404,13 +368,13 @@ The live site is currently deployed at [stackiid.github.io](https://stackiid.git
 
 See `docs/PROJECT_EDITING_GUIDE.md` for the complete reference. Quick summary:
 
-- **New project** - Append to `window.projects` in `scripts/projects-data.js`. First 3 entries auto-pin.
+- **New project** - Append to `window.projects` in `scripts/projects-data.js`. Include
+  `type: ["featured"]` to have it render in the homepage carousel.
 - **New skill** - Append to the correct `skillCategories[n].skills` array in `scripts/skills-data.js`.
 - **New experience entry** - Append to the `experience` array in `scripts/experience-data.js`.
 - **New testimonial** - Append to the `testimonials` array in `scripts/testimonials-data.js`.
 - **New client** - Append to the `clients` array in `scripts/clients-data.js`.
 - **New certification** - Add a `.cert-card` block in `pages/about.html` and drop the image into `assets/credentials/`.
-- **New palette** - Add a palette object to `PALETTES` in `initThemeCustomizer()` inside `app.js`.
 - **New section** - Apply `.section`, `.container-custom`, `.section-wrapper`, and `.animate-on-scroll`.
 
 ---
@@ -436,13 +400,15 @@ All extended documentation lives in the `docs/` directory.
 | File                            | Purpose                                                        |
 | ------------------------------- | -------------------------------------------------------------- |
 | `docs/PROJECT_EDITING_GUIDE.md` | Step-by-step instructions for adding and modifying all content |
-| `docs/DESIGN_SYSTEM.md`         | Complete design token reference, component classes, animation  |
+| `docs/DESIGN_SYSTEM.md`         | Design token reference, component classes, animation patterns  |
+| `docs/ACCESSIBILITY.md`         | ARIA, keyboard navigation, and focus management reference      |
+| `docs/PERFORMANCE.md`           | Performance budget and optimisation reference                  |
 
 ---
 
 ## License
 
-All rights reserved. See `LICENSE` for full terms.
+All rights reserved. See [LICENSE](./LICENSE) for full terms.
 
 This source code is the proprietary work of Ubaid Ahmad. Viewing for reference is permitted.
 Copying, redistribution, modification, and commercial use are strictly prohibited without explicit

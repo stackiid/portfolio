@@ -1,140 +1,87 @@
 # DESIGN_SYSTEM.md
 
-This document is the complete reference for the visual design system used across the Ubaid Ahmad
-portfolio. It covers every colour token, typography rule, component class, animation system, and
-layout primitive. Any new page, section, or component added to the portfolio should be built
-exclusively using the tokens and patterns defined here.
+This is the design reference for the Ubaid Ahmad portfolio: the real CSS custom properties,
+component classes, and animation patterns as they exist in `styles/style.css`,
+`styles/about.css`, and the render logic in `scripts/app.js`. Every value below was verified
+directly against the codebase - if you see a class or variable elsewhere that isn't listed here,
+treat that as the error to fix, not this document.
 
-Consistency is not optional. The portfolio communicates technical credibility in part through
-visual coherence. A developer reading this codebase should never encounter a hardcoded hex value
-outside of `:root`, a font size that does not map to the established scale, or a card component
-that approximates the glass treatment rather than using `.glass-card` directly.
+Build new UI using the patterns in this file wherever one already fits. Where no token exists for
+something (spacing, radius, timing), the codebase currently uses hardcoded literal values chosen
+per-component rather than a shared scale - match the nearest existing value rather than inventing
+a new one.
 
 ---
 
 ## 1. Design Tokens
 
-All design tokens are defined as CSS custom properties inside `:root` in `styles/style.css`. No
-value that appears more than once in the codebase should be hardcoded. Reference the variable.
+### 1.1 Color Tokens (`:root` in `style.css`)
 
-### 1.1 Colour Tokens
+| Variable         | Dark (default) | Light (`[data-theme="light"]`) | Role                          |
+| ----------------- | --------------------------- | ------------------------------------ | ------------------------------ |
+| `--bg-dark`       | `#1a1a1a`                   | `#f5f0e8`                            | Page background                |
+| `--text-dark`     | `#e8e8e8`                   | `#1a1a1a`                            | Body text                      |
+| `--accent-dark`   | `#d4af37`                   | `#d4af37` (unchanged)                | Primary gold accent            |
+| `--accent-light`  | `#f0d896`                   | `#f0d896` (unchanged)                | Lighter gold, gradient pairing |
+| `--accent-rgb`    | `212, 175, 55`               | `212, 175, 55` (unchanged)           | Raw RGB triplet for `rgba()`   |
+| `--glass-dark`    | `rgba(255,255,255,0.05)`    | `rgba(255,255,255,0.65)`             | Glass-card fill                |
+| `--border-dark`   | `rgba(212,175,55,0.2)`      | `rgba(var(--accent-rgb), 0.3)`       | Card/button borders            |
+| `--shadow-color`  | `rgba(212,175,55,0.5)`      | `rgba(var(--accent-rgb), 0.35)`      | Glow shadows                   |
+| `--spring`        | `cubic-bezier(0.175, 0.885, 0.32, 1.275)` | same in both themes | Default spring easing          |
 
-#### Dark Mode (Default)
+Changing `--accent-dark` propagates across borders, glows, hovers, and gradients. Always update
+`--accent-rgb` to the matching raw triplet - it's used directly inside `rgba()` calls and does
+not derive automatically from the hex value.
 
-| Variable              | Value                       | Purpose                                        |
-| --------------------- | --------------------------- | ---------------------------------------------- |
-| `--bg-dark`           | `#1A1A1A`                   | Page background, deep noir black surface       |
-| `--text-dark`         | `#e8e8e8`                   | Primary body text colour                       |
-| `--text-muted-dark`   | `rgba(232, 232, 232, 0.6)`  | Secondary / muted text, captions, labels       |
-| `--accent-dark`       | `#D4AF37`                   | Gold Noir - the primary brand colour           |
-| `--accent-light`      | `#F0D896`                   | Light green tint for gradient text/headings    |
-| `--accent-hover-dark` | `#C49A1A`                   | Gold Noir accent on hover state                |
-| `--accent-rgb`        | `212,175,55`                | Raw RGB triplet of `--accent-dark` (no spaces) |
-| `--glass-dark`        | `rgba(255, 255, 255, 0.05)` | Glass card fill                                |
-| `--glass-hover-dark`  | `rgba(255, 255, 255, 0.08)` | Glass card fill on hover                       |
-| `--border-dark`       | `rgba(212, 175, 55, 0.2)`   | Card border colour (green at 20% opacity)      |
-| `--border-hover-dark` | `rgba(212, 175, 55, 0.4)`   | Card border on hover (green at 50% opacity)    |
-| `--shadow-color`      | `rgba(212, 175, 55, 0.5)`   | Glow shadow colour for depth effects           |
-| `--nav-bg`            | `rgba(26, 26, 26, 0.9)`     | Navigation bar background with blur            |
+There is only one theme pair (dark/light of the same gold palette) - there is no multi-palette
+switcher in this codebase.
 
-> **`--accent-rgb` is required.** This variable holds the raw comma-separated R,G,B triplet of
-> the current accent colour. It is consumed inside `rgba()` calls throughout the CSS - for
-> example, the client initial pill uses `rgba(var(--accent-rgb), 0.12)`. The Theme Customizer
-> updates `--accent-rgb` whenever a new palette is applied. If you add a new palette manually,
-> you must set this variable alongside `--accent-dark`.
+> Note: `[data-theme="light"]` is declared twice in `style.css` (once early, once later in the
+> file). The later block wins the cascade for `--glass-dark`, `--border-dark`, and
+> `--shadow-color`; the values above are the effective (winning) ones. Worth consolidating into a
+> single block next time `style.css` is touched, but it doesn't currently cause a visible bug.
 
-#### Light Mode
+### 1.2 Typography
 
-Light mode tokens override the dark mode defaults when the `[data-theme="light"]` attribute is
-present on the `:root` element (`<html>`). The JavaScript toggle writes this attribute and also
-persists the preference in `localStorage`.
+No `--font-*` custom properties exist. Typography is hardcoded per-rule:
 
-> **Implementation note:** Light mode is applied as `document.documentElement.setAttribute("data-theme", "light")` in `initThemeToggle()`. The CSS selector is `:root[data-theme="light"]`. **Do not use `.light-mode` as a class on `<body>`** - that pattern is not implemented in this codebase.
+- **Font family:** `"Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`
+  (set once on `body`, inherited everywhere). Loaded via Google Fonts, weights 300/400/500/600/700.
+- **Font weights in use:** `500`, `600`, `700`, `800`, `900` as literal values - no named scale.
+  `600` is the most common (buttons, nav links); `800`/`900` are reserved for headings and stat
+  numbers.
+- No monospace font is loaded or used anywhere in the project.
 
-| Variable             | Light Mode Value           |
-| -------------------- | -------------------------- |
-| `--bg-dark`          | `#f5f0e8`                  |
-| `--text-dark`        | `#1A1A1A`                  |
-| `--text-muted-dark`  | `rgba(26, 26, 26, 0.6)`    |
-| `--glass-dark`       | `rgba(255, 255, 255, 0.7)` |
-| `--glass-hover-dark` | `rgba(255, 255, 255, 0.9)` |
-| `--border-dark`      | `rgba(212, 175, 55, 0.3)`  |
-| `--nav-bg`           | `rgba(245, 240, 232, 0.9)` |
+### 1.3 Spacing
 
-The accent colour `--accent-dark` (`#D4AF37`) does not change between modes. It is the permanent
-brand colour of the portfolio in the Gold Noir palette.
+No `--space-*` tokens exist. Spacing is written directly in `rem`/`px` per rule, informally
+following multiples of `4px`/`8px` (`0.5rem`, `1rem`, `1.5rem`, `2rem`, `3rem` are the most common
+values). When adding spacing, match the surrounding rule's scale rather than picking an arbitrary
+number.
 
-#### To Retheme the Entire Site (Static)
+### 1.4 Border Radius
 
-Change the value of `--accent-dark` in `:root`. This single change propagates through every
-border, glow, shimmer, badge gradient, icon tint, and hover highlight across the entire site.
-Remember to also update `--accent-rgb` to match the new hex value's R,G,B components.
+No `--radius-*` tokens exist. Common literal values in use, by role:
 
-#### To Retheme at Runtime (Dynamic)
-
-Use the Theme Customizer panel (`#cs-trigger` → `#cs-panel`). See
-`docs/PROJECT_EDITING_GUIDE.md` section 18 for the full palette reference and instructions for
-adding new palettes.
-
----
-
-### 1.2 Typography Tokens
-
-| Variable               | Value                             | Usage                              |
-| ---------------------- | --------------------------------- | ---------------------------------- |
-| `--font-primary`       | `'Plus Jakarta Sans', sans-serif` | All body text, UI labels, headings |
-| `--font-mono`          | `'Courier New', monospace`        | Code snippets, technical strings   |
-| `--font-weight-light`  | `300`                             | Muted captions, secondary labels   |
-| `--font-weight-base`   | `400`                             | Body copy                          |
-| `--font-weight-medium` | `500`                             | Card subtitles, nav links          |
-| `--font-weight-semi`   | `600`                             | Section titles, card headings      |
-| `--font-weight-bold`   | `700`                             | Hero title, major CTAs             |
-
-The font stack falls back to `sans-serif` if Google Fonts fails to load. This is intentional -
-the layout should remain legible at all times.
-
----
-
-### 1.3 Spacing Tokens
-
-The spacing system is based on a `0.5rem` (8px) baseline unit. All padding, margin, and gap
-values should be multiples of this unit.
-
-| Token name (informal) | Value    | Usage                                    |
-| --------------------- | -------- | ---------------------------------------- |
-| XS                    | `0.5rem` | Icon padding, tight inline spacing       |
-| SM                    | `1rem`   | Card internal padding (compact sections) |
-| MD                    | `1.5rem` | Standard card padding                    |
-| LG                    | `2rem`   | Section internal spacing                 |
-| XL                    | `3rem`   | Section vertical padding                 |
-| XXL                   | `5rem`   | Hero vertical padding                    |
-
----
-
-### 1.4 Border Radius Tokens
-
-| Variable        | Value    | Usage                              |
-| --------------- | -------- | ---------------------------------- |
-| `--radius-sm`   | `8px`    | Tags, badges, small buttons        |
-| `--radius-md`   | `12px`   | Input fields, compact cards        |
-| `--radius-lg`   | `16px`   | Standard glass cards               |
-| `--radius-xl`   | `24px`   | Large hero cards, modal containers |
-| `--radius-full` | `9999px` | Pill buttons, availability badge   |
-
----
+| Value          | Used for                                             |
+| -------------- | ----------------------------------------------------- |
+| `50%`          | Circular elements (coin container, client-initial pill) |
+| `50px`         | Pill-shaped buttons (`.cta-button`)                  |
+| `20px`         | Cards and the header (`.glass-card`, `.glass-header`) |
+| `16px`         | Smaller cards (`.skill-card`)                        |
+| `2px`–`12px`   | Small UI details (badges, inputs, icon wraps)         |
 
 ### 1.5 Animation Tokens
 
-| Variable          | Value                                     | Usage                                    |
-| ----------------- | ----------------------------------------- | ---------------------------------------- |
-| `--spring`        | `cubic-bezier(0.175, 0.885, 0.32, 1.275)` | Standard spring - cards, skill tabs      |
-| `--coin-ease`     | `cubic-bezier(0.34, 1.56, 0.64, 1)`       | Coin-toss overshoot easing               |
-| `--ease-out`      | `cubic-bezier(0.22, 1, 0.36, 1)`          | Fast-exit animations, modal open         |
-| `--ease-in`       | `cubic-bezier(0.64, 0, 0.78, 0)`          | Gradual entry animations                 |
-| `--duration-fast` | `0.15s`                                   | Micro-interactions (hover state changes) |
-| `--duration-base` | `0.3s`                                    | Standard transitions                     |
-| `--duration-slow` | `0.6s`                                    | Hero entrance, modal fade                |
-| `--coin-size`     | `180px` desktop / `140px` at 480px        | Profile coin diameter CSS variable       |
+| Value                                      | Role                                                  |
+| ------------------------------------------- | ------------------------------------------------------ |
+| `--spring` (see 1.1)                       | Default spring easing for hover/transition effects   |
+| `--coin-size` (scoped to `.profile-coin-container`) | `180px` desktop, `140px` at ≤480px - coin diameter |
+| `--coin-border` (scoped, `4px`)            | Coin ring thickness                                   |
+
+No `--duration-*` or `--ease-*` tokens exist; transition durations (`0.3s`–`0.9s`) and easing
+functions (`ease`, `ease-in-out`, `var(--spring)`, or explicit `cubic-bezier(...)`) are written
+per-rule.
 
 ---
 
@@ -142,599 +89,356 @@ values should be multiples of this unit.
 
 ### 2.1 Glass Card
 
-The `.glass-card` class is the primary surface component of the portfolio. It implements the
-full glassmorphism treatment: semi-transparent fill, backdrop blur, green border, depth shadow,
-and hover state transitions.
-
 ```css
 .glass-card {
-  background: var(--glass-dark);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid var(--border-dark);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  transition:
-    transform 0.3s var(--spring),
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.glass-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--border-hover-dark);
-  box-shadow: 0 20px 60px var(--shadow-color);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  transition: all 0.5s var(--spring);
 }
 ```
 
-Apply `.glass-card` to any container that should sit on the dark surface as a distinct panel.
-Do not approximate the glass treatment with inline styles or partial rule sets.
+Apply `.glass-card` to any new container that needs the glassmorphism treatment. Note the fill,
+border, and shadow here are hardcoded rgba values, not `var(--glass-dark)` / `var(--border-dark)`
+- those tokens are used elsewhere (buttons, form fields) but not on the base `.glass-card` rule
+itself.
 
-**Critical exception:** Do not add `overflow: hidden` directly to `.glass-card` in any global
-rule. The shimmer effect requires `overflow: hidden` for the sweep animation, but `.modal-content`
-extends `.glass-card` and requires `overflow-y: auto`. The shimmer CSS scopes this correctly via
-`.glass-card:not(.modal-content)`. Breaking this scope breaks modal scrolling.
-
----
-
-### 2.2 CTA Button (Primary)
-
-The `.cta-button` class is used for high-priority calls to action: CV download, contact links,
-service CTAs, and page-level primary actions.
-
-```css
-.cta-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 2rem;
-  background: linear-gradient(
-    135deg,
-    var(--accent-dark),
-    var(--accent-hover-dark)
-  );
-  color: #1a1a1a;
-  font-weight: var(--font-weight-bold);
-  border-radius: var(--radius-full);
-  text-decoration: none;
-  transition:
-    transform 0.2s var(--spring),
-    box-shadow 0.2s ease;
-}
-
-.cta-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px var(--shadow-color);
-}
-```
-
-Service tier CTAs and all external call-to-action links use `mailto:` addresses or direct
-`href` URLs. The homepage contact section uses the dual-mode form for inline enquiries.
-
----
-
-### 2.3 Section Layout
-
-All sections follow a consistent layout pattern:
-
-```html
-<section id="section-id" class="section">
-  <div class="container-custom">
-    <div class="section-wrapper">
-      <h2 class="section-title">Section Title</h2>
-      <!-- Section content goes here -->
-    </div>
-  </div>
-</section>
-```
-
-| Class               | Purpose                                                            |
-| ------------------- | ------------------------------------------------------------------ |
-| `.section`          | Vertical padding (typically `5rem` top and bottom)                 |
-| `.container-custom` | Max-width constraint with horizontal padding                       |
-| `.section-wrapper`  | Inner flex or grid layout wrapper                                  |
-| `.section-title`    | Section heading with green underline accent and uppercase tracking |
-
----
-
-### 2.4 Navigation Bar
-
-The navigation uses a floating glass header that becomes visible immediately on load:
+### 2.2 Glass Header
 
 ```css
 .glass-header {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: var(--nav-bg);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-dark);
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
   z-index: 1000;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px) saturate(180%);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.5s ease;
+  overflow: hidden; /* clips the liquid progress fill to the rounded shape */
 }
 ```
 
-Navigation links use the `.nav-link` class. The active state is tracked by `IntersectionObserver`
-on all pages and applies `.nav-active` to the link whose destination section is currently in view.
+The header also hosts `.header-progress-fill` (see 3.1) and the desktop/mobile nav.
 
-The nav includes a theme toggle button (`#themeToggle`) and - on mobile - a hamburger button
-(`#mobileMenuBtn`) that opens the full-screen overlay (`#mobileMenu`). See
-`docs/PROJECT_EDITING_GUIDE.md` section 19 for mobile sub-nav documentation.
-
-#### Liquid Scroll-Progress Fill
-
-`.glass-header` carries `overflow: hidden` so the inner `.header-progress-fill` layer is clipped to
-its rounded corners. `initHeaderScrollProgress()` in `scripts/app.js` sets the fill's `width` (0%
-at the top of the page, 100% at the bottom) on a rAF-throttled scroll listener. Two
-`.header-progress-wave` elements - rotating, low-opacity green blobs built from `--accent-rgb` -
-sit at the fill's leading edge and animate continuously via `@keyframes header-wave-spin` /
-`header-wave-spin-reverse`, even while scrolling is idle. `.header-content` is given
-`position: relative; z-index: 1` so nav links, the logo, and the theme toggle always render above
-the fill. The wave animation is disabled under `prefers-reduced-motion: reduce`.
-
----
-
-### 2.5 Type Tag Badges
-
-Project type tags use the `.type-tag` base class combined with a type-specific modifier class:
+### 2.3 CTA Button
 
 ```css
-.type-tag {
-  display: inline-block;
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.7rem;
-  font-weight: var(--font-weight-semi);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+.cta-button {
+  padding: 1rem 2.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border-radius: 50px;
+  border: 1px solid var(--border-dark);
+  background: var(--glass-dark);
+  color: var(--text-dark);
+  min-height: 44px;
+  transition: all 0.5s var(--spring);
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(var(--accent-rgb), 0.25);
 }
 ```
 
-Type tags are rendered by `renderProjects()` in `app.js` based on the `type` array on each
-project object. Do not hardcode type tag HTML - always add the type to the data array and let
-the render function handle the markup.
+This is a glass-style button (uses `--glass-dark`/`--text-dark`), not a solid gold-filled button.
 
----
-
-### 2.6 Skill Card
-
-Skill cards inside the tabbed skills grid use `.skill-card-anim` for their entrance animation.
-This class is applied dynamically by `renderSkills()` and should not be renamed.
-
----
-
-### 2.7 Available for Work Badge
-
-The availability badge is a fixed-position element rendered on every page in the bottom-right
-corner:
+### 2.4 Section Layout
 
 ```css
-.available-badge {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  background: linear-gradient(
-    135deg,
-    var(--accent-dark),
-    var(--accent-hover-dark)
-  );
-  color: #1a1a1a;
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-full);
-  font-weight: var(--font-weight-bold);
-  font-size: 0.85rem;
-  animation: bounce 2s infinite;
-  z-index: 999;
-  text-decoration: none;
+.section {
+  padding: 5rem 0;
+  position: relative;
+}
+
+.container-custom {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 3rem;
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  width: 100%;
 }
 ```
 
-The `bounce` keyframe is defined globally in `style.css`. The badge always links to the primary
-`mailto:` contact address.
+`.section-title` uses a gradient text-fill effect, not an underline. Every top-level page section
+follows the `.section > .container-custom > .section-title` nesting pattern.
 
-> **Stacking note:** The Theme Customizer trigger button (`#cs-trigger`) is also fixed at the
-> bottom-right at `z-index: 1000`, positioned just above the Available for Work badge. Both
-> elements coexist at the same corner. Do not change either `z-index` or `bottom`/`right` values
-> without checking for visual overlap between these two elements.
+### 2.5 Navigation
 
----
+Desktop nav links are plain `<a>` tags inside `.desktop-nav` (no dedicated link class); the
+current-page link gets `.nav-active`:
+
+```css
+.desktop-nav a {
+  color: inherit;
+  font-weight: 600;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.5s ease;
+}
+
+.nav-active {
+  color: var(--accent-dark);
+  border-bottom: 2px solid var(--accent-dark);
+  padding-bottom: 2px;
+}
+```
+
+Mobile nav is a separate structure - see `docs/PROJECT_EDITING_GUIDE.md` section 18 for the full
+`.mobile-nav-group` / `.mobile-nav-link` / `.mobile-subnav` accordion hierarchy.
+
+### 2.6 Load More / Category Buttons
+
+- `.load-more-btn` - used for the experience section's "Load More" / "Show Less" toggle
+  (`.load-less-btn` is added as a second class on the "Show Less" variant).
+- `.category-btn` - skill-category tab buttons rendered by `renderSkills()`; the active tab gets
+  an additional `active` class.
+
+### 2.7 Skill Card
+
+```css
+.skill-card {
+  min-height: 80px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  transition: all 0.5s var(--spring);
+}
+```
 
 ### 2.8 Client Logo Card
 
-The client carousel renders two card variants driven by the `clients` array in
-`scripts/clients-data.js`. Both variants are wrapped in an `<a>` tag with a link-type icon badge.
-
-**Logo variant** (when `logo` field is present):
-
-```html
-<a href="{link}" class="client-logo" ...>
-  <img src="{logo}" alt="{name} logo" />
-  <span class="client-link-badge"><i class="{icon}"></i></span>
-</a>
+```css
+.client-initial-pill {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(var(--accent-rgb), 0.12);
+  border: 2px solid var(--accent-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: var(--accent-dark);
+}
 ```
 
-**No-logo variant** (when `logo` field is absent):
+Rendered instead of a logo `<img>` when a client entry in `clients-data.js` has no `logo` field -
+shows the company's initial letter.
 
-```html
-<a href="{link}" class="client-logo client-logo-text" ...>
-  <div class="client-initial-pill">{initial}</div>
-  <span class="client-name-label">{name}</span>
-  <span class="client-link-badge"><i class="{icon}"></i></span>
-</a>
+### 2.9 Certification Card (`about.css`, About page only)
+
+Real classes: `.cert-grid`, `.cert-card`, `.cert-icon-wrap`, `.cert-name`, `.cert-institute`,
+`.cert-date-badge`, `.cert-view-hint`. Clicking a `.cert-card` opens `#certModal`, which uses
+`.cert-modal-header`, `.cert-modal-title`, `.cert-modal-sub`, `.cert-modal-img-wrap`, and falls
+back to `.cert-modal-placeholder` when no certificate image is set. Wired by
+`scripts/certification-modal-logic.js`.
+
+### 2.10 Modal
+
+```css
+.modal-content {
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2rem;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
 ```
 
-The `.client-initial-pill` uses `rgba(var(--accent-rgb), 0.12)` for its background, which is
-why `--accent-rgb` must be set correctly for each palette.
+Scales/fades in on open (state toggled via JS, not a CSS class swap). `.modal-content` is
+deliberately excluded from the shimmer hover effect (see 3.4) via `:not(.modal-content)`.
 
----
+### 2.11 Project Card (Featured Carousel)
 
-### 2.9 Certification Card
+Real classes: `.pc-card`, `.pc-preview`, `.pc-title`, `.pc-visit-btn`, `.pc-dot` (carousel dot
+indicator, active state via `.is-active`). There is no `.type-tag` or badge class - projects
+render as plain cards with a screenshot, title, and a "Visit" button (disabled/greyed via
+`visitEnabled: false` in the data object).
 
-Certification cards on `pages/about.html` use `.cert-card.glass-card`. They are static HTML
-(not data-driven) and carry `data-cert-*` attributes consumed by
-`scripts/certification-modal-logic.js`:
+### 2.12 Footer Availability
 
-```html
-<div
-  class="cert-card glass-card animate-on-scroll fade-in"
-  role="button"
-  tabindex="0"
-  data-cert-name="Certificate Title"
-  data-cert-institute="Issuing Institution"
-  data-cert-date="Month DD, YYYY"
-  data-cert-img="../assets/credentials/image.jpg"
->
-  <div class="cert-icon-wrap"><i class="fas fa-certificate"></i></div>
-  <p class="cert-name">Certificate Title</p>
-  <p class="cert-institute">Issuing Institution</p>
-  <span class="cert-date-badge">Month DD, YYYY</span>
-  <p class="cert-view-hint">
-    <i class="fas fa-expand-alt" style="font-size: 0.65rem"></i>
-    View Certificate
-  </p>
-</div>
-```
+The footer includes a static `.footer-availability` line ("Currently accepting new projects" or
+similar) - this is a plain inline element in the footer layout, not a floating/fixed badge.
 
-Clicking the card opens `#certModal`, which renders the credential image at full size. See
-`docs/PROJECT_EDITING_GUIDE.md` section 10 for the full add-a-certification workflow.
+### 2.13 Contact Form
 
----
-
-### 2.10 Contact Form
-
-The dual-mode contact form (`id="contactForm"`) on `index.html` uses these structural classes:
-
-| Class          | Purpose                                          |
-| -------------- | ------------------------------------------------ |
-| `.cf-form`     | Form container - `novalidate` attribute required |
-| `.cf-tab-pill` | Animated sliding tab indicator                   |
-| `.cf-field`    | Individual field wrapper (label + input + error) |
-| `#cfToast`     | Toast notification container                     |
-| `#cfSubmitBtn` | Submit button - label and icon update per mode   |
-
-All form logic (mode switching, field visibility, validation, URI construction, toast lifecycle)
-lives in `scripts/contact-form-validation.js`. Do not write inline `onsubmit` or `onclick`
-attributes on any form element.
-
-#### Validation Rules
-
-- **Full Name** (`#cf-name`) must contain at least two space-separated words, each made up of
-  alphabetic characters with optional internal apostrophes or hyphens (`O'Brien`, `Anne-Marie`).
-  Digits and other special characters are rejected. Multiple spaces are collapsed and
-  leading/trailing spaces are trimmed on blur. Invalid input shows _"Please enter your first and
-  last name."_
-- **Email** (`#cf-email`, Mail mode) and **WhatsApp Number** (`#cf-contact`, WhatsApp mode) keep
-  their existing format checks.
-- **Subject** (`#cf-subject`, Mail mode) and **Message** (`#cf-message`) are required non-empty
-  fields.
-
-#### Submit Button State
-
-`#cfSubmitBtn` is disabled by default (`updateSubmitState()` runs once on script load) and is
-re-evaluated on every `input` event and on tab switch. It only becomes enabled once all required
-fields for the active mode (Mail or WhatsApp) pass validation, and re-disables immediately if any
-field becomes invalid again. The existing `.cf-submit-btn:disabled` style (`opacity: 0.65`,
-`cursor: not-allowed`) provides the visual state.
+Real structure: `#contactForm.cf-form`, `.cf-pair-row`, `.cf-field` (each input + floating
+`<label>` + `.cf-field-error` span), `.cf-tab-pill` (Mail/WhatsApp tab selector), `#cfSubmitBtn`,
+and a `.cf-toast` / `#cfToast` notification. Field IDs: `cf-name`, `cf-email`, `cf-contact` (tel,
+used in WhatsApp mode), `cf-subject`, `cf-message`. Submits to Formspree
+(`https://formspree.io/f/...`) in Mail mode or builds a `https://wa.me/` link in WhatsApp mode.
+Logic lives entirely in `scripts/contact-form-validation.js`.
 
 ---
 
 ## 3. Animation System
 
-### 3.1 Scroll Animation Framework
+### 3.1 Header Scroll Progress
 
-The scroll animation system is built on `IntersectionObserver`. Any HTML element can opt into
-scroll-triggered animation by adding two classes: the base class `animate-on-scroll` and one
-modifier class.
+`.header-progress-fill` grows `width` in sync with scroll position, driven by
+`initHeaderScrollProgress()`. Two low-opacity blobs (`.header-progress-wave`,
+`.header-progress-wave--b`) sit at the fill's leading edge and continuously rotate via the
+`header-wave-spin` / `header-wave-spin-reverse` keyframes. Disabled under
+`prefers-reduced-motion: reduce`.
 
-**Base class:**
+### 3.2 Scroll-Triggered Animations
 
-```css
-.animate-on-scroll {
-  opacity: 0;
-  transition:
-    opacity 0.6s ease,
-    transform 0.6s var(--spring);
-}
+Add `animate-on-scroll` plus exactly one modifier class to any element:
 
-.animate-on-scroll.visible {
-  opacity: 1;
-  transform: none;
-}
-```
+| Modifier   | Effect                                              |
+| ---------- | ----------------------------------------------------- |
+| `slide-up` | Slides in from +/-40px on the Y axis                 |
+| `zoom-in`  | Scales from 0.88 to 1.0                              |
+| `fade-in`  | Fades in with a smaller +/-12px Y offset              |
 
-**Modifier classes:**
+A shared `IntersectionObserver`, combined with a passive `scroll` listener tracking
+`_lastScrollY`/`_currentScrollY`, stamps `from-below` or `from-above` on the element depending on
+scroll direction before adding `visible` to trigger the transition. Don't wrap the hero section
+in `animate-on-scroll` - it uses its own `heroFadeUp` keyframe instead.
 
-```css
-/* Slide up (direction-aware) */
-.animate-on-scroll.slide-up.from-below {
-  transform: translateY(40px);
-}
-.animate-on-scroll.slide-up.from-above {
-  transform: translateY(-40px);
-}
+### 3.3 Real Keyframes (`style.css`)
 
-/* Zoom in (direction-agnostic) */
-.animate-on-scroll.zoom-in {
-  transform: scale(0.88);
-}
+| Keyframe                     | Used for                                        |
+| ------------------------------ | -------------------------------------------------- |
+| `heroFadeUp`                 | Hero section entrance                           |
+| `coinGlow`                   | Profile coin idle ring pulse                    |
+| `liquidFloat`                | Decorative background blob movement             |
+| `header-wave-spin` / `-reverse` | Header progress-fill wave blobs              |
+| `clientsScroll`              | Infinite client-logo carousel auto-scroll       |
+| `skillPop`                   | Skill card entrance                             |
+| `pulse-dot`                  | Small pulsing-dot indicators                    |
+| `cf-shake`                   | Contact form field shake on validation error    |
+| `spin`                       | Generic loading-spinner rotation                |
 
-/* Fade in (direction-aware, subtle) */
-.animate-on-scroll.fade-in.from-below {
-  transform: translateY(12px);
-}
-.animate-on-scroll.fade-in.from-above {
-  transform: translateY(-12px);
-}
-```
+There is no `bounce`, `carouselSlide`, or `fadeInScale` keyframe in the codebase.
 
-The `from-below` and `from-above` classes are applied by `app.js` at the moment an element
-enters the viewport, based on tracked scroll direction. Both are cleared on exit so every scroll
-pass re-evaluates cleanly. `zoom-in` is direction-agnostic and does not receive directional
-modifier classes.
-
-Do not apply `animate-on-scroll` to the hero section. The hero uses its own keyframe animation
-(`heroFadeUp`) that fires on page load without a scroll trigger.
-
----
-
-### 3.2 Keyframe Animations
-
-| Keyframe Name   | Used On                    | Description                                      |
-| --------------- | -------------------------- | ------------------------------------------------ |
-| `heroFadeUp`    | Hero section (all pages)   | Fades in + slides up 20px on page load           |
-| `coinGlow`      | Profile coin outer ring    | Pulses green box-shadow at idle                  |
-| `bounce`        | Available for Work badge   | Vertical bounce loop at 2s interval              |
-| `carouselSlide` | Client logo carousel track | Infinite horizontal scroll, pauses on hover      |
-| `liquidFloat`   | Background blob elements   | Slow radial float cycle (20s), purely decorative |
-| `shimmerSweep`  | Handled via CSS transition | Not a keyframe - uses `left` property transition |
-| `fadeInScale`   | Page loader exit           | Fades and scales out the loader overlay          |
-
-All keyframe definitions live inside `style.css` under their respective named comment blocks.
-Do not define keyframes inside component-level style rules.
-
----
-
-### 3.3 Testimonial Carousel
-
-The testimonial carousel (`id="testimonialCarousel"`) is a single-card slide system managed
-entirely by `app.js`. Slide transitions are driven by CSS class toggling - not keyframes:
-
-| Class         | Applied to | Effect                  |
-| ------------- | ---------- | ----------------------- |
-| `exit-left`   | Outgoing   | Slides out to the left  |
-| `exit-right`  | Outgoing   | Slides out to the right |
-| `enter-left`  | Incoming   | Enters from the right   |
-| `enter-right` | Incoming   | Enters from the left    |
-
-The `carouselAnimating` boolean guard in `app.js` prevents stacked transitions. Do not apply
-these classes manually - `tcGoTo()` manages the full class lifecycle including `transitionend`
-cleanup.
-
-Auto-advance interval: `TC_INTERVAL = 120_000` (2 minutes). The timer resets on any manual
-navigation via `tcResetTimer()`.
-
----
-
-### 3.4 Coin-Toss Animation
-
-The 3D coin-toss uses CSS `transform: rotateY` rather than keyframes. Key values:
+### 3.4 Dynamic 3D Coin-Toss Profile Card
 
 ```css
 .profile-coin-container {
+  --coin-size: 180px;
+  --coin-border: 4px;
+  width: var(--coin-size);
+  height: var(--coin-size);
+  border-radius: 50%;
   perspective: 1500px;
-}
-
-.coin-inner {
-  transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
-  transform-style: preserve-3d;
-}
-
-.profile-coin-container:hover .coin-inner {
-  transform: rotateY(720deg);
-}
-
-.coin-front,
-.coin-back {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-.coin-back {
-  transform: rotateY(180deg);
+  animation: coinGlow 3s ease-in-out infinite;
 }
 ```
 
-The `1500px` perspective value is not arbitrary - it produces the correct depth curve for a
-`180px` coin at standard desktop viewing distances. Do not change this value.
+On hover, `.coin-inner` performs a 720-degree Y-axis rotation over `0.9s` using
+`cubic-bezier(0.34, 1.56, 0.64, 1)`. Both faces use `backface-visibility: hidden` for correct
+depth. The reverse face shows a gold-gradient **"VERIFIED DEVELOPER"** badge.
 
----
+### 3.5 Testimonial Carousel
 
-### 3.5 Shimmer-Gradient Hover Effect
+The carousel is **not** driven by CSS animation classes. `tcGoTo()` in `app.js` directly sets
+inline `transform: translateX()` and `opacity` styles on `#tcTrack .carousel-slide` elements,
+sequenced with `requestAnimationFrame` and a `520ms` `setTimeout` cleanup step. Dot navigation
+uses `.carousel-dot` with the active dot marked via `.tc-dot-active`. Auto-advances every 2
+minutes (`TC_INTERVAL`) and pauses on hover/focus.
 
-The shimmer is a `::after` pseudo-element diagonal stripe that sweeps left to right on hover.
-Full implementation details and the full selector list are in `docs/PROJECT_EDITING_GUIDE.md`
-section 13.
+### 3.6 Universal Shimmer-Gradient Hover
 
-Key values:
+Applied via `::after` pseudo-element to exactly four selectors:
 
-```css
-width: 65%;
-transform: skewX(-18deg);
-background: linear-gradient(
-  120deg,
-  transparent 0%,
-  rgba(212, 175, 55, 0.18) 50%,
-  transparent 100%
-);
-
-left: -110%; /* resting position (off-screen left) */
-left: 160%; /* hover position (off-screen right)  */
-transition: left 0.65s ease;
+```
+.glass-card:not(.modal-content)
+.cta-button
+.load-more-btn
+.category-btn
 ```
 
-The `skewX(-18deg)` value was chosen to produce a clean diagonal at the `65%` width. Do not
-adjust the skew angle without adjusting the stripe width proportionally.
+To add the shimmer to a new element type, append its selector to the shimmer rule blocks in
+`style.css`.
 
 ---
 
 ## 4. Responsive Breakpoints
 
-### 4.1 768px (Tablet and Mobile)
+Primary breakpoints used throughout `style.css`:
 
-- Desktop navigation hidden; mobile hamburger drawer activates.
-- Project grid collapses from multi-column to single column.
-- Experience timeline shifts to single-column layout.
-- Stats bar reflows from horizontal row to 2×2 grid.
-- Hero layout stacks vertically (coin above text).
-- Contact form fields stack to full width.
-- Theme Customizer panel adjusts to full-width slide-in from bottom.
+| Breakpoint         | Usage                                    |
+| -------------------- | ------------------------------------------- |
+| `max-width: 768px`  | Tablet / mobile nav switch                |
+| `min-width: 641px`  | Desktop-only overrides                    |
+| `max-width: 640px`  | Small tablet adjustments                  |
+| `max-width: 480px`  | Phone-specific sizing (e.g. `--coin-size`) |
 
-### 4.2 480px (Small Mobile)
-
-- Hero padding reduces to accommodate small screens.
-- Profile coin shrinks from `180px` to `140px` via `--coin-size` CSS variable.
-- Body font size reduces by approximately 10% for comfortable reading.
-- Card padding reduces to maintain usable content width.
-
-Never remove `@media` blocks. Never use `px` values inside responsive blocks - use `rem` or
-percentages to ensure the layout responds to the user's base font size setting.
+A small number of one-off breakpoints (`680px`, `1100px`) exist for specific components - check
+the surrounding rule before assuming a value applies globally.
 
 ---
 
 ## 5. Icon System
 
-### 5.1 Lucide Icons (Primary)
-
-Lucide icons are the primary icon system for all functional UI icons: navigation toggle, theme
-toggle, outcome tags on project cards, stat counter labels, social links in the footer, and the
-Available for Work badge.
-
-```html
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-```
-
-```js
-// Call after rendering any section that contains Lucide placeholder elements
-lucide.createIcons();
-```
-
-To use a Lucide icon in HTML:
-
-```html
-<i data-lucide="arrow-right"></i>
-```
-
-### 5.2 Font Awesome 6.5 (Supplemental)
-
-Font Awesome is used for:
-
-- Profile coin back-face badge (`fa-certificate` + `fa-check`)
-- Pinned badge thumbtack (`fa-thumbtack`)
-- Theme Customizer trigger (`fa-palette`) and panel controls (`fa-sliders-h`, `fa-times`)
-- Client carousel link-type badges (`fa-globe`, `fab fa-facebook`, `fab fa-instagram`)
-- Testimonial star ratings (`fa-star`)
-- Experience pagination buttons (`fa-chevron-down`)
-- Certification card icons (`fa-certificate`, `fa-code`, `fa-mobile-button`)
-- Certification modal expand hint (`fa-expand-alt`)
-
-All other icon needs should be handled by Lucide. Do not introduce new Font Awesome usage where
-a Lucide equivalent exists.
+**Font Awesome 6.5 only**, loaded via CDN and used with `fas`/`fab` classes site-wide
+(`fas fa-envelope`, `fab fa-github`, etc.). There is no second icon library - don't introduce one
+for a new icon; find or request the closest Font Awesome equivalent instead.
 
 ---
 
 ## 6. Colour Usage Rules
 
-- **Gold Noir (`#D4AF37`) is for emphasis only.** It should not be used as a fill colour for large
-  surfaces. It is used for borders, glows, text highlights, gradients on buttons and badges,
-  and the shimmer stripe. Predominantly gold backgrounds will overwhelm the dark palette.
-
-- **Text on dark surfaces** should use `--text-dark` (`#e8e8e8`) for primary copy and
-  `--text-muted-dark` for secondary copy. Never use pure white (`#ffffff`) as a text colour
-  against the dark background - it creates too much contrast and fights the green.
-
-- **Text on green surfaces** (buttons, badges, the coin back face) should use `#1A1A1A` for
-  maximum legibility and visual consistency.
-
-- **Palette-aware colours** that must follow the active palette should reference CSS variables
-  (`var(--accent-dark)`, `var(--border-dark)`, etc.). Hardcoded hex values like `#D4AF37`
-  inside component rules will not update when the user changes palettes via the Theme Customizer.
+- `--accent-dark` (`#d4af37`, gold) is the only accent color - don't introduce a second accent
+  hue without updating this document and auditing every `rgba(var(--accent-rgb), ...)` usage.
+- Secondary/muted text is produced by applying `opacity` (commonly `0.7`–`0.9`) to `--text-dark`,
+  not a separate muted-color token.
+- Always keep `--accent-rgb` as the literal `R, G, B` triplet matching `--accent-dark` - it feeds
+  every `rgba(var(--accent-rgb), ...)` call directly.
 
 ---
 
-## 7. Dos and Don'ts
+## 7. Do / Don't
 
-### Do
+**Do:**
+- Reuse `.glass-card`, `.cta-button`, `.section`/`.container-custom`/`.section-title` for any new
+  UI that fits an existing pattern.
+- Match the nearest existing literal value for spacing/radius/duration rather than inventing a
+  new one (see section 1.3–1.5).
+- Use Font Awesome for any new icon.
 
-- Reference CSS variables for every repeated value. Hard-coding a hex value more than once is
-  a system violation.
-- Use `.glass-card` for every surface that sits on the dark background as a distinct panel.
-- Use `animate-on-scroll` with one modifier class for every section that should enter on scroll.
-- Keep service tier CTAs and footer links as `mailto:` or direct `href` URLs. The homepage
-  contact section is the designated form entry point.
-- Call `lucide.createIcons()` after every render function that injects Lucide icon placeholders.
-- Update `--accent-rgb` alongside `--accent-dark` whenever manually adding a new palette.
-
-### Do Not
-
-- Do not use `!important` anywhere in `style.css` unless overriding a prior `!important` from
-  a patch block. If a specificity conflict requires it in a new rule, restructure the selector
-  chain instead.
-- Do not define colours, font sizes, or border radii as hardcoded values outside of `:root`.
-- Do not add `overflow: hidden` to `.modal-content` in any CSS rule, scoped or global.
-- Do not use emoji characters in any rendered content. All iconography is handled by Lucide SVGs
-  or Font Awesome classes.
-- Do not write inline styles on HTML elements for anything other than temporary debugging.
-  All styles belong in `style.css`.
-- Do not apply the `[data-theme="light"]` attribute pattern as `.light-mode` on `<body>`. The
-  CSS uses `:root[data-theme="light"]` selectors exclusively.
+**Don't:**
+- Don't add a new CSS custom property scale (spacing, radius, duration) without updating this
+  document - the codebase currently has none beyond the color/animation tokens in section 1.1/1.5.
+- Don't add a second icon library.
+- Don't rename `animate-on-scroll`, `glass-card`, or `skill-card-anim` classes - they're relied on
+  by the scroll-animation observer and by inline references elsewhere.
 
 ---
 
 ## 8. Adding a New Page
 
-When a new page is needed (for example, a blog, a case study, or a resume view), follow this
-checklist to maintain design system consistency:
-
-1. Copy the `<head>` block from `pages/about.html` as the starting point. Update the `<title>`
-   and `<meta name="description">` content only.
-2. Copy the `<nav>` block verbatim from any existing page. Do not modify the navigation structure.
-3. Copy the `<footer>` block verbatim from any existing page.
-4. Apply the `heroFadeUp` animation to the page hero section by giving the hero element the
-   class `hero-animate`, matching the pattern used on existing pages.
-5. Use the standard section layout pattern from section 2.3 of this document for all content
-   sections.
-6. Include the Available for Work badge element as a fixed element in the page body.
-7. Include the inline theme initialisation block from the `<head>` of an existing page. It reads
-   from `localStorage` before the DOM renders to prevent a flash of the wrong theme.
-8. Load scripts in the correct order: data files → `app.js` → any page-specific scripts.
-   `initThemeCustomizer()` and `initThemeToggle()` are called automatically by `app.js` on
-   `DOMContentLoaded` - no manual call needed.
-9. If the page needs a certification section, copy the `.cert-grid` block from `pages/about.html`
-   and load `scripts/certification-modal-logic.js` after `app.js`.
-10. Test at 768px and 480px viewport widths before committing.
-
----
-
-This design system is a living document. When a new component is built that introduces a new
-token, class, or pattern, document it here immediately. A design system that is not maintained
-is not a design system - it is a collection of coincidences.
+1. Copy the `<head>` block from an existing page (Tailwind CDN, Font Awesome CDN, Google Fonts,
+   meta tags) and update the title/description/OG tags.
+2. Include the data scripts + `app.js` in the standard load order (see
+   `docs/PROJECT_EDITING_GUIDE.md` section on script load order), plus any page-specific script.
+3. Reuse `.glass-header` for the nav and `.section`/`.container-custom` for content blocks.
+4. Add the new page's link to both the desktop nav and the mobile nav (`.mobile-nav-group` or a
+   standalone `.mobile-nav-link`).
+5. Test in both dark and light theme, and at the 768px/480px breakpoints.

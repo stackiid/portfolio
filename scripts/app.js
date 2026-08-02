@@ -1144,11 +1144,6 @@ document.addEventListener("DOMContentLoaded", () => {
       // Observer is initialised later in the setTimeout below - no early call needed
     }
 
-    // --- Refresh Lucide icons for dynamically rendered content ---
-    if (typeof lucide !== "undefined") {
-      lucide.createIcons();
-    }
-
     // --- Mobile menu ---
     initMobileMenu();
 

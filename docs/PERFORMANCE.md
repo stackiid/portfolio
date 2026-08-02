@@ -114,19 +114,22 @@ must be actively used on that page. Current CDN payloads:
 | Library           | CDN Size (approx) | Pages loaded on |
 | ----------------- | ----------------- | --------------- |
 | Tailwind CSS      | ~28KB (gzip)      | All             |
-| Lucide Icons      | ~40KB (gzip)      | All             |
 | Font Awesome 6.5  | ~70KB (gzip)      | All             |
 | Plus Jakarta Sans | ~25KB (gzip)      | All             |
 
 Font Awesome 6.5 is the largest dependency. If Font Awesome usage is reduced in future, consider
 switching to a subsetting approach or an SVG sprite to reduce payload.
 
-### 3.3 Render-Blocking Avoidance
+### 3.3 Theme Application Timing
 
-The theme initialisation script in `<head>` is intentionally synchronous and tiny (< 200 bytes).
-It reads `localStorage` and applies `data-theme` before the DOM renders to prevent a flash of
-the wrong theme. This is a justified blocking script. Do not add any other synchronous scripts
-to `<head>`.
+**Not currently optimised.** There is no inline theme-initialisation script in `<head>`. The
+dark/light theme is applied by `initThemeToggle()` in `app.js`, which runs after all scripts
+load at the bottom of `<body>` - meaning a page loaded with the light theme saved in
+`localStorage` can briefly flash the default dark theme before JavaScript executes (FOUC). If
+this becomes noticeable, the fix is a small synchronous inline script in `<head>` that reads
+`localStorage.getItem('theme')` and sets `data-theme` on `<html>` before first paint. Keep any
+such script under ~200 bytes and synchronous - it's one of the few cases where a blocking
+script in `<head>` is justified.
 
 ### 3.4 Debouncing and Passive Listeners
 

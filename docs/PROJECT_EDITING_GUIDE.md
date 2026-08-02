@@ -89,7 +89,7 @@ hierarchy is important before touching this section.
 .profile-coin-container     <- perspective wrapper (perspective: 1500px)
   .coin-inner               <- rotating element (transform: rotateY)
     .coin-front             <- front face (profile photo)
-    .coin-back              <- back face (TRUSTED EXPERT badge)
+    .coin-back              <- back face (VERIFIED DEVELOPER badge)
 ```
 
 ### To Replace the Profile Photo
@@ -219,12 +219,6 @@ Experience entries live in the `experience` array in `scripts/experience-data.js
 }
 ```
 
-### Deprecated Field
-
-The `isInitiallyVisible` boolean from v1.0.0 is no longer read by `renderExperience()`. It can
-remain in existing entries without causing errors, but has no effect. Visibility is controlled
-entirely by array index position.
-
 ### Pagination Logic
 
 The Experience section uses two constants defined near the top of `app.js`:
@@ -264,12 +258,12 @@ Projects live in `window.projects` inside `scripts/projects-data.js`.
 }
 ```
 
-### The Auto-Pin System
+### Featured Projects Carousel
 
-The first three entries in the `projects` array (index 0, 1, 2) are automatically pinned.
-`renderProjects()` uses `projectsData.indexOf(project)` to detect position and injects a
-`.pinned-badge` ribbon. No type tag or manual flag is needed. To change which projects are
-pinned, **reorder the array**.
+`renderProjects()` filters `projectsData` for entries whose `type` array includes `"featured"`
+and renders only those into the homepage carousel. Order in the carousel follows their order in
+the array. To change which projects appear on the homepage, add or remove `"featured"` from the
+project's `type` array - array position has no effect.
 
 ---
 
@@ -290,7 +284,7 @@ Clients live in the `clients` array in `scripts/clients-data.js`.
 
 `link` and `linkType` are both required. `linkType` controls the badge icon: `"website"` → globe,
 `"facebook"` → Facebook icon, `"instagram"` → Instagram icon. If `logo` is omitted, the card
-auto-renders a green initial pill using the first letter of `name`.
+auto-renders a gold initial pill using the first letter of `name`.
 
 > **Note:** The `#clients` section in `index.html` is currently commented out. Uncomment it when
 > real client asset data is ready.
@@ -375,20 +369,22 @@ registers every `.cert-card` found on the page - no JavaScript changes needed wh
 
 The contact form on `index.html` (`id="contactForm"`) supports two send paths:
 
-| Mode     | Tab selector           | Send action                        |
-| -------- | ---------------------- | ---------------------------------- |
-| Mail     | `data-mode="mail"`     | Opens a `mailto:` URI              |
-| WhatsApp | `data-mode="whatsapp"` | Opens a `https://wa.me/` deep-link |
+| Mode     | Tab selector           | Send action                                   |
+| -------- | ---------------------- | ----------------------------------------------- |
+| Mail     | `data-mode="mail"`     | Submits via `fetch()` to a Formspree endpoint |
+| WhatsApp | `data-mode="whatsapp"` | Opens a `https://wa.me/` deep-link            |
 
 All logic lives in `scripts/contact-form-validation.js`. The form is loaded on `index.html` only.
 
-### To Update the Recipient Email Address
+### To Update the Recipient (Mail Mode)
 
-In `contact-form-validation.js`, find the `mailto:` URI builder and update the address string.
+Mail mode does **not** use a `mailto:` link - it submits the form via `fetch()` to a Formspree
+endpoint (`https://formspree.io/f/...`). To change the recipient, update the Formspree form ID
+in that fetch call, or change the recipient address in the Formspree dashboard for that form ID.
 
 ### To Update the WhatsApp Number
 
-In `contact-form-validation.js`, find the `wa.me/` URI builder and update the phone number
+In `contact-form-validation.js`, find the `wa.me/` URL builder and update the phone number
 (international format, no `+`, no spaces - e.g. `923001234567`).
 
 ### Form Field IDs
@@ -450,8 +446,6 @@ The shimmer sweep is applied automatically by CSS to:
 .glass-card:not(.modal-content)
 .cta-button
 .load-more-btn
-.connect-btn
-.modal-link
 .category-btn
 ```
 
@@ -515,16 +509,15 @@ scripts. Removing or renaming any of them will silently break the corresponding 
 | `experienceTimeline`      | `renderExperience()`                     |
 | `loadMoreExperience`      | `loadMoreExperience()`                   |
 | `showLessExperience`      | `showLessExperience()`                   |
-| `projectsGrid`            | `renderProjects()`                       |
+| `pcTrack`                 | `renderProjects()`                       |
+| `pcDots`                  | `renderProjects()`                       |
+| `pcPrev` / `pcNext`       | `renderProjects()` carousel arrows       |
 | `clientsTrack`            | `renderClients()`                        |
 | `testimonialCarousel`     | `renderTestimonials()`, keyboard nav     |
 | `tcTrack`                 | `renderTestimonials()`, `tcGoTo()`       |
 | `tcDots`                  | `renderTestimonials()`, `tcUpdateDots()` |
-| `projectModal`            | `openProjectModal()`                     |
-| `projectModalContent`     | `openProjectModal()`                     |
 | `testimonialModal`        | `openTestimonialModal()`                 |
 | `testimonialModalContent` | `openTestimonialModal()`                 |
-| `closeProjectModal`       | modal close listener                     |
 | `closeTestimonialModal`   | modal close listener                     |
 | `page-loader`             | `hideLoader()`                           |
 | `themeToggle`             | `initThemeToggle()`                      |
@@ -560,7 +553,8 @@ scripts. Removing or renaming any of them will silently break the corresponding 
 - Verify that asset paths exist in `assets/` before referencing them in arrays.
 - Test in both desktop and mobile viewports (768px and 480px) after any structural change.
 - Check the browser console after changes - all render functions log `console.error` on failure.
-- Call `createIcons()` after any render function that injects Lucide placeholder elements.
+- Use the existing `fas`/`fab` Font Awesome class pattern when adding new icons; don't introduce
+  a second icon library.
 - Maintain script load order (data files → `app.js` → page-specific scripts).
 
 ---
@@ -573,14 +567,13 @@ scripts. Removing or renaming any of them will silently break the corresponding 
 | Project card not appearing         | Array object has all required fields; `id` is a unique integer      |
 | Animation not triggering           | Element has both `animate-on-scroll` and exactly one modifier class |
 | Modal not scrolling                | `.modal-content` accidentally received `overflow: hidden` somewhere |
-| Pinned badge not showing           | Project is at array index 0, 1, or 2 in the `projects` array        |
 | Coin-toss not animating            | `.coin-front` or `.coin-back` missing `backface-visibility: hidden` |
-| Shimmer sweep not appearing        | Element selector missing from all three shimmer CSS rule blocks     |
-| Lucide icon renders as empty       | `createIcons()` not being called after the element renders          |
+| Shimmer sweep not appearing        | Element selector missing from the shimmer CSS rule blocks in `style.css` |
+| Icon renders as empty              | Font Awesome class missing or misspelled (e.g. `fas fa-` prefix)    |
 | Experience count wrong             | `INITIAL_EXP_COUNT` or `EXP_BATCH_SIZE` constants set incorrectly   |
 | Theme not persisting on reload     | `localStorage.setItem('theme', ...)` not called on toggle click     |
 | CV button downloads wrong file     | `href` on the CV `<a>` does not point to the correct path           |
-| Palette not restoring on reload    | `localStorage.getItem('ua-palette')` key is correct; see section 18 |
+| Project not showing in carousel    | `type` array on the project object is missing `"featured"`          |
 | Client card has no link icon       | `linkType` field is missing or uses an unrecognised string          |
 | Mobile sub-nav not toggling        | `.mobile-nav-group` missing or `initMobileMenu()` not called        |
 | Testimonial carousel not advancing | `TC_INTERVAL` constant; check `tcStart()` is called after render    |
@@ -590,47 +583,7 @@ scripts. Removing or renaming any of them will silently break the corresponding 
 
 ---
 
-## 18. Theme Customizer
-
-The portfolio includes a runtime palette-switching panel (v2.9+) managed by
-`initThemeCustomizer()` in `app.js` and styled under the `v2.9 - THEME CUSTOMIZER` comment
-block in `style.css`.
-
-### Quick Reference
-
-- **Trigger button:** `#cs-trigger` - fixed-position, bottom-right, above the Available for
-  Work badge.
-- **Panel:** `#cs-panel` - slides in from the right on trigger click.
-- **Palette storage key:** `localStorage.getItem('ua-palette')` - persists selection across
-  page loads.
-- **Apply programmatically:** `applyPalette(paletteId)` where `paletteId` is one of the ten
-  `id` strings in the `PALETTES` array inside `initThemeCustomizer()`.
-- **The `--accent-rgb` variable:** Each palette sets this as a raw `R,G,B` triplet (e.g.
-  `212,175,55`) for use inside `rgba()` calls. It is required for the clients carousel initial
-  pill and shimmer tints to follow the active palette.
-
-### Adding a New Palette
-
-Inside `initThemeCustomizer()` in `app.js`, append to the `PALETTES` array:
-
-```js
-{
-  id: "your-palette-name",
-  label: "Display Name",
-  accent: "#HEXVAL",
-  light: "#HEXVAL",
-  bg: "#HEXVAL",
-  glass: "rgba(...)",
-  border: "rgba(...)",
-  shadow: "rgba(...)",
-  rgb: "R,G,B",       // Must match accent as raw R,G,B - no spaces
-  blobs: ["#HEXVAL", "#HEXVAL"],
-}
-```
-
----
-
-## 19. Mobile Menu Sub-Navigation
+## 18. Mobile Menu Sub-Navigation
 
 ### Class Hierarchy
 

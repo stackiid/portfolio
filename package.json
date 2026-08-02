@@ -1,0 +1,21 @@
+{
+  "name": "ubaid-ahmad-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static developer portfolio - vanilla HTML/CSS/JS, no build step required to run.",
+  "scripts": {
+    "lint:js": "eslint scripts/**/*.js",
+    "lint:css": "stylelint styles/**/*.css",
+    "lint:html": "html-validate index.html pages/*.html",
+    "lint": "npm run lint:js && npm run lint:css && npm run lint:html",
+    "check:links": "node tools/check-local-refs.js",
+    "validate": "npm run lint && npm run check:links",
+    "serve": "npx --yes serve ."
+  },
+  "devDependencies": {
+    "eslint": "^9.9.0",
+    "html-validate": "^8.18.1",
+    "stylelint": "^16.8.1",
+    "stylelint-config-standard": "^36.0.1"
+  }
+}
