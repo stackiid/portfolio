@@ -116,7 +116,9 @@ for (const f of HTML_FILES) scanHtml(f);
 for (const f of CSS_FILES) scanCss(f);
 for (const f of JS_FILES) scanJs(f);
 
-console.log(`Checked ${checked} local references across ${HTML_FILES.length + CSS_FILES.length + JS_FILES.length} files.`);
+console.log(
+  `Checked ${checked} local references across ${HTML_FILES.length + CSS_FILES.length + JS_FILES.length} files.`,
+);
 
 if (errors > 0) {
   console.error(`\n${errors} broken reference(s) found.`);
