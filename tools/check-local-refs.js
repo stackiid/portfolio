@@ -1,15 +1,4 @@
 #!/usr/bin/env node
-/**
- * check-local-refs.js
- *
- * This project has no bundler, so there's no "build" step that would normally
- * catch a broken import/asset path. This script is the static-site equivalent:
- * it scans every HTML/CSS/JS file for local (non-external) src/href/url()
- * references and confirms the referenced file actually exists on disk.
- *
- * Usage: node tools/check-local-refs.js
- * Exits non-zero if any local reference is broken.
- */
 
 const fs = require("fs");
 const path = require("path");
@@ -47,7 +36,6 @@ function isExternalOrSkippable(ref) {
 }
 
 function resolveRef(fromFile, ref, baseDir) {
-  // Strip any query string or hash fragment before resolving to disk.
   const clean = ref.split("#")[0].split("?")[0];
   if (!clean) return null;
   const dir = baseDir || path.dirname(path.join(ROOT, fromFile));
@@ -88,17 +76,11 @@ function scanCss(file) {
 function scanJs(file) {
   const full = path.join(ROOT, file);
   const text = fs.readFileSync(full, "utf-8");
-  // Only check quoted paths that look like local asset paths
-  // (start with ./ or ../ or assets/), to avoid false positives on
-  // arbitrary strings, template literals with interpolation, and URLs.
-  // Skip commented-out lines (// ...) - this codebase uses them for
-  // placeholder/example fields, not live references.
   const pathPattern = /["'](\.{1,2}\/[^"'`]+|assets\/[^"'`]+)["']/g;
   const lines = text.split("\n");
   lines.forEach((line, i) => {
     const trimmed = line.trimStart();
     if (trimmed.startsWith("//")) return;
-    // Strip a trailing // comment on an otherwise-live line before scanning.
     const codePart = line.split(/\s\/\/(?!\d)/)[0];
     let m;
     const localPattern = new RegExp(pathPattern.source, "g");
