@@ -27,7 +27,7 @@ window.projects = [
     title: "StudyStation - WhatsApp Channel Site",
     type: ["featured"],
     image: "assets/work/study-station.jpeg",
-    demo: "https://bugcurator.github.io/StudyStation/",
+    demo: "https://stackiid.github.io/StudyStation/",
     visitEnabled: false,
   },
   {
@@ -35,8 +35,24 @@ window.projects = [
     title: "Hadaf Immigration - Study Abroad Consultancy UI",
     type: ["featured"],
     image: "assets/work/hadaf-immigration.jpeg",
-    demo: "https://bugcurator.github.io/Hadaf-Immigration/",
+    demo: "https://stackiid.github.io/Hadaf-Immigration/",
     visitEnabled: false,
+  },
+  {
+    id: 4,
+    title: "Greenova -Renewable Energy Company UI",
+    type: ["featured"],
+    image: "assets/work/greenova.png",
+    demo: "https://stackiid.github.io/greenova/",
+    visitEnabled: true,
+  },
+  {
+    id: 5,
+    title: "Wildflour Bakehouse -Artisan Bakery UI",
+    type: ["featured"],
+    image: "assets/work/wildflour-bakehouse.png",
+    demo: "https://stackiid.github.io/wildflour-bakehouse/",
+    visitEnabled: true,
   },
 
   // --- ADD MORE PROJECTS BELOW ----------------------------------------
