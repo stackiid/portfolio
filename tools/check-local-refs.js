@@ -12,9 +12,13 @@ const JS_FILES = [
   "scripts/projects-data.js",
   "scripts/skills-data.js",
   "scripts/experience-data.js",
-  "scripts/clients-data.js",
+  "scripts/collaboration-config.js",
+  "scripts/collaboration-render.js",
+  "scripts/collaboration-slider.js",
+  "scripts/collaboration-events.js",
   "scripts/testimonials-data.js",
   "scripts/certification-modal-logic.js",
+  "scripts/document-modal.js",
   "scripts/contact-form-validation.js",
 ];
 

@@ -98,11 +98,15 @@ Ubaid Ahmad/
 |   |- projects-data.js                # window.projects - all project objects
 |   |- skills-data.js                  # skillCategories - tabbed skills grid
 |   |- experience-data.js              # experience - paginated timeline
-|   |- clients-data.js                 # clients - logo carousel
+|   |- collaboration-config.js         # collaborations + CLIENT_ICONS/MY_ICONS maps (pure data)
+|   |- collaboration-render.js         # Builds the two-face hover card markup
+|   |- collaboration-slider.js         # Seamless RAF-driven infinite carousel
+|   |- collaboration-events.js         # My-Document / tap-to-reveal click wiring
 |   |- testimonials-data.js            # testimonials - carousel + modal
 |   |- app.js                          # All render functions, state, animations, theme toggle,
 |   |                                  #   mobile menu, testimonial carousel
-|   |- certification-modal-logic.js    # Cert card → modal wiring (about.html only)
+|   |- document-modal.js               # Shared modal controller (certs + collab documents)
+|   |- certification-modal-logic.js    # Cert card → document-modal.js wiring (about.html)
 |   `- contact-form-validation.js      # Dual-mode contact form logic (index.html only)
 |
 |- styles/
@@ -124,8 +128,8 @@ The project enforces strict separation of concerns:
 - **HTML** handles structure, static metadata, and modal scaffold containers only.
 - **CSS** owns every presentational rule, animation keyframe, and responsive breakpoint.
 - **JavaScript** owns all data arrays, render logic, state management, and DOM output.
-- **Data files** (`*-data.js`) are the single source of truth for all content - edit these
-  to add, remove, or update entries with zero HTML changes.
+- **Data files** (`*-data.js`, `collaboration-config.js`) are the single source of truth for
+  all content - edit these to add, remove, or update entries with zero HTML changes.
 
 ### Script Load Order
 
@@ -135,8 +139,13 @@ All HTML pages load scripts in this sequence:
 <script src="./scripts/projects-data.js"></script>
 <script src="./scripts/skills-data.js"></script>
 <script src="./scripts/experience-data.js"></script>
-<script src="./scripts/clients-data.js"></script>
+<script src="./scripts/collaboration-config.js"></script>
 <script src="./scripts/testimonials-data.js"></script>
+<script src="./scripts/document-modal.js"></script>
+<!-- index.html + about.html only - services.html has no document to open -->
+<script src="./scripts/collaboration-render.js"></script>
+<script src="./scripts/collaboration-slider.js"></script>
+<script src="./scripts/collaboration-events.js"></script>
 <script src="./scripts/app.js"></script>
 <!-- page-specific scripts after app.js -->
 <script src="./scripts/contact-form-validation.js"></script>
@@ -144,6 +153,12 @@ All HTML pages load scripts in this sequence:
 <script src="./scripts/certification-modal-logic.js"></script>
 <!-- about.html only -->
 ```
+
+`app.js`'s `DOMContentLoaded` handler calls `renderCollaborations()` unconditionally (same
+pattern as `renderSkills()`, `renderExperience()`, etc.), so
+`collaboration-render.js`/`-slider.js`/`-events.js` must be present on every page that loads
+`app.js` even if that page has no `#clientsTrack` - each one early-returns safely when its
+target element is missing, exactly like the other render functions already do.
 
 `app.js` reads from the data variables set by the preceding files, so load order is mandatory.
 
@@ -197,16 +212,19 @@ the full testimonial modal (`openTestimonialModal()`).
 
 `pages/about.html` includes a `.cert-grid` section with credential cards. Each card carries
 `data-cert-*` attributes and opens a full-screen `#certModal` displaying the certificate image,
-falling back to a placeholder icon when no image is set. Wired by
-`scripts/certification-modal-logic.js` (loaded on `about.html` only).
+falling back to a placeholder icon when no image is set. The modal itself lives in
+`scripts/document-modal.js` (`window.DocumentModal.open/close`) and is shared with the Clients
+& Collaborations "My Document" icon on `index.html` - see below. `certification-modal-logic.js`
+just wires `.cert-card` clicks to that shared API (loaded on `about.html` only).
 
 ### Homepage Sections
 
 - `#collaboration` - a CTA block positioned after the projects carousel.
 - `#social` - a social-icon grid (`.social-icon.glass-card.glow-hover`) linking to GitHub,
   LinkedIn, Instagram, Facebook, Threads, and Discord.
-- `#clients` - an infinite-scroll client logo carousel driven by `scripts/clients-data.js`,
-  currently commented out in `index.html` pending real client logos/testimonial data.
+- `#clients` - an infinite-scroll Clients & Collaborations carousel driven by
+  `scripts/collaboration-config.js`. Its nav-bar link is commented out in `index.html` pending
+  more real client logos, but the section itself renders live on the homepage.
 
 ### Dynamic 3D Coin-Toss Profile Card
 
@@ -243,12 +261,19 @@ dot navigation, and a hover scroll-preview effect on each screenshot.
 `.glass-card` (excluding `.modal-content`), `.cta-button`, `.load-more-btn`, and `.category-btn`
 elements carry a `::after` pseudo-element diagonal shimmer stripe that sweeps on hover.
 
-### Interactive Client Carousel
+### Clients & Collaborations Carousel
 
-The `clients` array (in `scripts/clients-data.js`) accepts `link` and `linkType` fields. Cards
-with no `logo` field render a gold initial pill + company name instead. A link-type badge icon
-renders in the card corner based on `linkType`. `mouseenter` pauses the auto-scroll animation;
-`mouseleave` resumes it.
+A seamless, GPU-accelerated infinite carousel (`scripts/collaboration-slider.js`) driven by
+`requestAnimationFrame` rather than a fixed-duration CSS `@keyframes` loop, so its speed stays
+constant no matter how many cards are configured. Each card (`scripts/collaboration-render.js`)
+is a non-clickable tile with two faces: an idle face (logo, or a gold initial pill + name when
+no `companyLogo` is set) that fades/blurs away on hover to reveal two circular action buttons -
+**My Document** (left, opens the shared certificate modal or an external link) and **Client**
+(right, opens the highest-priority configured platform link). Both icon sets and the fallback
+priority order live in `scripts/collaboration-config.js`, fully decoupled from rendering.
+Hovering, keyboard-focusing a button, or tapping a card (for touch devices with no `:hover`)
+all pause the marquee and reveal the buttons; `prefers-reduced-motion` disables the motion
+entirely.
 
 ### Light / Dark Mode Toggle
 
@@ -267,13 +292,13 @@ with a `.mobile-subnav` block expands it while collapsing any previously open gr
 
 All dynamic content lives in dedicated data files under `scripts/`:
 
-| Array             | Renders Into               | File                           |
-| ----------------- | -------------------------- | ------------------------------ |
-| `window.projects` | Featured projects carousel | `scripts/projects-data.js`     |
-| `skillCategories` | Tabbed skills grid         | `scripts/skills-data.js`       |
-| `experience`      | Paginated timeline         | `scripts/experience-data.js`   |
-| `clients`         | Infinite logo carousel     | `scripts/clients-data.js`      |
-| `testimonials`    | Single-card carousel       | `scripts/testimonials-data.js` |
+| Array              | Renders Into                      | File                               |
+| ------------------- | ---------------------------------- | ------------------------------------ |
+| `window.projects`  | Featured projects carousel        | `scripts/projects-data.js`         |
+| `skillCategories`  | Tabbed skills grid                | `scripts/skills-data.js`           |
+| `experience`       | Paginated timeline                | `scripts/experience-data.js`       |
+| `collaborations`   | Clients & Collaborations carousel | `scripts/collaboration-config.js`  |
+| `testimonials`     | Single-card carousel              | `scripts/testimonials-data.js`     |
 
 To add content, append a correctly structured object to the relevant array. No HTML editing
 required. For the full object shape of each array, see `docs/PROJECT_EDITING_GUIDE.md`.
@@ -373,7 +398,10 @@ See `docs/PROJECT_EDITING_GUIDE.md` for the complete reference. Quick summary:
 - **New skill** - Append to the correct `skillCategories[n].skills` array in `scripts/skills-data.js`.
 - **New experience entry** - Append to the `experience` array in `scripts/experience-data.js`.
 - **New testimonial** - Append to the `testimonials` array in `scripts/testimonials-data.js`.
-- **New client** - Append to the `clients` array in `scripts/clients-data.js`.
+- **New client/collaboration** - Copy the HerDev entry in the `collaborations` array
+  (`scripts/collaboration-config.js`) and edit `companyName`, `companyLogo`, `myIcon`,
+  `documentAvailable`/`documentPath`/`documentLink`, and `clientLinks`. New icon types go in
+  `MY_ICONS`/`CLIENT_ICONS` in the same file - no rendering code changes needed.
 - **New certification** - Add a `.cert-card` block in `pages/about.html` and drop the image into `assets/credentials/`.
 - **New section** - Apply `.section`, `.container-custom`, `.section-wrapper`, and `.animate-on-scroll`.
 

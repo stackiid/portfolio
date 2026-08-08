@@ -23,9 +23,13 @@ this guide.
 | `scripts/projects-data.js`             | Single source of truth for all project objects                |
 | `scripts/skills-data.js`               | `skillCategories` array - tabbed skills grid                  |
 | `scripts/experience-data.js`           | `experience` array - paginated timeline                       |
-| `scripts/clients-data.js`              | `clients` array - logo carousel                               |
+| `scripts/collaboration-config.js`      | `collaborations` array + `CLIENT_ICONS`/`MY_ICONS` maps       |
+| `scripts/collaboration-render.js`      | Builds the Clients & Collaborations card markup                |
+| `scripts/collaboration-slider.js`      | Seamless RAF-driven infinite carousel                          |
+| `scripts/collaboration-events.js`      | "My Document" click wiring + touch tap-to-reveal                |
 | `scripts/testimonials-data.js`         | `testimonials` array - carousel + modal                       |
-| `scripts/certification-modal-logic.js` | Cert card → modal wiring (`about.html` only)                  |
+| `scripts/document-modal.js`            | Shared modal controller (certifications + collab documents)    |
+| `scripts/certification-modal-logic.js` | Cert card → `document-modal.js` wiring (`about.html` only)     |
 | `scripts/contact-form-validation.js`   | Dual-mode contact form logic (`index.html` only)              |
 | `assets/`                              | Images, credentials, work screenshots                         |
 | `docs/`                                | Project documentation (this file and DESIGN_SYSTEM.md)        |
@@ -39,8 +43,13 @@ populated by the preceding data files - order is mandatory:
 <script src="./scripts/projects-data.js"></script>
 <script src="./scripts/skills-data.js"></script>
 <script src="./scripts/experience-data.js"></script>
-<script src="./scripts/clients-data.js"></script>
+<script src="./scripts/collaboration-config.js"></script>
 <script src="./scripts/testimonials-data.js"></script>
+<script src="./scripts/document-modal.js"></script>
+<!-- index.html + about.html only - services.html has no document to open -->
+<script src="./scripts/collaboration-render.js"></script>
+<script src="./scripts/collaboration-slider.js"></script>
+<script src="./scripts/collaboration-events.js"></script>
 <script src="./scripts/app.js"></script>
 <!-- page-specific scripts load after app.js -->
 <script src="./scripts/contact-form-validation.js"></script>
@@ -48,6 +57,11 @@ populated by the preceding data files - order is mandatory:
 <script src="./scripts/certification-modal-logic.js"></script>
 <!-- about.html only -->
 ```
+
+`app.js`'s `DOMContentLoaded` handler calls `renderCollaborations()` unconditionally, exactly
+like `renderSkills()`/`renderExperience()`/etc., so the three `collaboration-*.js` modules must
+be present on every page that loads `app.js` - each one early-returns safely if its target
+element (`#clientsTrack` / `.clients-carousel`) isn't on the page.
 
 ### Rendering Pattern
 
@@ -267,27 +281,49 @@ project's `type` array - array position has no effect.
 
 ---
 
-## 8. Adding Client Logos
+## 8. Adding Clients & Collaborations
 
-Clients live in the `clients` array in `scripts/clients-data.js`.
+Collaboration cards live in the `collaborations` array in `scripts/collaboration-config.js`.
+Copy the fully-wired HerDev entry at the top of the array as your template - it demonstrates
+every field.
 
 ### Required Object Shape
 
 ```js
 {
-  name: "Client or Company Name",
-  logo: "./assets/client-logo.png",  // optional - omit key entirely if no logo yet
-  link: "https://client-website.com",
-  linkType: "website",               // "website" | "facebook" | "instagram"
+  companyName: "Client or Company Name",
+  companyLogo: "./assets/collaboration/company-logo.png", // optional - omit if no logo yet
+  showMyIcon: true,       // show/hide the left "My Document" button
+  showClientIcon: true,   // show/hide the right "Client" button
+  myIcon: "internship",   // key into MY_ICONS - which document type
+  documentAvailable: true,
+  documentPath: "./assets/documents/company-certificate.jpg", // local mode
+  documentLink: "",       // external mode - used when documentAvailable is false
+  clientLinks: {
+    website: "https://company.com",   // any subset of CLIENT_ICONS keys
+    linkedin: "https://linkedin.com/company/company",
+  },
 }
 ```
 
-`link` and `linkType` are both required. `linkType` controls the badge icon: `"website"` → globe,
-`"facebook"` → Facebook icon, `"instagram"` → Instagram icon. If `logo` is omitted, the card
-auto-renders a gold initial pill using the first letter of `name`.
+- If `companyLogo` is omitted, the card auto-renders a gold initial pill using the first
+  letter of `companyName` (same fallback as before).
+- `myIcon` must be a key in `MY_ICONS` (also in `collaboration-config.js`) - e.g.
+  `certificate`, `experience`, `internship`, `recommendation`, `offerLetter`, `nda`, `legal`,
+  `appreciation`, `document`. Add a new document type by adding one key to `MY_ICONS` (+
+  `MY_ICON_LABELS`) - no rendering code changes needed.
+- When `documentAvailable: true`, clicking "My Document" opens `documentPath` in the shared
+  certificate modal (the same one used on the About page). When `false`, it opens
+  `documentLink` in a new tab instead.
+- `clientLinks` can hold any subset of the `CLIENT_ICONS` keys (`website`, `linkedin`,
+  `facebook`, `instagram`, `x`, `github`, `behance`, `dribbble`, `fiverr`, `upwork`). The
+  button shown is auto-resolved via `CLIENT_ICON_PRIORITY`, in that order - set whichever
+  links you actually have and the highest-priority one wins.
+- Both `showMyIcon: false` and `showClientIcon: false` are supported and stay centered
+  automatically; if both are false the hover animation still runs, just with an empty face.
 
-> **Note:** The `#clients` section in `index.html` is currently commented out. Uncomment it when
-> real client asset data is ready.
+> **Note:** The `#clients` nav-bar link is commented out in `index.html`, but the section
+> itself renders live on the homepage.
 
 ---
 
@@ -512,7 +548,8 @@ scripts. Removing or renaming any of them will silently break the corresponding 
 | `pcTrack`                 | `renderProjects()`                       |
 | `pcDots`                  | `renderProjects()`                       |
 | `pcPrev` / `pcNext`       | `renderProjects()` carousel arrows       |
-| `clientsTrack`            | `renderClients()`                        |
+| `clientsTrack`            | `renderCollaborations()`, `initCollaborationSlider()`, `initCollaborationEvents()` |
+| `certModal`                | `document-modal.js` (shared - certifications + collab documents) |
 | `testimonialCarousel`     | `renderTestimonials()`, keyboard nav     |
 | `tcTrack`                 | `renderTestimonials()`, `tcGoTo()`       |
 | `tcDots`                  | `renderTestimonials()`, `tcUpdateDots()` |
@@ -574,10 +611,12 @@ scripts. Removing or renaming any of them will silently break the corresponding 
 | Theme not persisting on reload     | `localStorage.setItem('theme', ...)` not called on toggle click     |
 | CV button downloads wrong file     | `href` on the CV `<a>` does not point to the correct path           |
 | Project not showing in carousel    | `type` array on the project object is missing `"featured"`          |
-| Client card has no link icon       | `linkType` field is missing or uses an unrecognised string          |
+| Client card has no Client button   | `clientLinks` empty, or `showClientIcon: false` on that card        |
+| My Document button missing         | `myIcon` key not in `MY_ICONS`, or missing `documentPath`/`documentLink` |
+| Collaboration marquee frozen       | `.clients-carousel`/`#clientsTrack` renamed without updating the three `collaboration-*.js` selectors |
 | Mobile sub-nav not toggling        | `.mobile-nav-group` missing or `initMobileMenu()` not called        |
 | Testimonial carousel not advancing | `TC_INTERVAL` constant; check `tcStart()` is called after render    |
-| Cert modal not opening             | `certification-modal-logic.js` not loaded; `data-cert-*` attrs set  |
+| Cert modal not opening             | `document-modal.js` and/or `certification-modal-logic.js` not loaded; `data-cert-*` attrs set |
 | Contact form not sending           | `contact-form-validation.js` not loaded; `id="contactForm"` present |
 | Data array changes not rendering   | Script load order violated - data file must load before `app.js`    |
 

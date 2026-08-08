@@ -1,12 +1,4 @@
 // =========================================================
-//  DATA - loaded via separate files before this script:
-//    skills-data.js      → skillCategories
-//    experience-data.js  → experience
-//    clients-data.js     → clients
-//    testimonials-data.js→ testimonials
-// =========================================================
-
-// =========================================================
 //                           STATE
 // =========================================================
 let currentSkillCategory = skillCategories[0].category;
@@ -18,7 +10,7 @@ let carouselAnimating = false; // guard against mid-transition clicks
 const TC_INTERVAL = 120_000; // 2 minutes (ms)
 
 // =========================================================
-//          SCROLL DIRECTION TRACKING
+//              SCROLL DIRECTION TRACKING
 // Continuously updated by a passive scroll listener so the
 // IntersectionObserver knows which way the user is scrolling.
 // =========================================================
@@ -421,7 +413,7 @@ function loadMoreExperience() {
 }
 
 // =========================================================
-//            EXPERIENCE - Show Less
+//                EXPERIENCE - Show Less
 // Collapses back to the initial INITIAL_EXP_COUNT cards.
 // =========================================================
 function showLessExperience() {
@@ -685,72 +677,6 @@ function renderProjects() {
   window.addEventListener("mousemove", onMouseMove);
   window.addEventListener("mouseup", onMouseUp);
 }
-// =========================================================
-//        RENDER CLIENTS - infinite carousel
-// --------------------------------------------------------─
-// Supports two card modes:
-//   • logo present  → shows the image (grayscale → color on hover)
-//   • no logo yet   → shows a green initial pill + company name
-// Each card links out via website > facebook > instagram,
-// indicated by a small icon badge in the corner.
-// =========================================================
-function renderClients() {
-  const clientsTrack = document.getElementById("clientsTrack");
-  if (!clientsTrack) return;
-  if (!clients.length) return;
-
-  const clientsCarousel = document.querySelector(".clients-carousel");
-
-  // FA icon class per link type
-  const linkIconMap = {
-    website: "fas fa-globe",
-    facebook: "fab fa-facebook",
-    instagram: "fab fa-instagram",
-  };
-
-  function buildCard(client) {
-    const initial = client.name.charAt(0).toUpperCase();
-    const iconClass =
-      linkIconMap[client.linkType] || "fas fa-external-link-alt";
-    const hasLogo = Boolean(client.logo);
-
-    const innerHTML = hasLogo
-      ? `<img src="${client.logo}" alt="${client.name} logo" loading="lazy" />`
-      : `<div class="client-initial-pill" aria-hidden="true">${initial}</div>
-         <span class="client-name-label">${client.name}</span>`;
-
-    return `
-      <a
-        href="${client.link}"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="client-logo${hasLogo ? "" : " client-logo-text"}"
-        role="listitem"
-        aria-label="Visit ${client.name}"
-        data-tooltip="${client.name}"
-      >
-        ${innerHTML}
-        <span class="client-link-badge" aria-hidden="true">
-          <i class="${iconClass}"></i>
-        </span>
-      </a>`;
-  }
-
-  // Duplicate for seamless infinite scroll
-  const doubled = [...clients, ...clients];
-  clientsTrack.innerHTML = doubled.map(buildCard).join("");
-
-  // Pause on hover so users can click
-  if (clientsCarousel) {
-    clientsCarousel.addEventListener("mouseenter", () => {
-      clientsTrack.style.animationPlayState = "paused";
-    });
-    clientsCarousel.addEventListener("mouseleave", () => {
-      clientsTrack.style.animationPlayState = "running";
-    });
-  }
-}
-
 // =========================================================
 //                    RENDER TESTIMONIALS
 // =========================================================
@@ -1134,7 +1060,9 @@ document.addEventListener("DOMContentLoaded", () => {
     renderSkills();
     renderExperience();
     renderProjects();
-    renderClients();
+    renderCollaborations();
+    initCollaborationSlider();
+    initCollaborationEvents();
     renderTestimonials();
 
     // Register dynamically-rendered testimonial carousel with observer

@@ -73,7 +73,29 @@ role="button" tabindex="0" aria-label="View {Certificate Name} certificate"
 
 These are `<div>` elements acting as buttons. The `role="button"` and `tabindex="0"` pair
 makes them keyboard-accessible. `certification-modal-logic.js` binds both `click` and
-`keydown` (Enter and Space) events.
+`keydown` (Enter and Space) events, opening the shared `window.DocumentModal`.
+
+#### Clients & Collaborations Cards (`.collab-tile`)
+
+```html
+<div class="collab-tile" role="listitem" aria-label="{Company name} collaboration">
+```
+
+The card itself carries no `role="button"`/`tabindex` and is never clickable - only the two
+real `<button>`/`<a>` elements inside it are, so they're reachable via normal Tab order without
+any custom keyboard wiring. `#clientsTrack` carries `role="list"` to pair correctly with each
+card's `role="listitem"`.
+
+The idle face (logo/initial + name) and the two-button action face are pure CSS, toggled by
+`:hover` **and** `:focus-within` together - tabbing to either button reveals the face it's in
+before the button itself receives visible focus, so keyboard users never focus something
+invisible. Touch devices (no real `:hover`) get a `collaboration-events.js`-driven tap-to-reveal
+fallback that adds/removes an `.is-revealed` class, mirrored by the same CSS rules.
+
+`collaboration-slider.js` pauses the auto-scrolling marquee on `mouseenter`, `focusin` (so
+tabbing into a card's buttons doesn't drag them out from under the pointer/keyboard focus), and
+while a card is `.is-revealed` on touch; it respects `prefers-reduced-motion` by not animating
+at all.
 
 #### Mobile Menu (`#mobileMenu`)
 
@@ -197,7 +219,7 @@ not mouse clicks.
 | ------------------------------ | ---------------------------------------------------- |
 | Profile photo (coin front)     | `"Ubaid Ahmad"` - identifies the person              |
 | Project screenshots            | Brief description of what the screenshot shows       |
-| Client logos                   | `"{Client name} logo"`                               |
+| Client / collaboration logos    | `"{Company name} logo"`                              |
 | Testimonial avatars            | `"{Reviewer name} photo"`                            |
 | Certificate images in modal    | `"{Certificate name} credential"`                    |
 | Decorative blobs / backgrounds | `alt=""` with `role="presentation"` or `aria-hidden` |

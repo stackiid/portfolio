@@ -1,22 +1,11 @@
 // =========================================================
-// PROJECTS DATABASE
-// Single source of truth for all project data.
-// Loaded before script.js so window.projects is available
-// when renderProjects() runs.
-//
-// Fields used by renderProjects():
-//   id           — card identifier (data-project-id attribute)
-//   image        — screenshot path (relative to root)
-//   title        — card title + alt text
-//   demo         — Visit button href
-//   visitEnabled — true = button active, false = greyed-out/disabled
-//   type         — include "featured" to show on the home carousel
+//                        PROJECTS
 // =========================================================
 
 window.projects = [
   {
     id: 1,
-    title: "DevOps Engineer Portfolio - Muhammad Dawood",
+    title: "DevOps Engineer Portfolio",
     type: ["featured"],
     image: "assets/work/portfolio-landing-page.png",
     demo: "https://idavidkhan.github.io/DevOps/",
@@ -24,23 +13,23 @@ window.projects = [
   },
   {
     id: 2,
-    title: "StudyStation - WhatsApp Channel Site",
+    title: "Transport Logistic - Logistics Company Website",
     type: ["featured"],
-    image: "assets/work/study-station.jpeg",
-    demo: "https://stackiid.github.io/StudyStation/",
-    visitEnabled: false,
+    image: "assets/work/transport-logistic.png",
+    demo: "https://stackiid.github.io/transport-logistic/",
+    visitEnabled: true,
   },
   {
     id: 3,
-    title: "Hadaf Immigration - Study Abroad Consultancy UI",
+    title: "Wildflour Bakehouse - Artisan Bakery UI",
     type: ["featured"],
-    image: "assets/work/hadaf-immigration.jpeg",
-    demo: "https://stackiid.github.io/Hadaf-Immigration/",
-    visitEnabled: false,
+    image: "assets/work/wildflour-bakehouse.png",
+    demo: "https://stackiid.github.io/wildflour-bakehouse/",
+    visitEnabled: true,
   },
   {
     id: 4,
-    title: "Greenova -Renewable Energy Company UI",
+    title: "Greenova - Renewable Energy Company UI",
     type: ["featured"],
     image: "assets/work/greenova.png",
     demo: "https://stackiid.github.io/greenova/",
@@ -48,11 +37,19 @@ window.projects = [
   },
   {
     id: 5,
-    title: "Wildflour Bakehouse -Artisan Bakery UI",
+    title: "Hadaf Immigration - Study Abroad Consultancy UI",
     type: ["featured"],
-    image: "assets/work/wildflour-bakehouse.png",
-    demo: "https://stackiid.github.io/wildflour-bakehouse/",
-    visitEnabled: true,
+    image: "assets/work/hadaf-immigration.jpeg",
+    demo: "https://stackiid.github.io/Hadaf-Immigration/",
+    visitEnabled: false,
+  },
+  {
+    id: 6,
+    title: "StudyStation - WhatsApp Channel Site",
+    type: ["featured"],
+    image: "assets/work/study-station.jpeg",
+    demo: "https://stackiid.github.io/StudyStation/",
+    visitEnabled: false,
   },
 
   // --- ADD MORE PROJECTS BELOW ----------------------------------------

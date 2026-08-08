@@ -1,15 +1,7 @@
 // =========================================================
-//                      TESTIMONIALS
+//                        TESTIMONIALS
 // =========================================================
-// Edit this file to add, remove, or update testimonial cards.
-// Entries render in the order listed.
-// Each object must have:
-//   name:   string         - reviewer's full name
-//   role:   string         - title / company shown under name
-//   avatar: string         - relative path to headshot image
-//   text:   string         - the testimonial body
-//   stars:  number (1–5)   - star rating
-// =========================================================
+
 const testimonials = [
   {
     name: "Muhammad Dawood",

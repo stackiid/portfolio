@@ -300,6 +300,13 @@ body.modal-open {
   .header-progress-wave--b {
     animation: none;
   }
+
+  .collab-tile,
+  .collab-face,
+  .collab-logo-img,
+  .collab-action-btn {
+    transition-duration: 0.01ms !important;
+  }
 }
 
 .logo {
@@ -1097,6 +1104,10 @@ body.modal-open {
 
 /* =========================================================
                         CLIENTS CAROUSEL
+   ---------------------------------------------------------
+   Track position is driven at runtime by collaboration-slider.js
+   (translate3d on .clients-track) - no CSS @keyframes here, so
+   speed stays constant regardless of how many cards exist.
    ========================================================= */
 .clients-carousel {
   overflow: hidden;
@@ -1104,58 +1115,210 @@ body.modal-open {
   padding: 2rem 0;
   width: 100%;
   max-width: 1000px;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 5%,
+    #000 95%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 5%,
+    #000 95%,
+    transparent 100%
+  );
 }
 
 .clients-track {
   display: flex;
   gap: 3rem;
-  animation: clientsScroll 18s linear infinite;
+  width: max-content;
 }
 
-.client-logo {
-  min-width: 200px;
-  height: 120px;
-  padding: 0;
-  display: flex;
-  align-items: center;
+/* STATIC mode - applied by collaboration-slider.js when the real,
+   un-cloned cards already fit within the carousel (e.g. only 1-4
+   real collaborations so far). No clones, no motion, no edge fade -
+   just the genuine cards, centered and wrapping to a second row on
+   narrow screens if needed. Looping a tiny set would just repeat
+   the same card(s) over and over, which reads as fake content. */
+.clients-carousel.is-static {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.clients-track.is-static {
+  flex-wrap: wrap;
   justify-content: center;
+  width: 100%;
+}
+
+/* =========================================================
+                   COLLABORATION CARD (hover-reveal)
+   ---------------------------------------------------------
+   Two stacked faces inside one non-clickable tile:
+     .collab-face--idle    → logo/initial + name (default state)
+     .collab-face--actions → two circular buttons (hover/focus/tap)
+   Only the buttons inside .collab-face--actions are interactive;
+   the tile itself carries no href/onclick.
+   ========================================================= */
+.collab-tile {
+  position: relative;
+  min-width: 200px;
+  height: 156px;
   border-radius: 16px;
   border: 1px solid var(--border-dark);
   background: var(--glass-dark);
-  transition: all 0.5s var(--spring);
   flex-shrink: 0;
   overflow: hidden;
+  transition:
+    background 0.6s var(--spring),
+    border-color 0.5s ease,
+    box-shadow 0.5s ease,
+    transform 0.5s var(--spring);
 }
 
-.client-logo:hover {
-  transform: scale(1.08);
-  box-shadow: 0 8px 20px rgba(var(--accent-rgb), 0.2);
+.collab-tile:hover,
+.collab-tile:focus-within,
+.collab-tile.is-revealed {
+  transform: translateY(-4px);
+  background: var(--bg-dark);
+  border-color: rgba(var(--accent-rgb), 0.45);
+  box-shadow: 0 12px 28px rgba(var(--accent-rgb), 0.22);
 }
 
-.client-logo img {
-  width: 100%;
+.collab-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s var(--spring),
+    filter 0.45s ease;
+}
+
+.collab-face--idle {
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.75rem;
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  filter: blur(0);
+}
+
+.collab-tile:hover .collab-face--idle,
+.collab-tile:focus-within .collab-face--idle,
+.collab-tile.is-revealed .collab-face--idle {
+  opacity: 0;
+  transform: scale(0.92) rotate(-2deg);
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+/* Fixed circular frame so every logo - landscape, portrait, or
+   square - sits inside a perfectly round shape at a consistent
+   size, at full original quality/colour (no filter/opacity dimming). */
+.collab-logo-frame {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.collab-logo-img {
+  max-width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
-  filter: grayscale(100%);
-  opacity: 0.6;
-  transition: all 0.5s ease;
+  max-height: 65px;
+  border-radius: 50%;
+  object-fit: contain;
   display: block;
 }
 
-.client-logo:hover img {
-  filter: grayscale(0%);
-  opacity: 1;
+.collab-face--actions {
+  gap: 1.1rem;
+  opacity: 0;
+  transform: scale(0.85) rotate(2deg);
+  filter: blur(3px);
+  pointer-events: none;
 }
 
-@keyframes clientsScroll {
-  0% {
-    transform: translateX(0);
-  }
+.collab-tile:hover .collab-face--actions,
+.collab-tile:focus-within .collab-face--actions,
+.collab-tile.is-revealed .collab-face--actions {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  filter: blur(0);
+  pointer-events: all;
+}
 
-  100% {
-    transform: translateX(-50%);
-  }
+/* Action buttons - own resting size/shape/colour (restored to the
+   original 52px gold-tinted look). Only the HOVER/FOCUS motion
+   (lift + rotate + shadow) is copied from the portfolio's existing
+   .social-icon hover effect - its class/sizing is deliberately NOT
+   applied here, so this stays its own compact style. */
+.collab-action-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(var(--accent-rgb), 0.1);
+  border: 1.5px solid rgba(var(--accent-rgb), 0.4);
+  color: var(--accent-dark);
+  font-size: 1.15rem;
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(8px) scale(0.7);
+  transition:
+    transform 0.45s var(--spring),
+    box-shadow 0.4s ease,
+    opacity 0.4s ease;
+}
+
+.collab-tile:hover .collab-action-btn,
+.collab-tile:focus-within .collab-action-btn,
+.collab-tile.is-revealed .collab-action-btn {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Staggered reveal: My Icon (left) settles first, Client Icon (right) just after */
+.collab-tile:hover .collab-action-btn--me,
+.collab-tile:focus-within .collab-action-btn--me,
+.collab-tile.is-revealed .collab-action-btn--me {
+  transition-delay: 0.05s;
+}
+
+.collab-tile:hover .collab-action-btn--client,
+.collab-tile:focus-within .collab-action-btn--client,
+.collab-tile.is-revealed .collab-action-btn--client {
+  transition-delay: 0.12s;
+}
+
+/* Higher specificity than the ancestor-driven "revealed at rest"
+   transform above, so a direct hover/focus on the button itself
+   (transform + shadow values copied verbatim from .social-icon:hover)
+   is never shadowed by it. Size/colour are untouched - hover effect only. */
+.collab-tile:is(:hover, :focus-within, .is-revealed)
+  .collab-action-btn:is(:hover, :focus-visible) {
+  transform: translateY(-5px) rotate(360deg);
+  box-shadow:
+    0 10px 20px rgb(0 0 0 / 25%),
+    0 0 15px rgba(var(--accent-rgb), 0.2);
+}
+
+.collab-action-btn:focus-visible {
+  outline: 2px solid var(--accent-dark);
+  outline-offset: 3px;
 }
 
 /* =========================================================
@@ -1528,15 +1691,6 @@ body.modal-open {
 }
 
 /* =========================================================
-                        CLIENTS CAROUSEL
-   ========================================================= */
-a.client-logo {
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-}
-
-/* =========================================================
                        CUSTOM SCROLLBAR
    ========================================================= */
 ::-webkit-scrollbar {
@@ -1660,6 +1814,22 @@ a.client-logo {
     grid-template-columns: 1fr;
   }
 
+  .collab-tile {
+    min-width: 168px;
+    height: 138px;
+  }
+
+  .collab-logo-frame {
+    width: 60px;
+    height: 60px;
+  }
+
+  .collab-action-btn {
+    width: 46px;
+    height: 46px;
+    font-size: 1.05rem;
+  }
+
   .testimonials-grid {
     grid-template-columns: 1fr;
   }
@@ -1685,6 +1855,31 @@ a.client-logo {
     width: 60px;
     height: 60px;
     font-size: 1.5rem;
+  }
+
+  .collab-tile {
+    min-width: 150px;
+    height: 124px;
+    gap: 0.85rem;
+  }
+
+  .collab-face--idle {
+    gap: 0.4rem;
+  }
+
+  .collab-logo-frame {
+    width: 52px;
+    height: 52px;
+  }
+
+  .collab-face--actions {
+    gap: 0.85rem;
+  }
+
+  .collab-action-btn {
+    width: 42px;
+    height: 42px;
+    font-size: 0.95rem;
   }
 }
 
@@ -3353,13 +3548,11 @@ a.client-logo {
 
 /* =========================================================
       CLIENTS SECTION
-      Existing .clients-carousel / .clients-track / .client-logo
-      rules remain unchanged above. These additions handle:
+      Card interaction rules live with .collab-tile above.
+      These additions handle:
         1. Section subtitle
-        2. No-logo card variant (.client-logo-text)
-        3. Initial pill (.client-initial-pill)
-        4. Company name label (.client-name-label)
-        5. Link type badge (.client-link-badge)
+        2. Initial pill (.client-initial-pill) - no-logo cards
+        3. Company name label (.client-name-label) - no-logo cards
    ========================================================= */
 
 /* Section subtitle */
@@ -3370,17 +3563,8 @@ a.client-logo {
   text-align: center;
 }
 
-/* -- No-logo card variant -- */
-.client-logo-text {
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 1.25rem 1rem;
-  min-width: 160px;
-  text-align: center;
-  position: relative;
-}
-
-/* Gold initial pill */
+/* Gold initial pill - shown instead of an <img> when a card has
+   no companyLogo. Sits inside .collab-face--idle. */
 .client-initial-pill {
   width: 52px;
   height: 52px;
@@ -3394,17 +3578,9 @@ a.client-logo {
   font-weight: 800;
   color: var(--accent-dark);
   flex-shrink: 0;
-  transition:
-    background 0.4s ease,
-    box-shadow 0.4s ease;
 }
 
-.client-logo-text:hover .client-initial-pill {
-  background: rgba(var(--accent-rgb), 0.22);
-  box-shadow: 0 0 18px rgba(var(--accent-rgb), 0.35);
-}
-
-/* Company name under initial */
+/* Company name under the initial pill */
 .client-name-label {
   font-size: 0.75rem;
   font-weight: 700;
@@ -3412,49 +3588,7 @@ a.client-logo {
   opacity: 0.75;
   letter-spacing: 0.04em;
   white-space: nowrap;
-  transition:
-    opacity 0.3s ease,
-    color 0.3s ease;
   display: block;
-}
-
-.client-logo-text:hover .client-name-label {
-  opacity: 1;
-  color: var(--accent-dark);
-}
-
-/* -- Link type badge (bottom-right corner of every card) -- */
-.client-link-badge {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: rgba(var(--accent-rgb), 0.15);
-  border: 1px solid rgba(var(--accent-rgb), 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.62rem;
-  color: var(--accent-dark);
-  opacity: 0;
-  transform: scale(0.8);
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-  pointer-events: none;
-}
-
-.client-logo:hover .client-link-badge,
-.client-logo-text:hover .client-link-badge {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* Ensure logo cards also have position:relative for the badge */
-.client-logo {
-  position: relative;
 }
 
 /* =========================================================
@@ -3541,7 +3675,7 @@ a.client-logo {
 .mobile-subnav a,
 .desktop-nav a,
 .social-icon,
-.client-logo,
+.collab-tile,
 .load-more-btn {
   transition:
     background-color 0.35s ease,
@@ -3641,10 +3775,16 @@ a.client-logo {
   color: var(--accent-dark) !important;
 }
 
-/* -- Client logo hover -- */
-.client-logo:hover {
-  box-shadow: 0 8px 20px rgba(var(--accent-rgb), 0.2) !important;
+/* -- Collaboration tile hover -- */
+.collab-tile:hover,
+.collab-tile:focus-within,
+.collab-tile.is-revealed {
+  box-shadow: 0 12px 28px rgba(var(--accent-rgb), 0.22) !important;
 }
+
+/* Collaboration action button hover/focus shadow reuses .social-icon's
+   own (theme-neutral) shadow recipe - see the SOCIAL ICONS section,
+   which likewise isn't overridden here. */
 
 /* -- Process number bubble -- */
 .process-number {
@@ -3713,21 +3853,17 @@ a.client-logo {
   color: var(--accent-dark) !important;
 }
 
-/* -- Client initial pill -- */
+/* -- Client initial pill (no-logo cards) -- */
 .client-initial-pill {
   background: rgba(var(--accent-rgb), 0.12) !important;
   border-color: var(--accent-dark) !important;
   color: var(--accent-dark) !important;
 }
 
-.client-logo-text:hover .client-initial-pill {
-  background: rgba(var(--accent-rgb), 0.22) !important;
-  box-shadow: 0 0 18px rgba(var(--accent-rgb), 0.35) !important;
-}
-
-.client-link-badge {
-  background: rgba(var(--accent-rgb), 0.15) !important;
-  border-color: rgba(var(--accent-rgb), 0.3) !important;
+/* -- Collaboration action buttons -- */
+.collab-action-btn {
+  background: rgba(var(--accent-rgb), 0.1) !important;
+  border-color: rgba(var(--accent-rgb), 0.4) !important;
   color: var(--accent-dark) !important;
 }
 

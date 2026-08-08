@@ -228,9 +228,36 @@ Mobile nav is a separate structure - see `docs/PROJECT_EDITING_GUIDE.md` section
 }
 ```
 
-### 2.8 Client Logo Card
+### 2.8 Collaboration Card (hover-reveal, two faces)
 
 ```css
+.collab-tile {
+  position: relative;
+  min-width: 200px;
+  height: 132px;
+  border-radius: 16px;
+  border: 1px solid var(--border-dark);
+  background: var(--glass-dark);
+  overflow: hidden;
+  transition: background 0.6s var(--spring), transform 0.5s var(--spring);
+}
+
+.collab-tile:hover,
+.collab-tile:focus-within,
+.collab-tile.is-revealed {
+  transform: translateY(-4px);
+  background: var(--bg-dark);
+}
+
+.collab-action-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(var(--accent-rgb), 0.1);
+  border: 1.5px solid rgba(var(--accent-rgb), 0.4);
+  color: var(--accent-dark);
+}
+
 .client-initial-pill {
   width: 52px;
   height: 52px;
@@ -245,16 +272,22 @@ Mobile nav is a separate structure - see `docs/PROJECT_EDITING_GUIDE.md` section
 }
 ```
 
-Rendered instead of a logo `<img>` when a client entry in `clients-data.js` has no `logo` field -
-shows the company's initial letter.
+Real classes: `.collab-tile` (non-clickable container), `.collab-face--idle` /
+`.collab-face--actions` (the two stacked, opacity/scale/blur-transitioned faces),
+`.collab-action-btn--me` / `.collab-action-btn--client` (the two circular buttons - left is
+always "my document", right is always the client link, never swapped). `.client-initial-pill`
+renders instead of a logo `<img>` when a `collaborations` entry in `collaboration-config.js`
+has no `companyLogo` field - shows the company's initial letter. On touch devices,
+`.collab-tile.is-revealed` mirrors the `:hover`/`:focus-within` state.
 
 ### 2.9 Certification Card (`about.css`, About page only)
 
 Real classes: `.cert-grid`, `.cert-card`, `.cert-icon-wrap`, `.cert-name`, `.cert-institute`,
-`.cert-date-badge`, `.cert-view-hint`. Clicking a `.cert-card` opens `#certModal`, which uses
-`.cert-modal-header`, `.cert-modal-title`, `.cert-modal-sub`, `.cert-modal-img-wrap`, and falls
-back to `.cert-modal-placeholder` when no certificate image is set. Wired by
-`scripts/certification-modal-logic.js`.
+`.cert-date-badge`, `.cert-view-hint`. Clicking a `.cert-card` opens `#certModal` via the shared
+`scripts/document-modal.js` controller (also used by the Clients & Collaborations "My Document"
+icon), which uses `.cert-modal-header`, `.cert-modal-title`, `.cert-modal-sub`,
+`.cert-modal-img-wrap`, and falls back to `.cert-modal-placeholder` when no image is set. Wired
+by `scripts/certification-modal-logic.js`.
 
 ### 2.10 Modal
 
@@ -329,13 +362,15 @@ in `animate-on-scroll` - it uses its own `heroFadeUp` keyframe instead.
 | `coinGlow`                   | Profile coin idle ring pulse                    |
 | `liquidFloat`                | Decorative background blob movement             |
 | `header-wave-spin` / `-reverse` | Header progress-fill wave blobs              |
-| `clientsScroll`              | Infinite client-logo carousel auto-scroll       |
 | `skillPop`                   | Skill card entrance                             |
 | `pulse-dot`                  | Small pulsing-dot indicators                    |
 | `cf-shake`                   | Contact form field shake on validation error    |
 | `spin`                       | Generic loading-spinner rotation                |
 
-There is no `bounce`, `carouselSlide`, or `fadeInScale` keyframe in the codebase.
+There is no `bounce`, `carouselSlide`, or `fadeInScale` keyframe in the codebase. The Clients &
+Collaborations carousel is deliberately **not** a `@keyframes` loop - `scripts/collaboration-slider.js`
+drives it with `requestAnimationFrame` and `translate3d` instead, so its speed stays constant
+regardless of how many cards are configured.
 
 ### 3.4 Dynamic 3D Coin-Toss Profile Card
 

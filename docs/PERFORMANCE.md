@@ -40,7 +40,7 @@ image asset added to the project.
 | ------------------------------- | ----------- | ------------------------------------------------- |
 | Profile photo (hero coin)       | WebP        | Best quality-to-size ratio for photographs        |
 | Project screenshots             | WebP        | Lossless compression available for UI screenshots |
-| Client logos (raster)           | WebP or PNG | PNG for logos with transparency; WebP otherwise   |
+| Client / collaboration logos    | WebP or PNG | PNG for logos with transparency; WebP otherwise   |
 | Testimonial avatars             | WebP        | Small dimensions - WebP savings are significant   |
 | Credential / certificate images | WebP or JPG | Certificates are document-style images - JPG fine |
 | OG image (`og-image.png`)       | PNG         | OG scrapers have inconsistent WebP support        |
@@ -52,7 +52,8 @@ image asset added to the project.
 | -------------------------- | ------------------ | -------------------------------------- |
 | Profile photo              | 360 × 360px        | Renders at 180px - 2× for retina       |
 | Project screenshots        | 800 × 500px        | Cards render thumbnails only           |
-| Client logos               | 200 × 200px        | Carousel tiles are square              |
+| Client / collaboration logos | 200 × 132px max     | Tile uses `object-fit: contain` - no need to crop to a square |
+| Collaboration documents (modal) | Same as certificate images below | Reuses the shared document modal |
 | Testimonial avatars        | 120 × 120px        | Rendered at 48–60px - 2× for retina    |
 | Certificate images (modal) | 1200 × 900px max   | Full-size modal display - no upscaling |
 | OG image                   | 1200 × 630px exact | Platform requirement                   |

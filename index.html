@@ -150,7 +150,7 @@
               <a href="#skills">Skills</a>
               <a href="#experience">Experience</a>
               <a href="#projects">Projects</a>
-              <!-- <a href="#clients">Companies</a> -->
+              <a href="#clients">Companies</a>
               <a href="#testimonials">Testimonials</a>
             </div>
           </div>
@@ -371,7 +371,7 @@
     </section>
 
     <!-- -- Clients & Collaborations Section -- -->
-    <!-- <section id="clients" class="section" aria-labelledby="clients-title">
+    <section id="clients" class="section" aria-labelledby="clients-title">
       <div class="container-custom">
         <div class="section-wrapper">
           <h2 id="clients-title" class="section-title">
@@ -382,18 +382,48 @@
           </p>
           <div
             class="clients-carousel animate-on-scroll slide-up"
-            aria-label="Clients logos carousel"
+            aria-label="Clients and collaborations carousel"
           >
             <div
               id="clientsTrack"
               class="clients-track"
               role="list"
-              aria-label="Scrolling client logos"
+              aria-label="Scrolling client and collaboration cards"
             ></div>
           </div>
         </div>
       </div>
-    </section> -->
+    </section>
+
+    <!-- -- Document / Certificate Modal --
+         Shared with pages/about.html's Certifications section - see
+         scripts/document-modal.js. Opened here by the "My Document"
+         action icon on a Clients & Collaborations card. -->
+    <div
+      id="certModal"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="certModalTitle"
+    >
+      <div class="modal-content glass-card">
+        <button
+          type="button"
+          class="modal-close"
+          id="closeCertModal"
+          aria-label="Close document modal"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="cert-modal-header">
+          <h3 class="cert-modal-title" id="certModalTitle">Document</h3>
+          <p class="cert-modal-sub" id="certModalSub"></p>
+        </div>
+        <div class="cert-modal-img-wrap" id="certModalBody">
+          <!-- content injected by JS -->
+        </div>
+      </div>
+    </div>
 
     <!-- -- Collaboration Section -- -->
     <section id="collaboration" class="section" aria-labelledby="collab-title">
@@ -732,8 +762,12 @@
     <script src="./scripts/projects-data.js"></script>
     <script src="./scripts/skills-data.js"></script>
     <script src="./scripts/experience-data.js"></script>
-    <script src="./scripts/clients-data.js"></script>
+    <script src="./scripts/collaboration-config.js"></script>
     <script src="./scripts/testimonials-data.js"></script>
+    <script src="./scripts/document-modal.js"></script>
+    <script src="./scripts/collaboration-render.js"></script>
+    <script src="./scripts/collaboration-slider.js"></script>
+    <script src="./scripts/collaboration-events.js"></script>
     <script src="./scripts/app.js"></script>
     <script src="./scripts/contact-form-validation.js"></script>
   </body>

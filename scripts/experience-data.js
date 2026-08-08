@@ -1,14 +1,7 @@
 // =========================================================
 //                       EXPERIENCE
 // =========================================================
-// Edit this file to add or update work / education entries.
-// Entries render in the order listed (top → bottom on page).
-// Each object must have:
-//   title:       string  - job / program title
-//   company:     string  - employer or institution
-//   period:      string  - date range (e.g. "Jan 2024 - Present")
-//   description: string  - short paragraph shown in the card
-// =========================================================
+
 const experience = [
   {
     title: "Computer Science Student",
@@ -23,5 +16,12 @@ const experience = [
     period: "Sep 2024 - Present",
     description:
       "Delivering end-to-end digital solutions: from human-centered UI/UX design in Figma to full-stack MERN applications with RESTful APIs. Specializing in responsive interfaces, scalable architectures, and clean code that turns complex client needs into seamless digital products.",
+  },
+  {
+    title: "Web Development Intern",
+    company: "HerDev",
+    period: "Aug 2026 - Sep 2026",
+    description:
+      "Gained hands-on experience in a remote environment building web applications and completing assigned development tasks. Worked closely with instructors to write clean code, troubleshoot issues, and deliver projects on schedule while following team standards.",
   },
 ];

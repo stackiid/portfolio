@@ -22,8 +22,16 @@ module.exports = [
         IntersectionObserver: "readonly",
         skillCategories: "readonly",
         experience: "readonly",
-        clients: "readonly",
         testimonials: "readonly",
+        collaborations: "readonly",
+        CLIENT_ICONS: "readonly",
+        CLIENT_ICON_LABELS: "readonly",
+        CLIENT_ICON_PRIORITY: "readonly",
+        MY_ICONS: "readonly",
+        MY_ICON_LABELS: "readonly",
+        renderCollaborations: "readonly",
+        initCollaborationSlider: "readonly",
+        initCollaborationEvents: "readonly",
       },
     },
     rules: {
@@ -41,8 +49,21 @@ module.exports = [
     files: [
       "scripts/skills-data.js",
       "scripts/experience-data.js",
-      "scripts/clients-data.js",
+      "scripts/collaboration-config.js",
       "scripts/testimonials-data.js",
+    ],
+    rules: {
+      "no-unused-vars": "off",
+    },
+  },
+  {
+    // These modules define global init functions that app.js calls
+    // from a different file (see the shared `globals` list above) -
+    // ESLint lints file-by-file so it can't see that cross-file call.
+    files: [
+      "scripts/collaboration-render.js",
+      "scripts/collaboration-slider.js",
+      "scripts/collaboration-events.js",
     ],
     rules: {
       "no-unused-vars": "off",
