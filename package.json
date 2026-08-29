@@ -1,21 +1,27 @@
 {
-  "name": "ubaid-ahmad-portfolio",
-  "version": "1.0.0",
+  "name": "portfolio-project",
   "private": true,
-  "description": "Static developer portfolio - vanilla HTML/CSS/JS, no build step required to run.",
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "lint:js": "eslint scripts/**/*.js",
-    "lint:css": "stylelint styles/**/*.css",
-    "lint:html": "html-validate index.html pages/*.html",
-    "lint": "npm run lint:js && npm run lint:css && npm run lint:html",
-    "check:links": "node tools/check-local-refs.js",
-    "validate": "npm run lint && npm run check:links",
-    "serve": "npx --yes serve ."
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "animejs": "^4.5.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
-    "eslint": "^9.9.0",
-    "html-validate": "^8.18.1",
-    "stylelint": "^16.8.1",
-    "stylelint-config-standard": "^36.0.1"
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.1.0",
+    "autoprefixer": "^10.5.4",
+    "oxlint": "^1.79.0",
+    "postcss": "^8.5.26",
+    "tailwindcss": "^3.4.19",
+    "vite": "^8.2.2"
   }
 }
