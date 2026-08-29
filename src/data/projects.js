@@ -13,7 +13,7 @@ const projects = [
     title: "DevOps Engineer Portfolio",
     description:
       "A collaborative portfolio build focused on clean information architecture and a fast, distraction-free presentation of technical work.",
-    image: "/assets/images/projects/portfolio-landing-page.png",
+    image: `${import.meta.env.BASE_URL}/assets/images/projects/portfolio-landing-page.png`,
     demo: "https://idavidkhan.github.io/DevOps/",
     tags: ["HTML", "CSS", "JavaScript"],
     visitEnabled: true,
@@ -23,7 +23,7 @@ const projects = [
     title: "Transport Logistic",
     description:
       "A logistics company website built around clarity and trust - service breakdowns, fleet information, and a conversion-focused layout.",
-    image: "/assets/images/projects/transport-logistic.png",
+    image: `${import.meta.env.BASE_URL}/assets/images/projects/transport-logistic.png`,
     demo: "https://stackiid.github.io/transport-logistic/",
     tags: ["Frontend", "UI/UX"],
     visitEnabled: true,
@@ -33,7 +33,7 @@ const projects = [
     title: "Wildflour Bakehouse",
     description:
       "An artisan bakery interface designed to feel warm and handmade, with a menu-first layout and soft, tactile visual language.",
-    image: "/assets/images/projects/wildflour-bakehouse.png",
+    image: `${import.meta.env.BASE_URL}/assets/images/projects/wildflour-bakehouse.png`,
     demo: "https://stackiid.github.io/wildflour-bakehouse/",
     tags: ["UI/UX", "Frontend"],
     visitEnabled: true,
@@ -43,7 +43,7 @@ const projects = [
     title: "Greenova",
     description:
       "A renewable energy company site balancing a technical subject with an approachable, sustainability-forward visual identity.",
-    image: "/assets/images/projects/greenova.png",
+    image: `${import.meta.env.BASE_URL}/assets/images/projects/greenova.png`,
     demo: "https://stackiid.github.io/greenova/",
     tags: ["Frontend", "UI/UX"],
     visitEnabled: true,
@@ -53,7 +53,7 @@ const projects = [
     title: "Hadaf Immigration",
     description:
       "A study-abroad consultancy interface structured around trust signals, program clarity, and a straightforward consultation funnel.",
-    image: "/assets/images/projects/hadaf-immigration.jpeg",
+    image: `${import.meta.env.BASE_URL}/assets/images/projects/hadaf-immigration.jpeg`,
     demo: "https://stackiid.github.io/Hadaf-Immigration/",
     tags: ["UI/UX", "Frontend"],
     visitEnabled: false,
@@ -63,7 +63,7 @@ const projects = [
     title: "StudyStation",
     description:
       "A WhatsApp channel landing page designed to convert visitors into subscribers with minimal friction and clear, direct messaging.",
-    image: "/assets/images/projects/study-station.jpeg",
+    image: `${import.meta.env.BASE_URL}/assets/images/projects/study-station.jpeg`,
     demo: "https://stackiid.github.io/StudyStation/",
     tags: ["Frontend"],
     visitEnabled: false,

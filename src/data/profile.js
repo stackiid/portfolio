@@ -42,8 +42,8 @@ const profile = {
   ],
   location: "Swabi, Khyber Pakhtunkhwa, Pakistan",
   email: "contact form (see Contact section)",
-  profileImage: "/assets/images/profile/ubaid-ahmad-profile.png",
-  resumeFile: "/assets/resume/ubaid-ahmad-resume.pdf",
+  profileImage: `${import.meta.env.BASE_URL}/assets/images/profile/ubaid-ahmad-profile.png`,
+  resumeFile: `${import.meta.env.BASE_URL}/assets/resume/ubaid-ahmad-resume.pdf`,
 };
 
 export default profile;

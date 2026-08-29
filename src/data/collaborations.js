@@ -8,10 +8,9 @@
 const collaborations = [
   {
     companyName: "HerDev",
-    companyLogo: "/assets/images/collaboration-logos/herdev.png",
+    companyLogo: `${import.meta.env.BASE_URL}/assets/images/collaboration-logos/herdev.png`,
     documentType: "Offer Letter",
-    documentImage:
-      "/assets/images/collaboration-credentials/herdev-offer-letter.png",
+    documentImage: `${import.meta.env.BASE_URL}/assets/images/collaboration-credentials/herdev-offer-letter.png`,
     clientLink: {
       label: "LinkedIn",
       icon: "fa-brands fa-linkedin",
