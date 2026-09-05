@@ -15,7 +15,7 @@ const LEARNING_DIRECTION = [
 // =========================================================
 //                          About
 // ---------------------------------------------------------
-export default function About() {
+export default function About({ onDownloadCv }) {
   const textRef = useScrollReveal();
 
   return (
@@ -54,8 +54,7 @@ export default function About() {
 
             <div className="mt-9">
               <Button
-                href={profile.resumeFile}
-                download
+                onClick={onDownloadCv}
                 variant="secondary"
                 icon="fa-solid fa-download"
               >

@@ -39,7 +39,7 @@ const MOBILE_NAV_ITEMS = [
 
 const SECTION_IDS = NAV_ITEMS.map((item) => item.href.slice(1));
 
-export default function Navbar() {
+export default function Navbar({ onDownloadCv }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const triggerRef = useRef(null);
@@ -56,10 +56,6 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Outer shell: full-width positioning context only, no visible
-          styling - keeps the fixed-positioning math simple. The floating
-          look (inset margins, rounded corners, background) lives on the
-          inner bar below. */}
       <div className="fixed inset-x-0 top-0 z-[80] px-3 pt-3 sm:px-5 sm:pt-4 lg:px-8 lg:pt-5">
         <header
           className={`mx-auto max-w-[1240px] rounded-2xl transition-all duration-300 ${
@@ -101,8 +97,7 @@ export default function Navbar() {
 
             <div className="flex items-center gap-3">
               <Button
-                href={profile.resumeFile}
-                download
+                onClick={onDownloadCv}
                 variant="primary"
                 icon="fa-solid fa-download"
                 className="hidden sm:inline-flex"
@@ -124,15 +119,12 @@ export default function Navbar() {
         </header>
       </div>
 
-      {/* Sibling of the header shell, not nested inside it - backdrop-filter
-          on the header creates a containing block for position:fixed
-          descendants, which would otherwise trap this overlay inside the
-          header's own small box instead of the viewport. */}
       <MobileMenu
         open={menuOpen}
         onClose={() => setMenuOpen(false)}
         navItems={MOBILE_NAV_ITEMS}
         triggerRef={triggerRef}
+        onDownloadCv={onDownloadCv}
       />
     </>
   );

@@ -3,6 +3,7 @@ import Loader from "./components/common/Loader.jsx";
 import Navbar from "./components/navigation/Navbar.jsx";
 import ScrollDots from "./components/navigation/ScrollDots.jsx";
 import Footer from "./components/common/Footer.jsx";
+import CvModal from "./components/common/CvModal.jsx";
 import Hero from "./sections/Hero/Hero.jsx";
 import About from "./sections/About/About.jsx";
 import Skills from "./sections/Skills/Skills.jsx";
@@ -19,6 +20,7 @@ import Contact from "./sections/Contact/Contact.jsx";
 // =========================================================
 export default function App() {
   const [loading, setLoading] = useState(true);
+  const [cvModalOpen, setCvModalOpen] = useState(false);
 
   useEffect(() => {
     const finishLoading = () => {
@@ -37,11 +39,11 @@ export default function App() {
   return (
     <>
       <Loader visible={loading} />
-      <Navbar />
+      <Navbar onDownloadCv={() => setCvModalOpen(true)} />
       <ScrollDots />
       <main>
         <Hero />
-        <About />
+        <About onDownloadCv={() => setCvModalOpen(true)} />
         <Skills />
         <Experience />
         <Education />
@@ -52,6 +54,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
+      <CvModal open={cvModalOpen} onClose={() => setCvModalOpen(false)} />
     </>
   );
 }

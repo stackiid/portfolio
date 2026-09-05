@@ -11,7 +11,13 @@ import useLockBodyScroll from "../../hooks/useLockBodyScroll.js";
 // exits to the left. Handles Escape-to-close, backdrop click,
 // body scroll lock, and returns focus to the trigger on close.
 // =========================================================
-export default function MobileMenu({ open, onClose, navItems, triggerRef }) {
+export default function MobileMenu({
+  open,
+  onClose,
+  navItems,
+  triggerRef,
+  onDownloadCv,
+}) {
   const panelRef = useRef(null);
   useLockBodyScroll(open);
 
@@ -82,11 +88,12 @@ export default function MobileMenu({ open, onClose, navItems, triggerRef }) {
 
         <div className="flex flex-col gap-5 border-t border-ink/10 px-6 py-6">
           <Button
-            href={profile.resumeFile}
-            download
+            onClick={() => {
+              onClose();
+              onDownloadCv?.();
+            }}
             variant="primary"
             icon="fa-solid fa-download"
-            onClick={onClose}
             className="w-full justify-center"
           >
             Download CV
