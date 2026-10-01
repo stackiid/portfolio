@@ -16,6 +16,42 @@ import { useEffect, useRef, useState } from "react";
 // - Reduced motion: handled globally in index.css (transitions
 //   collapse to ~0ms), so the flip becomes an instant swap.
 // =========================================================
+// One round icon button. Enabled: a real external link. Disabled: a
+// non-focusable, non-clickable greyed-out stand-in (no href, so there is
+// nothing to follow or tab to); aria-disabled keeps it announced as
+// unavailable instead of silently disappearing.
+function ProjectLink({ enabled, href, label, disabledLabel, className, iconClass }) {
+  const base =
+    "flex h-9 w-9 min-[420px]:h-10 min-[420px]:w-10 items-center justify-center rounded-full transition-all duration-300";
+  const isActive = Boolean(enabled) && typeof href === "string" && href.trim() !== "";
+
+  if (!isActive) {
+    return (
+      <span
+        role="link"
+        aria-disabled="true"
+        aria-label={disabledLabel}
+        title={disabledLabel}
+        className={`${base} cursor-not-allowed border border-teal/15 text-teal/35`}
+      >
+        <i className={iconClass} aria-hidden="true" />
+      </span>
+    );
+  }
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      className={`${base} ${className}`}
+    >
+      <i className={iconClass} aria-hidden="true" />
+    </a>
+  );
+}
+
 export default function ProjectCard({ project }) {
   const [flipped, setFlipped] = useState(false);
   const pointerType = useRef("mouse");
@@ -36,7 +72,7 @@ export default function ProjectCard({ project }) {
   }, [flipped]);
 
   function handleClick(e) {
-    if (e.target.closest("a")) return;
+    if (e.target.closest("a, [aria-disabled='true']")) return;
     // Mouse users flip via hover; toggling on click would fight it.
     if (pointerType.current === "mouse" && e.detail !== 0) return;
     setFlipped((value) => !value);
@@ -70,27 +106,22 @@ export default function ProjectCard({ project }) {
                 {project.title}
               </h3>
               <div className="flex flex-shrink-0 gap-2">
-                <a
+                <ProjectLink
+                  enabled={project.liveEnabled}
                   href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Open ${project.title} live site`}
-                  className="flex h-9 w-9 min-[420px]:h-10 min-[420px]:w-10 items-center justify-center rounded-full bg-teal text-cream transition-colors duration-300 hover:bg-teal-dark"
-                >
-                  <i
-                    className="fa-solid fa-arrow-up-right-from-square text-sm"
-                    aria-hidden="true"
-                  />
-                </a>
-                <a
+                  label={`Open ${project.title} live site`}
+                  disabledLabel={`${project.title} live site is not available`}
+                  className="bg-teal text-cream hover:bg-teal-dark"
+                  iconClass="fa-solid fa-arrow-up-right-from-square text-sm"
+                />
+                <ProjectLink
+                  enabled={project.repoEnabled}
                   href={project.repoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Open ${project.title} GitHub repository`}
-                  className="flex h-9 w-9 min-[420px]:h-10 min-[420px]:w-10 items-center justify-center rounded-full border border-teal/25 text-teal transition-all duration-300 hover:bg-teal hover:text-cream"
-                >
-                  <i className="fa-brands fa-github text-base" aria-hidden="true" />
-                </a>
+                  label={`Open ${project.title} GitHub repository`}
+                  disabledLabel={`${project.title} repository is private`}
+                  className="border border-teal/25 text-teal hover:bg-teal hover:text-cream"
+                  iconClass="fa-brands fa-github text-base"
+                />
               </div>
             </div>
 
