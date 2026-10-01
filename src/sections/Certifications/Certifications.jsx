@@ -7,7 +7,7 @@ import useCarousel from "../../hooks/useCarousel.js";
 import useMediaQuery from "../../hooks/useMediaQuery.js";
 import useScrollReveal from "../../hooks/useScrollReveal.js";
 
-function CertCard({ cert, delay, onOpen, carousel }) {
+function CertCard({ cert, delay, onOpen, carousel, desktopCarousel }) {
   const ref = useScrollReveal({ delay });
 
   return (
@@ -17,6 +17,12 @@ function CertCard({ cert, delay, onOpen, carousel }) {
       onClick={() => onOpen(cert)}
       className={`flex flex-col items-start gap-3 rounded-2xl border border-ink/8 bg-white/70 p-5 text-left opacity-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-soft ${
         carousel ? "w-[calc(100vw_-_3rem)] flex-shrink-0 snap-center" : ""
+      } ${
+        // Six equal cards per viewport: (track width - 5 gaps) / 6.
+        // Derived from the track so it adapts to the container width.
+        desktopCarousel
+          ? "w-[calc((100%_-_5_*_1rem)_/_6)] flex-shrink-0 snap-start"
+          : ""
       }`}
     >
       <div className="flex h-11 w-11 items-center justify-center rounded-full bg-teal-light text-teal">
@@ -51,14 +57,19 @@ function CertCard({ cert, delay, onOpen, carousel }) {
 // ---------------------------------------------------------
 // Small screens: horizontal auto-advancing carousel (keeps the
 // section from becoming excessively tall as certifications are
-// added). sm breakpoint and up: original grid - unaffected.
+// added). sm up to below xl: original grid - unaffected.
+// xl (1280px) and up: single-row carousel showing six cards at
+// once, advancing one card per arrow press.
 // =========================================================
 export default function Certifications() {
   const [activeDoc, setActiveDoc] = useState(null);
   const isMobile = useMediaQuery("(max-width: 639px)");
+  const isDesktop = useMediaQuery("(min-width: 1280px)");
   const { trackRef, canPrev, canNext, scrollPrev, scrollNext, handleKeyDown } =
     useCarousel({
       itemSelector: "[data-carousel-item]",
+      // Desktop track uses gap-4 (16px); the hook's step must match it.
+      gap: isDesktop ? 16 : 24,
       autoAdvanceMs: isMobile ? 5000 : 0,
     });
 
@@ -95,6 +106,33 @@ export default function Certifications() {
                   cert={cert}
                   onOpen={openCert}
                   carousel
+                />
+              ))}
+            </div>
+            <CarouselArrows
+              canPrev={canPrev}
+              canNext={canNext}
+              onPrev={scrollPrev}
+              onNext={scrollNext}
+              label="certification"
+            />
+          </div>
+        ) : isDesktop ? (
+          <div className="relative mt-10">
+            <div
+              ref={trackRef}
+              role="region"
+              aria-label="Certifications, scrollable"
+              tabIndex={0}
+              onKeyDown={handleKeyDown}
+              className="no-scrollbar flex items-stretch gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory py-3"
+            >
+              {certifications.map((cert) => (
+                <CertCard
+                  key={cert.name}
+                  cert={cert}
+                  onOpen={openCert}
+                  desktopCarousel
                 />
               ))}
             </div>
