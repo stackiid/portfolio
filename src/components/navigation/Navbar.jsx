@@ -12,6 +12,7 @@ import useActiveSection from "../../hooks/useActiveSection.js";
 // section list separately - see MOBILE_NAV_ITEMS below and
 // MobileMenu.jsx.
 // =========================================================
+
 const NAV_ITEMS = [
   { label: "Home", href: "#hero" },
   { label: "About", href: "#about" },

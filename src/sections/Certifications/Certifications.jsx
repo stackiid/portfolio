@@ -6,6 +6,13 @@ import CarouselArrows from "../../components/common/CarouselArrows.jsx";
 import useCarousel from "../../hooks/useCarousel.js";
 import useMediaQuery from "../../hooks/useMediaQuery.js";
 import useScrollReveal from "../../hooks/useScrollReveal.js";
+import { prefersReducedMotion } from "../../utils/motion.js";
+
+// Desktop carousel: four cards are visible, and each arrow press /
+// arrow key moves a full page, so four new certificates replace the four shown.
+
+const DESKTOP_GAP = 16;
+const DESKTOP_PAGE_SIZE = 4;
 
 function CertCard({ cert, delay, onOpen, carousel, desktopCarousel }) {
   const ref = useScrollReveal({ delay });
@@ -18,10 +25,10 @@ function CertCard({ cert, delay, onOpen, carousel, desktopCarousel }) {
       className={`flex flex-col items-start gap-3 rounded-2xl border border-ink/8 bg-white/70 p-5 text-left opacity-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-soft ${
         carousel ? "w-[calc(100vw_-_3rem)] flex-shrink-0 snap-center" : ""
       } ${
-        // Six equal cards per viewport: (track width - 5 gaps) / 6.
+        // Four equal cards per viewport: (track width - 3 gaps) / 4.
         // Derived from the track so it adapts to the container width.
         desktopCarousel
-          ? "w-[calc((100%_-_5_*_1rem)_/_6)] flex-shrink-0 snap-start"
+          ? "w-[calc((100%_-_3_*_1rem)_/_4)] flex-shrink-0 snap-start"
           : ""
       }`}
     >
@@ -58,9 +65,10 @@ function CertCard({ cert, delay, onOpen, carousel, desktopCarousel }) {
 // Small screens: horizontal auto-advancing carousel (keeps the
 // section from becoming excessively tall as certifications are
 // added). sm up to below xl: original grid - unaffected.
-// xl (1280px) and up: single-row carousel showing six cards at
-// once, advancing one card per arrow press.
+// xl (1280px) and up: single-row carousel showing four cards at
+// once, advancing four cards per arrow press.
 // =========================================================
+
 export default function Certifications() {
   const [activeDoc, setActiveDoc] = useState(null);
   const isMobile = useMediaQuery("(max-width: 639px)");
@@ -69,9 +77,36 @@ export default function Certifications() {
     useCarousel({
       itemSelector: "[data-carousel-item]",
       // Desktop track uses gap-4 (16px); the hook's step must match it.
-      gap: isDesktop ? 16 : 24,
+      gap: isDesktop ? DESKTOP_GAP : 24,
       autoAdvanceMs: isMobile ? 5000 : 0,
     });
+
+  // Desktop paging: snap to the nearest card, then move one page of cards, clamped
+  // to the start/end of the track. Computing from the nearest card index
+  // (not the raw scroll position) keeps rapid clicks from drifting.
+  function scrollDesktopPage(direction) {
+    const el = trackRef.current;
+    const item = el?.querySelector("[data-carousel-item]");
+    if (!el || !item) return;
+    const step = item.getBoundingClientRect().width + DESKTOP_GAP;
+    const index = Math.round(el.scrollLeft / step);
+    const maxLeft = el.scrollWidth - el.clientWidth;
+    const left = Math.min(
+      Math.max((index + direction * DESKTOP_PAGE_SIZE) * step, 0),
+      maxLeft,
+    );
+    el.scrollTo({ left, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+  }
+
+  function handleDesktopKeyDown(e) {
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      scrollDesktopPage(1);
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      scrollDesktopPage(-1);
+    }
+  }
 
   function openCert(cert) {
     setActiveDoc({
@@ -124,7 +159,7 @@ export default function Certifications() {
               role="region"
               aria-label="Certifications, scrollable"
               tabIndex={0}
-              onKeyDown={handleKeyDown}
+              onKeyDown={handleDesktopKeyDown}
               className="no-scrollbar flex items-stretch gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory py-3"
             >
               {certifications.map((cert) => (
@@ -139,8 +174,8 @@ export default function Certifications() {
             <CarouselArrows
               canPrev={canPrev}
               canNext={canNext}
-              onPrev={scrollPrev}
-              onNext={scrollNext}
+              onPrev={() => scrollDesktopPage(-1)}
+              onNext={() => scrollDesktopPage(1)}
               label="certification"
             />
           </div>

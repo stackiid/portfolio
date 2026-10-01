@@ -27,6 +27,7 @@ import { prefersReducedMotion } from "../utils/motion.js";
 //   const ref = useScrollReveal({ delay: 120 });
 //   <div ref={ref} className="opacity-0">...</div>
 // =========================================================
+
 export default function useScrollReveal({ delay = 0, translateY = 24 } = {}) {
   const cleanupRef = useRef(null);
 

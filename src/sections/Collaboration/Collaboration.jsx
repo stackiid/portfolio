@@ -29,7 +29,9 @@ function CollaborationCard({ item, delay, onOpenDocument, carousel }) {
         <h3 className="font-display text-lg font-bold text-ink">
           {item.companyName}
         </h3>
-        <p className="text-sm text-ink-soft">Collaboration &amp; documentation on file</p>
+        <p className="text-sm text-ink-soft">
+          Collaboration &amp; documentation on file
+        </p>
       </div>
 
       <div className="flex items-center gap-2">
@@ -66,19 +68,16 @@ function CollaborationCard({ item, delay, onOpenDocument, carousel }) {
 
 // =========================================================
 //                       Collaboration
-// ---------------------------------------------------------
-// Small screens: horizontal auto-advancing carousel, same
-// pattern as Certifications - keeps the section compact as
-// more collaborations are added. sm and up: original stacked
-// layout, unaffected. With only one entry today, the arrows
-// simply stay disabled and auto-advance has nothing to do -
-// the architecture is just ready for more without changes.
 // =========================================================
+
 export default function Collaboration() {
   const [activeDoc, setActiveDoc] = useState(null);
   const isMobile = useMediaQuery("(max-width: 639px)");
   const { trackRef, canPrev, canNext, scrollPrev, scrollNext, handleKeyDown } =
-    useCarousel({ itemSelector: "[data-carousel-item]", autoAdvanceMs: isMobile ? 5000 : 0 });
+    useCarousel({
+      itemSelector: "[data-carousel-item]",
+      autoAdvanceMs: isMobile ? 5000 : 0,
+    });
 
   return (
     <section id="collaboration" className="section-y bg-cream-soft/60">

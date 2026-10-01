@@ -6,6 +6,7 @@ import useScrollReveal from "../../hooks/useScrollReveal.js";
 // Consistent eyebrow + heading + optional description used
 // at the top of every homepage section.
 // =========================================================
+
 export default function SectionHeading({
   eyebrow,
   title,

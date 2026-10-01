@@ -21,14 +21,17 @@ import { useEffect, useState } from "react";
 // last one in `ids` order, i.e. the one closest to "what
 // you've actually scrolled to."
 // =========================================================
+
 export default function useActiveSection(ids) {
   const [activeId, setActiveId] = useState(ids[0]);
+
   // A joined string, not the array itself, is the effect dependency below -
   // callers commonly pass an inline array literal (a new reference every
   // render), which would otherwise re-run this effect (tear down and
   // recreate the IntersectionObserver) on every single render for no
   // reason. The effect closes over `ids` directly and only reruns when the
   // actual section list changes, so that closure is always current.
+
   const idsKey = ids.join(",");
 
   useEffect(() => {
@@ -57,6 +60,7 @@ export default function useActiveSection(ids) {
 
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
+
     // Depending on idsKey (stable joined string) instead of `ids` (a new
     // array reference every render for inline-literal callers) is
     // intentional - see comment on idsKey above.

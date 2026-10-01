@@ -33,15 +33,13 @@ function EducationRow({ item, delay }) {
 
 // =========================================================
 //                         Education
-// ---------------------------------------------------------
+// =========================================================
+
 export default function Education() {
   return (
     <section id="education" className="section-y bg-cream-soft/60">
       <div className="container-custom">
-        <SectionHeading
-          eyebrow="Education"
-          title="Academic Background"
-        />
+        <SectionHeading eyebrow="Education" title="Academic Background" />
 
         <div className="mt-10 flex flex-col gap-4">
           {education.map((item, i) => (

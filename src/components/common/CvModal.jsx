@@ -6,6 +6,7 @@ import useLockBodyScroll from "../../hooks/useLockBodyScroll.js";
 // =========================================================
 //                         CvModal
 // =========================================================
+
 export default function CvModal({ open, onClose }) {
   const [step, setStep] = useState("action"); // "action" | "viewer"
   const actionCloseRef = useRef(null);

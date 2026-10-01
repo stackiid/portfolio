@@ -30,6 +30,7 @@ import { prefersReducedMotion } from "../utils/motion.js";
 // reduced motion - unrequested, looping horizontal movement is
 // exactly the kind of motion that preference exists to suppress.
 // =========================================================
+
 export default function useCarousel({
   itemSelector = "[data-carousel-item]",
   gap = 24,
@@ -80,6 +81,7 @@ export default function useCarousel({
   // before the browser paints - otherwise there's a brief flash of both
   // arrows showing "disabled" (the initial state) even when there's more
   // to scroll to.
+
   useLayoutEffect(() => {
     const el = trackRef.current;
     if (!el) return undefined;
@@ -93,6 +95,7 @@ export default function useCarousel({
     // stuck reflecting a scrollWidth that's since changed. ResizeObserver
     // catches any actual size change to the track's content, not just the
     // viewport.
+
     const resizeObserver = new ResizeObserver(updateArrowState);
     resizeObserver.observe(el);
 
@@ -132,9 +135,11 @@ export default function useCarousel({
     function resume() {
       pausedRef.current = false;
     }
+
     // Touch devices don't fire mouseleave, so give a grace period
     // after the last touch before auto-advance picks back up -
     // otherwise one swipe on mobile would pause it forever.
+
     function pauseThenResumeLater() {
       pause();
       resumeTimeoutRef.current = setTimeout(resume, 4000);

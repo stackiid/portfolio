@@ -6,6 +6,7 @@ import socialLinks from "../../data/socialLinks.js";
 // Renders the icon row from src/data/socialLinks.js. Add or
 // remove a platform there - this component never changes.
 // =========================================================
+
 export default function SocialLinks({ className = "" }) {
   return (
     <ul className={`flex items-center gap-3 ${className}`}>

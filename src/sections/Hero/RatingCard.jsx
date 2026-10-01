@@ -8,6 +8,7 @@ import testimonials from "../../data/testimonials.js";
 // testimonial there and this card updates on its own instead
 // of quietly going stale like a hardcoded "4.9" would.
 // =========================================================
+
 export default function RatingCard() {
   const count = testimonials.length;
   const average =
@@ -40,7 +41,10 @@ export default function RatingCard() {
           <span className="font-display text-lg font-bold text-ink">
             {average}
           </span>
-          <i className="fa-solid fa-star text-mango text-xs" aria-hidden="true" />
+          <i
+            className="fa-solid fa-star text-mango text-xs"
+            aria-hidden="true"
+          />
         </div>
       </div>
     </div>

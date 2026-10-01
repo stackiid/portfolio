@@ -3,7 +3,8 @@ import ProjectCarousel from "./ProjectCarousel.jsx";
 
 // =========================================================
 //                         Projects
-// ---------------------------------------------------------
+// =========================================================
+
 export default function Projects() {
   return (
     <section id="projects" className="section-y bg-cream-soft/60">

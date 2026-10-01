@@ -2,28 +2,20 @@ import { useEffect, useRef, useState } from "react";
 
 // =========================================================
 //                       ProjectCard
-// ---------------------------------------------------------
-// One true-3D flip card: image on the front, details on the
-// back (image ratio matches the asset, so nothing is ever cropped),
-// both occupying the exact same box (no layout shift).
-//
-// - Mouse: hover flips (pure CSS, see .flip-card in index.css).
-// - Touch: tap toggles; a second tap flips back. Taps on the
-//   Live/Repo links are ignored so they navigate normally, and
-//   a swipe never fires a click, so carousel scrolling is safe.
-// - Keyboard: tabbing onto a back-face link flips the card
-//   (CSS :has), so nothing is hover-only.
-// - Reduced motion: handled globally in index.css (transitions
-//   collapse to ~0ms), so the flip becomes an instant swap.
 // =========================================================
-// One round icon button. Enabled: a real external link. Disabled: a
-// non-focusable, non-clickable greyed-out stand-in (no href, so there is
-// nothing to follow or tab to); aria-disabled keeps it announced as
-// unavailable instead of silently disappearing.
-function ProjectLink({ enabled, href, label, disabledLabel, className, iconClass }) {
+
+function ProjectLink({
+  enabled,
+  href,
+  label,
+  disabledLabel,
+  className,
+  iconClass,
+}) {
   const base =
     "flex h-9 w-9 min-[420px]:h-10 min-[420px]:w-10 items-center justify-center rounded-full transition-all duration-300";
-  const isActive = Boolean(enabled) && typeof href === "string" && href.trim() !== "";
+  const isActive =
+    Boolean(enabled) && typeof href === "string" && href.trim() !== "";
 
   if (!isActive) {
     return (

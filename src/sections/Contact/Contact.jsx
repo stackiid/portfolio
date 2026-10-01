@@ -14,6 +14,7 @@ const SUCCESS_RESET_MS = 3000;
 //   - "email"    -> POST to Formspree, JSON response
 //   - "whatsapp" -> opens a pre-filled wa.me deep link
 // =========================================================
+
 export default function Contact() {
   const [mode, setMode] = useState("email");
   const [values, setValues] = useState({ name: "", contact: "", message: "" });
@@ -30,7 +31,10 @@ export default function Contact() {
   function succeed() {
     setStatus("success");
     clearTimeout(resetTimerRef.current);
-    resetTimerRef.current = setTimeout(() => setStatus("idle"), SUCCESS_RESET_MS);
+    resetTimerRef.current = setTimeout(
+      () => setStatus("idle"),
+      SUCCESS_RESET_MS,
+    );
   }
 
   function updateField(field, value) {
@@ -47,7 +51,10 @@ export default function Contact() {
     if (!values.name.trim()) next.name = "Please enter your name.";
 
     if (!values.contact.trim()) {
-      next.contact = mode === "email" ? "Please enter your email." : "Please enter your WhatsApp number.";
+      next.contact =
+        mode === "email"
+          ? "Please enter your email."
+          : "Please enter your WhatsApp number.";
     } else if (mode === "email" && !EMAIL_RE.test(values.contact.trim())) {
       next.contact = "That doesn't look like a valid email.";
     } else if (mode === "whatsapp" && !PHONE_RE.test(values.contact.trim())) {
@@ -68,9 +75,12 @@ export default function Contact() {
 
     if (mode === "whatsapp") {
       const text = encodeURIComponent(
-        `Hi Ubaid,\n\nMy name is ${values.name.trim()}.\n\n${values.message.trim()}\n\n— My WhatsApp: ${values.contact.trim()}`
+        `Hi Ubaid,\n\nMy name is ${values.name.trim()}.\n\n${values.message.trim()}\n\n— My WhatsApp: ${values.contact.trim()}`,
       );
-      window.open(`https://wa.me/${contact.whatsappNumber}?text=${text}`, "_blank");
+      window.open(
+        `https://wa.me/${contact.whatsappNumber}?text=${text}`,
+        "_blank",
+      );
       succeed();
       setValues({ name: "", contact: "", message: "" });
       return;
@@ -103,7 +113,8 @@ export default function Contact() {
   }[status];
 
   const submitIcon = {
-    idle: mode === "email" ? "fa-solid fa-paper-plane" : "fa-brands fa-whatsapp",
+    idle:
+      mode === "email" ? "fa-solid fa-paper-plane" : "fa-brands fa-whatsapp",
     sending: "fa-solid fa-spinner fa-spin",
     success: "fa-solid fa-check",
     error: "fa-solid fa-rotate-right",
@@ -132,11 +143,17 @@ export default function Contact() {
                   setErrors({});
                 }}
                 className={`flex-1 rounded-full px-4 py-2.5 text-sm font-semibold transition-all duration-300 ${
-                  mode === m ? "bg-teal text-cream" : "text-ink-soft hover:text-teal"
+                  mode === m
+                    ? "bg-teal text-cream"
+                    : "text-ink-soft hover:text-teal"
                 }`}
               >
                 <i
-                  className={m === "email" ? "fa-solid fa-envelope" : "fa-brands fa-whatsapp"}
+                  className={
+                    m === "email"
+                      ? "fa-solid fa-envelope"
+                      : "fa-brands fa-whatsapp"
+                  }
                   aria-hidden="true"
                 />{" "}
                 {m === "email" ? "Email" : "WhatsApp"}
@@ -144,9 +161,16 @@ export default function Contact() {
             ))}
           </div>
 
-          <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
+          <form
+            onSubmit={handleSubmit}
+            noValidate
+            className="flex flex-col gap-4"
+          >
             <div>
-              <label htmlFor="cf-name" className="mb-1.5 block text-sm font-semibold text-ink">
+              <label
+                htmlFor="cf-name"
+                className="mb-1.5 block text-sm font-semibold text-ink"
+              >
                 Name
               </label>
               <input
@@ -162,38 +186,54 @@ export default function Contact() {
                 }`}
               />
               {errors.name && (
-                <p id="cf-name-error" className="mt-1 text-xs font-medium text-red-500">
+                <p
+                  id="cf-name-error"
+                  className="mt-1 text-xs font-medium text-red-500"
+                >
                   {errors.name}
                 </p>
               )}
             </div>
 
             <div>
-              <label htmlFor="cf-contact" className="mb-1.5 block text-sm font-semibold text-ink">
+              <label
+                htmlFor="cf-contact"
+                className="mb-1.5 block text-sm font-semibold text-ink"
+              >
                 {mode === "email" ? "Email" : "WhatsApp Number"}
               </label>
               <input
                 id="cf-contact"
                 name={mode === "email" ? "email" : "phone"}
                 type={mode === "email" ? "email" : "tel"}
-                placeholder={mode === "email" ? "you@example.com" : "+92 300 1234567"}
+                placeholder={
+                  mode === "email" ? "you@example.com" : "+92 300 1234567"
+                }
                 value={values.contact}
                 onChange={(e) => updateField("contact", e.target.value)}
                 aria-invalid={Boolean(errors.contact)}
-                aria-describedby={errors.contact ? "cf-contact-error" : undefined}
+                aria-describedby={
+                  errors.contact ? "cf-contact-error" : undefined
+                }
                 className={`w-full rounded-xl border bg-white/80 px-4 py-3 text-sm outline-none transition-colors focus:border-teal ${
                   errors.contact ? "border-red-400" : "border-ink/10"
                 }`}
               />
               {errors.contact && (
-                <p id="cf-contact-error" className="mt-1 text-xs font-medium text-red-500">
+                <p
+                  id="cf-contact-error"
+                  className="mt-1 text-xs font-medium text-red-500"
+                >
                   {errors.contact}
                 </p>
               )}
             </div>
 
             <div>
-              <label htmlFor="cf-message" className="mb-1.5 block text-sm font-semibold text-ink">
+              <label
+                htmlFor="cf-message"
+                className="mb-1.5 block text-sm font-semibold text-ink"
+              >
                 Message
               </label>
               <textarea
@@ -203,13 +243,18 @@ export default function Contact() {
                 value={values.message}
                 onChange={(e) => updateField("message", e.target.value)}
                 aria-invalid={Boolean(errors.message)}
-                aria-describedby={errors.message ? "cf-message-error" : undefined}
+                aria-describedby={
+                  errors.message ? "cf-message-error" : undefined
+                }
                 className={`w-full resize-none rounded-xl border bg-white/80 px-4 py-3 text-sm outline-none transition-colors focus:border-teal ${
                   errors.message ? "border-red-400" : "border-ink/10"
                 }`}
               />
               {errors.message && (
-                <p id="cf-message-error" className="mt-1 text-xs font-medium text-red-500">
+                <p
+                  id="cf-message-error"
+                  className="mt-1 text-xs font-medium text-red-500"
+                >
                   {errors.message}
                 </p>
               )}
@@ -219,7 +264,9 @@ export default function Contact() {
               type="submit"
               disabled={status === "sending"}
               className={`mt-2 inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold text-cream shadow-soft transition-all duration-300 disabled:opacity-70 ${
-                status === "success" ? "bg-teal-dark" : "bg-teal hover:bg-teal-dark"
+                status === "success"
+                  ? "bg-teal-dark"
+                  : "bg-teal hover:bg-teal-dark"
               }`}
             >
               <i className={submitIcon} aria-hidden="true" />

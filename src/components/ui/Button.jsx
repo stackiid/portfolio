@@ -1,10 +1,7 @@
 // =========================================================
 //                         Button
-// ---------------------------------------------------------
-// Shared button/link component. Renders an <a> when `href`
-// is provided, otherwise a <button>. Keeps CTA styling
-// consistent across the entire site.
 // =========================================================
+
 export default function Button({
   children,
   href,

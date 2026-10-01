@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 // (not just layout) needs to change - like whether auto-advance
 // should run at all.
 // =========================================================
+
 export default function useMediaQuery(query) {
   const [matches, setMatches] = useState(() =>
     typeof window !== "undefined" ? window.matchMedia(query).matches : false,

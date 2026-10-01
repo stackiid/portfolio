@@ -68,8 +68,6 @@ const certifications = [
     date: "November 4, 2024",
     image: `${import.meta.env.BASE_URL}/assets/images/credentials/365datascience-introduction-to-jupyter.jpg`,
   },
-  // ===========================================================
-
   {
     name: "Front-End Development Libraries",
     institute: "freeCodeCamp",

@@ -18,6 +18,7 @@ import Contact from "./sections/Contact/Contact.jsx";
 // =========================================================
 //                           App
 // =========================================================
+
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [cvModalOpen, setCvModalOpen] = useState(false);

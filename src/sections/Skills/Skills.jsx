@@ -10,6 +10,7 @@ import useScrollReveal from "../../hooks/useScrollReveal.js";
 // src/data/skills.js - add a category or a skill there and it
 // appears here automatically.
 // =========================================================
+
 export default function Skills() {
   const [activeIndex, setActiveIndex] = useState(0);
   const tabRefs = useRef([]);
@@ -81,9 +82,7 @@ export default function Skills() {
               className="flex items-center gap-3 rounded-xl border border-ink/8 bg-white/70 px-4 py-3.5 transition-all duration-300 hover:-translate-y-0.5 hover:border-mango/40 hover:shadow-soft"
             >
               <span className="h-2 w-2 flex-shrink-0 rounded-full bg-mango" />
-              <span className="text-sm font-medium text-ink">
-                {skill.name}
-              </span>
+              <span className="text-sm font-medium text-ink">{skill.name}</span>
             </div>
           ))}
         </div>

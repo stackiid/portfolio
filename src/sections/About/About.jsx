@@ -14,7 +14,8 @@ const LEARNING_DIRECTION = [
 
 // =========================================================
 //                          About
-// ---------------------------------------------------------
+// =========================================================
+
 export default function About({ onDownloadCv }) {
   const textRef = useScrollReveal();
 

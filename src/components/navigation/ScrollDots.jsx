@@ -2,26 +2,8 @@ import useActiveSection from "../../hooks/useActiveSection.js";
 
 // =========================================================
 //                        ScrollDots
-// ---------------------------------------------------------
-// Replaces the default browser scrollbar as the primary visual
-// wayfinding element: a minimal vertical dot per major section,
-// fixed to the right edge. The active dot reflects real section
-// visibility via useActiveSection (IntersectionObserver-based,
-// not a hardcoded scrollY threshold), animates between states
-// with a simple CSS transition (respects prefers-reduced-motion
-// through the same global rule the rest of the site uses - see
-// index.css), and each dot is a real, labeled, clickable button.
-//
-// Desktop/large-screen only. The browser's default scrollbar is hidden
-// site-wide (index.css) and this replaces it there - but on small screens
-// it's hidden entirely; the hamburger menu already covers navigation, and
-// there isn't room for a second wayfinding column without crowding
-// content.
-//
-// Native scrolling (wheel/trackpad/touch/keyboard) is completely
-// untouched - this is a pure navigation affordance layered on
-// top, not a scroll-hijacking replacement.
 // =========================================================
+
 const SECTIONS = [
   { id: "hero", label: "Home" },
   { id: "about", label: "About" },
@@ -41,9 +23,6 @@ export default function ScrollDots() {
   const activeId = useActiveSection(SECTION_IDS);
 
   function goTo(id) {
-    // scroll-margin-top on section elements (index.css) accounts for the
-    // fixed/floating header - no manual offset math needed here, and the
-    // same rule benefits every other anchor link on the site too.
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   }
 

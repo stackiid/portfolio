@@ -11,6 +11,7 @@ import useLockBodyScroll from "../../hooks/useLockBodyScroll.js";
 // exits to the left. Handles Escape-to-close, backdrop click,
 // body scroll lock, and returns focus to the trigger on close.
 // =========================================================
+
 export default function MobileMenu({
   open,
   onClose,

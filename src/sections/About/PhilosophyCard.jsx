@@ -2,7 +2,8 @@ import useScrollReveal from "../../hooks/useScrollReveal.js";
 
 // =========================================================
 //                     PhilosophyCard
-// ---------------------------------------------------------
+// =========================================================
+
 export default function PhilosophyCard({ icon, title, description, delay }) {
   const ref = useScrollReveal({ delay });
 

@@ -10,6 +10,7 @@ import useLockBodyScroll from "../../hooks/useLockBodyScroll.js";
 //
 //   document: { title, subtitle, imgSrc } | null
 // =========================================================
+
 export default function DocumentModal({ document: doc, onClose }) {
   const closeBtnRef = useRef(null);
   const lastFocused = useRef(null);

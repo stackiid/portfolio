@@ -4,6 +4,7 @@
 // Shared prev/next arrow pair for every horizontal carousel.
 // Pass the state/handlers returned by useCarousel directly.
 // =========================================================
+
 export default function CarouselArrows({
   canPrev,
   canNext,

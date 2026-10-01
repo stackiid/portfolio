@@ -28,7 +28,8 @@ function TimelineItem({ item, delay }) {
 
 // =========================================================
 //                        Experience
-// ---------------------------------------------------------
+// =========================================================
+
 export default function Experience() {
   return (
     <section id="experience" className="section-y">
@@ -41,7 +42,11 @@ export default function Experience() {
 
         <div className="relative mt-12 flex flex-col gap-10 border-l border-ink/10 sm:gap-12">
           {experience.map((item, i) => (
-            <TimelineItem key={item.title + item.period} item={item} delay={i * 100} />
+            <TimelineItem
+              key={item.title + item.period}
+              item={item}
+              delay={i * 100}
+            />
           ))}
         </div>
       </div>

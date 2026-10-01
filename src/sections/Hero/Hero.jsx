@@ -6,13 +6,8 @@ import useScrollReveal from "../../hooks/useScrollReveal.js";
 
 // =========================================================
 //                           Hero
-// ---------------------------------------------------------
-// Primary visual reference: the supplied hero screenshot.
-// Composition preserved (nav-adjacent greeting, centered
-// circular portrait, decorative arc, floating proof card,
-// left experience stat, right supporting statement, bottom
-// tagline) - content and identity are Ubaid's own.
 // =========================================================
+
 export default function Hero() {
   const leftRef = useScrollReveal({ delay: 0 });
   const imageRef = useScrollReveal({ delay: 150 });
@@ -77,8 +72,6 @@ export default function Hero() {
             className="order-1 flex justify-center opacity-0 lg:order-2 lg:col-span-4"
           >
             <div className="relative">
-
-
               <div className="h-64 w-64 rounded-full bg-gradient-to-b from-teal-light via-cream-soft to-mango-light p-2 shadow-card sm:h-80 sm:w-80">
                 <div className="h-full w-full overflow-hidden rounded-full bg-cream-soft">
                   <img
@@ -99,7 +92,10 @@ export default function Hero() {
               </span>
 
               <span className="absolute right-[-2.5rem] top-[62%] inline-flex -translate-y-1/2 items-center gap-1.5 rounded-full bg-mango px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-ink shadow-soft">
-                <i className="fa-solid fa-compass-drafting text-teal-dark" aria-hidden="true" />
+                <i
+                  className="fa-solid fa-compass-drafting text-teal-dark"
+                  aria-hidden="true"
+                />
                 Designer
               </span>
             </div>

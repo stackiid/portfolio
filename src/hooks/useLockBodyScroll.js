@@ -7,6 +7,7 @@ import { useEffect } from "react";
 // mobile menu and modals). Restores the previous overflow
 // value on cleanup so nested usage never fights itself.
 // =========================================================
+
 export default function useLockBodyScroll(locked) {
   useEffect(() => {
     if (!locked) return;

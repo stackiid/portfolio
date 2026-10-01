@@ -6,17 +6,8 @@ import useCarousel from "../../hooks/useCarousel.js";
 
 // =========================================================
 //                       Testimonials
-// ---------------------------------------------------------
-// A single horizontal, non-wrapping row at every breakpoint -
-// not a grid. A grid reflows into a second row once it runs
-// out of columns, which looks fine at 4 testimonials and
-// broken at 5+. Horizontal scroll has no such ceiling: 4, 8,
-// or 20 testimonials all render as one row, just a longer one.
-//
-// No auto-advance here (unlike Certifications/Collaboration) -
-// testimonials are read-heavy, and auto-scrolling text out from
-// under someone mid-read is worse than leaving it to arrows/swipe.
 // =========================================================
+
 export default function Testimonials() {
   const { trackRef, canPrev, canNext, scrollPrev, scrollNext, handleKeyDown } =
     useCarousel({ itemSelector: "[data-carousel-item]" });

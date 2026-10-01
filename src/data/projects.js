@@ -1,23 +1,5 @@
 // =========================================================
 //                        PROJECTS
-// ---------------------------------------------------------
-// Each entry renders as one flip card: image on the front,
-// details on the back. Descriptions and tech stacks were
-// written from the actual repository source, not just READMEs.
-//   id, title, description, image,
-//   liveEnabled, liveUrl, repoEnabled, repoUrl, tags
-//
-// Link switches (set by hand, per project):
-//   liveEnabled / repoEnabled: true  -> icon is a working link
-//   liveEnabled / repoEnabled: false -> icon is shown greyed-out
-//                                       and cannot be clicked
-// When a switch is false, set its URL to "" (e.g. a private repo
-// should never have its address in the bundle). A switch set to
-// true with an empty URL is also treated as disabled, so a
-// forgotten URL can never produce a dead link.
-// To add a project: copy an entry, give it the next id, and
-// drop a 3:2 image into public/assets/images/projects/.
-// Keep tags to 6 or fewer so the back face never overflows.
 // =========================================================
 
 const img = (name) =>
@@ -34,7 +16,14 @@ const projects = [
     liveUrl: "https://stackiid.github.io/study-station/",
     repoEnabled: true,
     repoUrl: "https://github.com/stackiid/study-station",
-    tags: ["React", "TypeScript", "Vite", "Tailwind CSS", "React Router", "GSAP"],
+    tags: [
+      "React",
+      "TypeScript",
+      "Vite",
+      "Tailwind CSS",
+      "React Router",
+      "GSAP",
+    ],
   },
   {
     id: 2,
@@ -70,7 +59,14 @@ const projects = [
     liveUrl: "https://idavidkhan.github.io/DevOps/",
     repoEnabled: true,
     repoUrl: "https://github.com/stackiid/devops",
-    tags: ["React", "TypeScript", "Vite", "Tailwind CSS", "Formspree", "GitHub Actions"],
+    tags: [
+      "React",
+      "TypeScript",
+      "Vite",
+      "Tailwind CSS",
+      "Formspree",
+      "GitHub Actions",
+    ],
   },
   {
     id: 5,
@@ -82,7 +78,14 @@ const projects = [
     liveUrl: "https://stackiid.github.io/ludo-royale/",
     repoEnabled: true,
     repoUrl: "https://github.com/stackiid/ludo-royale",
-    tags: ["JavaScript", "HTML5", "CSS3", "Tailwind CSS", "Anime.js", "Web Audio"],
+    tags: [
+      "JavaScript",
+      "HTML5",
+      "CSS3",
+      "Tailwind CSS",
+      "Anime.js",
+      "Web Audio",
+    ],
   },
   {
     id: 6,
@@ -94,7 +97,14 @@ const projects = [
     liveUrl: "https://stackiid.github.io/cashew/",
     repoEnabled: true,
     repoUrl: "https://github.com/stackiid/cashew",
-    tags: ["JavaScript", "HTML5", "CSS3", "Chart.js", "Anime.js", "Local Storage"],
+    tags: [
+      "JavaScript",
+      "HTML5",
+      "CSS3",
+      "Chart.js",
+      "Anime.js",
+      "Local Storage",
+    ],
   },
   {
     id: 7,
