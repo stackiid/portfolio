@@ -25,7 +25,7 @@ export default function ProjectCarousel() {
         aria-label="Featured projects, scrollable"
         tabIndex={0}
         onKeyDown={handleKeyDown}
-        className="no-scrollbar flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4"
+        className="no-scrollbar flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory py-5"
       >
         {projects.map((project) => (
           <ProjectCard key={project.id} project={project} />

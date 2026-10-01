@@ -12,7 +12,7 @@ export default function Projects() {
           <SectionHeading
             eyebrow="Projects"
             title="Featured Work"
-            description="A mix of full-stack builds and UI/UX-first projects - drag, scroll, or use the arrows."
+            description="Hover or tap a card to flip it for details. Drag, scroll, or use the arrows to browse."
           />
         </div>
 
