@@ -21,6 +21,18 @@ export default function ProjectCarousel() {
 
   return (
     <div className="relative">
+      {/* Quiet, device-aware nudge. Only one variant is displayed (see
+          .flip-hint in index.css), so assistive tech reads just one. */}
+      <p className="flip-hint mb-1 flex items-center justify-center gap-1.5 text-[11px] font-medium tracking-wide text-teal">
+        <span className="flip-hint__hover items-center gap-1.5">
+          <i className="fa-solid fa-arrow-pointer text-[10px]" aria-hidden="true" />
+          Hover over a card to view its details.
+        </span>
+        <span className="flip-hint__touch items-center gap-1.5">
+          <i className="fa-solid fa-hand-pointer text-[10px]" aria-hidden="true" />
+          Tap a card to view its details.
+        </span>
+      </p>
       <div
         ref={trackRef}
         role="region"

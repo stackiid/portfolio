@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // =========================================================
 //                       ProjectCard
@@ -19,6 +19,21 @@ import { useRef, useState } from "react";
 export default function ProjectCard({ project }) {
   const [flipped, setFlipped] = useState(false);
   const pointerType = useRef("mouse");
+  const cardRef = useRef(null);
+
+  // Touch: tapping anywhere outside this card flips it back. Listening only
+  // while flipped keeps idle cards free of document-level handlers. Tapping
+  // another card also lands here, so only one card stays open at a time.
+  useEffect(() => {
+    if (!flipped) return undefined;
+    function handleOutside(e) {
+      if (cardRef.current && !cardRef.current.contains(e.target)) {
+        setFlipped(false);
+      }
+    }
+    document.addEventListener("pointerdown", handleOutside);
+    return () => document.removeEventListener("pointerdown", handleOutside);
+  }, [flipped]);
 
   function handleClick(e) {
     if (e.target.closest("a")) return;
@@ -30,6 +45,7 @@ export default function ProjectCard({ project }) {
   return (
     <article className="w-full flex-shrink-0 snap-start md:w-[calc((100%_-_1.5rem)/2)] xl:w-[calc((100%_-_3rem)/3)]">
       <div
+        ref={cardRef}
         className={`flip-card aspect-[1000/658] ${flipped ? "is-flipped" : ""}`}
         onPointerDown={(e) => {
           pointerType.current = e.pointerType;
