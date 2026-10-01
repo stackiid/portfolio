@@ -23,14 +23,14 @@ const certifications = [
   {
     name: "React Basics",
     institute: "Meta",
-    date: "September 17, 2026",
-    image: `${import.meta.env.BASE_URL}/assets/images/credentials/meta-html-and-css-in-depth.jpg`,
+    date: "September 19, 2026",
+    image: `${import.meta.env.BASE_URL}/assets/images/credentials/meta-react-basics.jpg`,
   },
   {
     name: "HTML and CSS in Depth",
     institute: "Meta",
-    date: "July 4, 2026",
-    image: `${import.meta.env.BASE_URL}/assets/images/credentials/ibm-uiux.jpg`,
+    date: "July 17, 2026",
+    image: `${import.meta.env.BASE_URL}/assets/images/credentials/meta-html-and-css-in-depth.jpg`,
   },
   {
     name: "JavaScript Programming",
