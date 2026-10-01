@@ -129,7 +129,9 @@ html::-webkit-scrollbar {
    backface-visibility. Reduced motion is covered by the global
    prefers-reduced-motion rule above (transition -> ~0ms). */
 .flip-card {
-  perspective: 1800px;
+  perspective: 2400px;
+  /* Lets the back face scale its padding/type with the card's own width. */
+  container-type: inline-size;
 }
 .flip-card__inner {
   position: relative;

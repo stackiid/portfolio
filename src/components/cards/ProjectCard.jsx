@@ -4,7 +4,8 @@ import { useRef, useState } from "react";
 //                       ProjectCard
 // ---------------------------------------------------------
 // One true-3D flip card: image on the front, details on the
-// back, both occupying the exact same box (no layout shift).
+// back (image ratio matches the asset, so nothing is ever cropped),
+// both occupying the exact same box (no layout shift).
 //
 // - Mouse: hover flips (pure CSS, see .flip-card in index.css).
 // - Touch: tap toggles; a second tap flips back. Taps on the
@@ -27,9 +28,9 @@ export default function ProjectCard({ project }) {
   }
 
   return (
-    <article className="w-[calc(100vw_-_3rem)] flex-shrink-0 snap-center sm:w-[400px]">
+    <article className="w-full flex-shrink-0 snap-start md:w-[calc((100%_-_1.5rem)/2)] xl:w-[calc((100%_-_3rem)/3)]">
       <div
-        className={`flip-card aspect-[4/3] sm:aspect-[3/2] ${flipped ? "is-flipped" : ""}`}
+        className={`flip-card aspect-[1000/658] ${flipped ? "is-flipped" : ""}`}
         onPointerDown={(e) => {
           pointerType.current = e.pointerType;
         }}
@@ -43,13 +44,13 @@ export default function ProjectCard({ project }) {
               loading="lazy"
               width="1000"
               height="658"
-              className="h-full w-full object-cover object-top"
+              className="h-full w-full object-contain"
             />
           </div>
 
-          <div className="flip-card__face flip-card__back flex flex-col overflow-y-auto border border-teal/15 bg-cream p-5 shadow-soft no-scrollbar">
+          <div className="flip-card__face flip-card__back flex flex-col overflow-y-auto border border-teal/15 bg-cream p-[4.5cqw] shadow-soft no-scrollbar">
             <div className="flex items-start justify-between gap-3">
-              <h3 className="min-w-0 font-display text-lg font-bold leading-tight text-ink">
+              <h3 className="min-w-0 font-display text-[clamp(1rem,4.6cqw,1.25rem)] font-bold leading-tight text-ink">
                 {project.title}
               </h3>
               <div className="flex flex-shrink-0 gap-2">
@@ -58,7 +59,7 @@ export default function ProjectCard({ project }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Open ${project.title} live site`}
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-teal text-cream transition-colors duration-300 hover:bg-teal-dark"
+                  className="flex h-9 w-9 min-[420px]:h-10 min-[420px]:w-10 items-center justify-center rounded-full bg-teal text-cream transition-colors duration-300 hover:bg-teal-dark"
                 >
                   <i
                     className="fa-solid fa-arrow-up-right-from-square text-sm"
@@ -70,22 +71,22 @@ export default function ProjectCard({ project }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Open ${project.title} GitHub repository`}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-teal/25 text-teal transition-all duration-300 hover:bg-teal hover:text-cream"
+                  className="flex h-9 w-9 min-[420px]:h-10 min-[420px]:w-10 items-center justify-center rounded-full border border-teal/25 text-teal transition-all duration-300 hover:bg-teal hover:text-cream"
                 >
                   <i className="fa-brands fa-github text-base" aria-hidden="true" />
                 </a>
               </div>
             </div>
 
-            <p className="mt-2 text-[13px] leading-relaxed text-ink-soft">
+            <p className="mt-[1.5cqw] text-[clamp(11px,3.3cqw,14px)] leading-snug text-ink-soft">
               {project.description}
             </p>
 
-            <ul className="mt-auto flex flex-wrap gap-1.5 pt-3">
+            <ul className="mt-auto flex flex-wrap gap-1 pt-[2cqw]">
               {project.tags.map((tag) => (
                 <li
                   key={tag}
-                  className="rounded-full bg-teal-light px-2.5 py-1 text-[11px] font-semibold text-teal-dark"
+                  className="rounded-full bg-teal-light px-2 py-[3px] text-[clamp(9.5px,2.9cqw,11px)] font-semibold text-teal-dark"
                 >
                   {tag}
                 </li>
