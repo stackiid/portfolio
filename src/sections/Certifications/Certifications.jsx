@@ -113,6 +113,7 @@ export default function Certifications() {
       title: cert.name,
       subtitle: [cert.institute, cert.date].filter(Boolean).join(" · "),
       imgSrc: cert.image,
+      imgSize: cert.imageSize,
     });
   }
 

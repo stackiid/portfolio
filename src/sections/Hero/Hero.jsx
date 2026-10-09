@@ -1,17 +1,38 @@
+import { useEffect, useRef, useState } from "react";
 import profile from "../../data/profile.js";
 import counters from "../../data/counters.js";
 import SocialLinks from "../../components/common/SocialLinks.jsx";
 import RatingCard from "./RatingCard.jsx";
 import useScrollReveal from "../../hooks/useScrollReveal.js";
+import { whenImageReady } from "../../utils/image.js";
 
 // =========================================================
 //                           Hero
 // =========================================================
 
-export default function Hero() {
+export default function Hero({ onImageSettled }) {
+  const [imageFailed, setImageFailed] = useState(false);
+  const imgRef = useRef(null);
   const leftRef = useScrollReveal({ delay: 0 });
   const imageRef = useScrollReveal({ delay: 150 });
   const rightRef = useScrollReveal({ delay: 300 });
+
+  // Reports once the portrait is decoded (or has definitively failed) so the
+  // app loader can wait on the real image rather than a guess.
+  useEffect(() => {
+    let cancelled = false;
+    whenImageReady(imgRef.current).then(
+      () => !cancelled && onImageSettled(),
+      () => {
+        if (cancelled) return;
+        setImageFailed(true);
+        onImageSettled();
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [onImageSettled]);
 
   return (
     <section
@@ -75,13 +96,19 @@ export default function Hero() {
               <div className="h-64 w-64 rounded-full bg-gradient-to-b from-teal-light via-cream-soft to-mango-light p-2 shadow-card sm:h-80 sm:w-80">
                 <div className="h-full w-full overflow-hidden rounded-full bg-cream-soft">
                   <img
+                    ref={imgRef}
                     src={profile.profileImage}
-                    alt={`Portrait of ${profile.name}`}
+                    srcSet={profile.profileImageSrcSet}
+                    sizes="(min-width: 640px) 304px, 240px"
+                    alt={imageFailed ? "" : `Portrait of ${profile.name}`}
                     width="320"
                     height="320"
                     loading="eager"
+                    decoding="async"
                     fetchPriority="high"
-                    className="h-full w-full object-cover object-top"
+                    className={`h-full w-full object-cover object-top ${
+                      imageFailed ? "invisible" : ""
+                    }`}
                   />
                 </div>
               </div>

@@ -42,7 +42,8 @@ const profile = {
   ],
   location: "Swabi, Khyber Pakhtunkhwa, Pakistan",
   email: "contact form (see Contact section)",
-  profileImage: `${import.meta.env.BASE_URL}/assets/images/profile/ubaid-ahmad-profile.png`,
+  profileImage: `${import.meta.env.BASE_URL}assets/images/profile/ubaid-ahmad-profile-640.webp`,
+  profileImageSrcSet: `${import.meta.env.BASE_URL}assets/images/profile/ubaid-ahmad-profile-320.webp 320w, ${import.meta.env.BASE_URL}assets/images/profile/ubaid-ahmad-profile-640.webp 640w`,
   resumeFile: `${import.meta.env.BASE_URL}assets/resume/ubaid-ahmad-resume.pdf`,
 };
 

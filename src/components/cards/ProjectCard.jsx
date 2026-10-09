@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import LazyImage from "../common/LazyImage.jsx";
 
 // =========================================================
 //                       ProjectCard
@@ -82,13 +83,14 @@ export default function ProjectCard({ project }) {
       >
         <div className="flip-card__inner">
           <div className="flip-card__face overflow-hidden bg-cream-deep shadow-soft">
-            <img
+            <LazyImage
               src={project.image}
               alt={`Screenshot of the ${project.title} project`}
-              loading="lazy"
-              width="1000"
-              height="658"
-              className="h-full w-full object-contain"
+              width={1000}
+              height={658}
+              showTimer
+              className="h-full w-full"
+              imgClassName="object-contain"
             />
           </div>
 

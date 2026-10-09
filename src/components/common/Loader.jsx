@@ -6,12 +6,19 @@
 // Unmounted by App once the app is ready - see App.jsx.
 // =========================================================
 
+import { useState } from "react";
+
 export default function Loader({ visible }) {
+  const [gone, setGone] = useState(false);
+
+  if (gone) return null;
+
   return (
     <div
       role="status"
       aria-label="Loading"
       aria-hidden={!visible}
+      onTransitionEnd={() => !visible && setGone(true)}
       className={`fixed inset-0 z-[100] flex items-center justify-center bg-cream transition-opacity duration-500 ${
         visible ? "opacity-100" : "pointer-events-none opacity-0"
       }`}

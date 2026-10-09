@@ -8,9 +8,10 @@
 const collaborations = [
   {
     companyName: "HerDev",
-    companyLogo: `${import.meta.env.BASE_URL}/assets/images/collaboration-logos/herdev.png`,
+    companyLogo: `${import.meta.env.BASE_URL}assets/images/collaboration-logos/herdev.webp`,
     documentType: "Internship Completion Certificate",
-    documentImage: `${import.meta.env.BASE_URL}/assets/images/collaboration-credentials/herdev-web-development-program-internship.jpg`,
+    documentImage: `${import.meta.env.BASE_URL}assets/images/collaboration-credentials/herdev-web-development-program-internship.webp`,
+    documentImageSize: [1136, 912],
     clientLink: {
       label: "LinkedIn",
       icon: "fa-brands fa-linkedin",

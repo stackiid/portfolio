@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import useLockBodyScroll from "../../hooks/useLockBodyScroll.js";
+import LazyImage from "./LazyImage.jsx";
 
 // =========================================================
 //                      DocumentModal
@@ -8,7 +9,7 @@ import useLockBodyScroll from "../../hooks/useLockBodyScroll.js";
 // image. Used by Certifications and Client Collaboration.
 // Pass `document={null}` (or leave unset) to keep it closed.
 //
-//   document: { title, subtitle, imgSrc } | null
+//   document: { title, subtitle, imgSrc, imgSize: [w, h] } | null
 // =========================================================
 
 export default function DocumentModal({ document: doc, onClose }) {
@@ -76,10 +77,13 @@ export default function DocumentModal({ document: doc, onClose }) {
 
         <div className="styled-scrollbar overflow-y-auto p-5">
           {doc?.imgSrc ? (
-            <img
+            <LazyImage
               src={doc.imgSrc}
               alt={doc.title}
-              loading="lazy"
+              width={doc.imgSize?.[0] ?? 4}
+              height={doc.imgSize?.[1] ?? 3}
+              loading="eager"
+              showTimer
               className="w-full rounded-lg"
             />
           ) : (

@@ -1,4 +1,5 @@
 import useScrollReveal from "../../hooks/useScrollReveal.js";
+import LazyImage from "../../components/common/LazyImage.jsx";
 
 // =========================================================
 //                     TestimonialCard
@@ -33,13 +34,12 @@ export default function TestimonialCard({ testimonial, delay }) {
       </blockquote>
 
       <figcaption className="flex items-center gap-3 border-t border-ink/8 pt-4">
-        <img
+        <LazyImage
           src={testimonial.avatar}
           alt=""
-          width="40"
-          height="40"
-          loading="lazy"
-          className="h-10 w-10 rounded-full object-cover"
+          width={160}
+          height={160}
+          className="h-10 w-10 flex-shrink-0 rounded-full"
         />
         <div>
           <p className="text-sm font-bold text-ink">{testimonial.name}</p>

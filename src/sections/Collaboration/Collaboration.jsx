@@ -2,6 +2,7 @@ import { useState } from "react";
 import collaborations from "../../data/collaborations.js";
 import SectionHeading from "../../components/common/SectionHeading.jsx";
 import DocumentModal from "../../components/common/DocumentModal.jsx";
+import LazyImage from "../../components/common/LazyImage.jsx";
 import CarouselArrows from "../../components/common/CarouselArrows.jsx";
 import useCarousel from "../../hooks/useCarousel.js";
 import useMediaQuery from "../../hooks/useMediaQuery.js";
@@ -18,11 +19,13 @@ function CollaborationCard({ item, delay, onOpenDocument, carousel }) {
         carousel ? "w-[calc(100vw_-_3rem)] flex-shrink-0 snap-center" : ""
       }`}
     >
-      <img
+      <LazyImage
         src={item.companyLogo}
         alt={`${item.companyName} logo`}
-        loading="lazy"
-        className="h-16 w-16 flex-shrink-0 rounded-xl object-contain"
+        width={128}
+        height={128}
+        className="h-16 w-16 flex-shrink-0 rounded-xl"
+        imgClassName="object-contain"
       />
 
       <div className="flex-1">
@@ -42,6 +45,7 @@ function CollaborationCard({ item, delay, onOpenDocument, carousel }) {
                 title: item.documentType,
                 subtitle: item.companyName,
                 imgSrc: item.documentImage,
+                imgSize: item.documentImageSize,
               })
             }
             aria-label={`View ${item.documentType} for ${item.companyName}`}

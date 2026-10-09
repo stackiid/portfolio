@@ -1,4 +1,5 @@
 import testimonials from "../../data/testimonials.js";
+import LazyImage from "../../components/common/LazyImage.jsx";
 
 // =========================================================
 //                       RatingCard
@@ -22,14 +23,13 @@ export default function RatingCard() {
     <div className="flex items-center gap-3 rounded-2xl bg-white/95 px-4 py-3 shadow-card">
       <div className="flex -space-x-3">
         {testimonials.slice(0, 3).map((t) => (
-          <img
+          <LazyImage
             key={t.name}
             src={t.avatar}
             alt=""
-            width="32"
-            height="32"
-            loading="lazy"
-            className="h-8 w-8 rounded-full border-2 border-white object-cover"
+            width={160}
+            height={160}
+            className="h-8 w-8 rounded-full border-2 border-white"
           />
         ))}
       </div>

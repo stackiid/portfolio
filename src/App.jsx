@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Loader from "./components/common/Loader.jsx";
 import Navbar from "./components/navigation/Navbar.jsx";
 import ScrollDots from "./components/navigation/ScrollDots.jsx";
@@ -19,23 +19,29 @@ import Contact from "./sections/Contact/Contact.jsx";
 //                           App
 // =========================================================
 
+// The loader stays until the hero portrait is decoded AND this much time
+// has passed. HERO_GIVE_UP_MS only exists so a stalled request cannot
+// trap the visitor behind the loader forever.
+const MIN_LOADER_MS = 2000;
+const HERO_GIVE_UP_MS = 15000;
+
 export default function App() {
-  const [loading, setLoading] = useState(true);
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
+  const [heroSettled, setHeroSettled] = useState(false);
   const [cvModalOpen, setCvModalOpen] = useState(false);
 
-  useEffect(() => {
-    const finishLoading = () => {
-      // Small minimum so the loader never just flashes on fast connections.
-      setTimeout(() => setLoading(false), 500);
-    };
+  const handleHeroSettled = useCallback(() => setHeroSettled(true), []);
 
-    if (document.readyState === "complete") {
-      finishLoading();
-    } else {
-      window.addEventListener("load", finishLoading);
-      return () => window.removeEventListener("load", finishLoading);
-    }
+  useEffect(() => {
+    const minTimer = setTimeout(() => setMinTimeElapsed(true), MIN_LOADER_MS);
+    const giveUpTimer = setTimeout(() => setHeroSettled(true), HERO_GIVE_UP_MS);
+    return () => {
+      clearTimeout(minTimer);
+      clearTimeout(giveUpTimer);
+    };
   }, []);
+
+  const loading = !(minTimeElapsed && heroSettled);
 
   return (
     <>
@@ -43,7 +49,7 @@ export default function App() {
       <Navbar onDownloadCv={() => setCvModalOpen(true)} />
       <ScrollDots />
       <main>
-        <Hero />
+        <Hero onImageSettled={handleHeroSettled} />
         <About onDownloadCv={() => setCvModalOpen(true)} />
         <Skills />
         <Experience />

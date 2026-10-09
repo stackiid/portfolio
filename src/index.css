@@ -197,3 +197,22 @@ html::-webkit-scrollbar {
     opacity: 0.55;
   }
 }
+
+/* Hourglass shown while a content image loads: a smooth vertical flip. */
+.lazy-hourglass {
+  display: inline-block;
+  animation: hourglass-flip 1.8s ease-in-out infinite;
+}
+@keyframes hourglass-flip {
+  from {
+    transform: perspective(120px) rotateX(0deg);
+  }
+  to {
+    transform: perspective(120px) rotateX(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lazy-hourglass {
+    animation: none;
+  }
+}
