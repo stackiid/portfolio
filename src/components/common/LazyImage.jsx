@@ -93,17 +93,17 @@ function LazyImageInner({
       <div
         role={decorative ? undefined : "status"}
         aria-hidden={decorative ? true : undefined}
-        className={`absolute inset-0 flex flex-col items-center justify-center gap-1 text-ink-soft transition-opacity duration-300 ${
+        className={`absolute inset-0 flex flex-col items-center justify-center text-ink-soft ${compact ? "gap-1" : "gap-3"} transition-opacity duration-300 ${
           status === "ready" ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
       >
         {status === "error" ? (
           <>
             <i
-              className={`fa-regular fa-image ${compact ? "text-xs" : "text-xl"}`}
+              className={`fa-regular fa-image ${compact ? "text-xs" : "text-3xl"}`}
               aria-hidden="true"
             />
-            {!compact && <span className="text-[11px]">Image unavailable</span>}
+            {!compact && <span className="text-sm">Image unavailable</span>}
             <span className="sr-only">Image unavailable</span>
           </>
         ) : (
@@ -111,12 +111,11 @@ function LazyImageInner({
             <i
               className={`fa-solid fa-hourglass-half ${
                 loadingState ? "lazy-hourglass" : ""
-              } ${compact ? "text-xs" : "text-xl"}`}
-              style={{ color: "rgb(0, 0, 0)" }}
+              } ${compact ? "text-xs" : "text-3xl"}`}
               aria-hidden="true"
             />
             {showTimer && seconds >= LABEL_AFTER_SECONDS && (
-              <span className="text-[11px] tabular-nums" aria-hidden="true">
+              <span className="text-sm tabular-nums" aria-hidden="true">
                 Loading {seconds}s
               </span>
             )}
