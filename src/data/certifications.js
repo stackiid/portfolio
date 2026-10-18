@@ -9,6 +9,13 @@
 
 const certifications = [
   {
+    name: "Introduction to Front-End Development",
+    institute: "Meta",
+    date: "October 16, 2026",
+    image: `${import.meta.env.BASE_URL}assets/images/credentials/meta-introduction-to-front-end-development.webp`,
+    imageSize: [1280, 989],
+  },
+  {
     name: "Programming with JavaScript",
     institute: "Meta",
     date: "September 29, 2026",
